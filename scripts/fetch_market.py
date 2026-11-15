@@ -1,11 +1,14 @@
 """Lấy dữ liệu thị trường công khai, miễn phí, không cần API key, ghi ra site/data/market.json:
 
 - COT (vị thế quỹ lớn) từ báo cáo Legacy của CFTC
+- Vị thế theo nhóm (quỹ đầu cơ, nhà sản xuất, ngân hàng) cho Vàng và Dầu từ báo cáo Disaggregated của CFTC
 - Tồn kho dầu hằng tuần từ EIA
-- Lợi suất trái phiếu (danh nghĩa và thực) từ Bộ Tài chính Mỹ, lãi suất EFFR từ Fed New York
+- Lợi suất trái phiếu (danh nghĩa và thực) và đường cong lợi suất từ Bộ Tài chính Mỹ, lãi suất EFFR từ Fed New York
 - Kịch bản quan sát mang tính giáo dục, suy ra từ các số liệu trên
+Tất cả là dữ liệu công khai của cơ quan nhà nước Mỹ.
 """
 import csv
+import functools
 import io
 import json
 import zipfile
@@ -78,6 +81,48 @@ def get_cot(prev):
     return {"report_date": report, "assets": out}, None
 
 
+# ------------------------------------------ Vị thế theo nhóm (Disaggregated) ----
+FLOW_ASSETS = ("GC", "CL")  # báo cáo Disaggregated chỉ có cho hàng hoá
+DISAGG_URL = "https://www.cftc.gov/files/dea/history/fut_disagg_txt_{year}.zip"
+
+
+def get_flows(prev):
+    """Quỹ đầu cơ (Managed Money), nhà sản xuất / thương nhân, ngân hàng (Swap Dealer): vị thế ròng 52 tuần."""
+    if prev and prev.get("flows"):
+        last = date.fromisoformat(prev["flows"]["report_date"])
+        if date.today() < last + timedelta(days=10):
+            return prev["flows"], "giữ bản cũ (chưa có báo cáo mới)"
+    codes = {ASSETS[k]["code"]: k for k in FLOW_ASSETS}
+    rows = {k: {} for k in FLOW_ASSETS}
+    this_year = date.today().year
+    for year in (this_year - 1, this_year):
+        z = zipfile.ZipFile(io.BytesIO(fetch(DISAGG_URL.format(year=year), timeout=60)))
+        for r in csv.DictReader(io.StringIO(z.read(z.namelist()[0]).decode("latin-1"))):
+            key = codes.get(r["CFTC_Contract_Market_Code"].strip())
+            if not key:
+                continue
+            n = lambda c: int(r[c].strip() or 0)
+            rows[key][r["Report_Date_as_YYYY-MM-DD"].strip()] = {
+                "mm": n("M_Money_Positions_Long_All") - n("M_Money_Positions_Short_All"),
+                "mm_long": n("M_Money_Positions_Long_All"), "mm_short": n("M_Money_Positions_Short_All"),
+                "prod": n("Prod_Merc_Positions_Long_All") - n("Prod_Merc_Positions_Short_All"),
+                "swap": n("Swap_Positions_Long_All") - n("Swap__Positions_Short_All"),
+            }
+    out = {}
+    for key, by_date in rows.items():
+        ds = sorted(by_date)[-53:]
+        if len(ds) < 2:
+            raise ValueError(f"Thiếu dữ liệu Disaggregated cho {key}")
+        cur, old = by_date[ds[-1]], by_date[ds[-2]]
+        out[key] = {
+            "mm": cur["mm"], "mm_change": cur["mm"] - old["mm"], "mm_long": cur["mm_long"], "mm_short": cur["mm_short"],
+            "prod": cur["prod"], "prod_change": cur["prod"] - old["prod"],
+            "swap": cur["swap"], "swap_change": cur["swap"] - old["swap"],
+            "history": [{"d": d, "mm": by_date[d]["mm"], "prod": by_date[d]["prod"], "swap": by_date[d]["swap"]} for d in ds[-52:]],
+        }
+    return {"report_date": max(a["history"][-1]["d"] for a in out.values()), "assets": out}, None
+
+
 # ---------------------------------------------------------------- EIA ----
 EIA_URL = "https://ir.eia.gov/wpsr/table1.csv"
 EIA_ROWS = [  # (nhãn hiển thị, đầu dòng trong file EIA)
@@ -116,8 +161,9 @@ TREASURY = ("https://home.treasury.gov/resource-center/data-chart-center/interes
 EFFR_URL = "https://markets.newyorkfed.org/api/rates/unsecured/effr/last/30.json"
 
 
+@functools.lru_cache(maxsize=None)
 def treasury(kind):
-    """Trả về danh sách (ngày, {kỳ hạn: lợi suất}) từ mới đến cũ, đủ dài để so với 1 tháng trước."""
+    """Trả về danh sách (ngày, {kỳ hạn: lợi suất}) từ mới đến cũ: cả năm nay, thêm năm trước nếu năm nay chưa đủ 30 phiên."""
     series = []
     for year in (date.today().year, date.today().year - 1):
         text = fetch(TREASURY.format(year=year, kind=kind)).decode("utf-8-sig")
@@ -191,6 +237,19 @@ def get_macro():
     return items
 
 
+CURVE_COLS = [("1 MO", "1T"), ("3 MO", "3T"), ("6 MO", "6T"), ("1 YR", "1N"), ("2 YR", "2N"), ("3 YR", "3N"),
+              ("5 YR", "5N"), ("7 YR", "7N"), ("10 YR", "10N"), ("20 YR", "20N"), ("30 YR", "30N")]
+
+
+def get_curve():
+    """Đường cong lợi suất danh nghĩa: phiên mới nhất, khoảng 1 tháng trước và phiên đầu tiên của năm."""
+    nom = [(d, v) for d, v in treasury("daily_treasury_yield_curve") if all(c in v for c, _ in CURVE_COLS)]
+    year_start = min((s for s in nom if s[0].year == nom[0][0].year), key=lambda s: s[0])
+    pick = lambda name, s: {"name": name, "date": s[0].isoformat(), "v": [s[1][c] for c, _ in CURVE_COLS]}
+    return {"labels": [l for _, l in CURVE_COLS],
+            "series": [pick("Hôm nay", nom[0]), pick("1 tháng trước", month_ago(nom)), pick("Đầu năm", year_start)]}
+
+
 # ----------------------------------------------------------- Kịch bản ----
 def scenarios(cot, macro, eia):
     """Gợi ý những điều nên quan sát, suy ra theo quy tắc đơn giản. Không phải khuyến nghị."""
@@ -233,13 +292,14 @@ def scenarios(cot, macro, eia):
 def main():
     prev = previous_json("market.json") or {}
     data = {"updated": datetime.now(timezone.utc).isoformat(), "errors": {}}
-    for name, fn in (("cot", lambda: get_cot(prev)), ("eia", get_eia), ("macro", get_macro)):
+    for name, fn in (("cot", lambda: get_cot(prev)), ("flows", lambda: get_flows(prev)), ("eia", get_eia),
+                     ("macro", get_macro), ("curve", get_curve)):
         try:
             res = fn()
-            if name == "cot":
+            if name in ("cot", "flows"):
                 res, info = res
                 if info:
-                    print(f"COT: {info}")
+                    print(f"{name}: {info}")
             data[name] = res
         except Exception as e:
             data["errors"][name] = f"{type(e).__name__}: {e}"
@@ -248,8 +308,9 @@ def main():
     data["scenarios"] = scenarios(data.get("cot"), data.get("macro") or [], data.get("eia"))
     write_json("market.json", data)
     cot = data.get("cot") or {}
-    print(f"COT {cot.get('report_date')}, EIA {(data.get('eia') or {}).get('week')}, "
-          f"vĩ mô {len(data.get('macro') or [])} chỉ số.")
+    print(f"COT {cot.get('report_date')}, nhóm {(data.get('flows') or {}).get('report_date')}, "
+          f"EIA {(data.get('eia') or {}).get('week')}, vĩ mô {len(data.get('macro') or [])} chỉ số, "
+          f"đường cong {((data.get('curve') or {}).get('series') or [{}])[0].get('date')}.")
 
 
 if __name__ == "__main__":
