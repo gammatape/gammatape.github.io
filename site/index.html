@@ -2,150 +2,272 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mạch Thị Trường</title>
-<meta name="description" content="Vĩ mô, vị thế quỹ lớn (COT), tồn kho dầu và tin tức cho GC, ES, NQ, CL. Công cụ học và theo dõi, miễn phí cho mọi người.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230f9f6e'/><path d='M5 18h5l3-8 5 14 3-6h6' stroke='white' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gammatape · Order flow + GEX trên một biểu đồ</title>
+<meta name="description" content="Gammatape: footprint, heatmap sổ lệnh, iceberg và các mức GEX trên một biểu đồ cho Vàng, ES, NQ, crypto. Kèm nhịp thị trường miễn phí: COT, tồn kho dầu, vĩ mô, lịch kinh tế, tin tức.">
+<meta name="theme-color" content="#0b0f17">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gammatape.github.io/">
+<link rel="canonical" href="https://gammatape.github.io/">
+<meta property="og:site_name" content="Gammatape">
+<meta property="og:title" content="Gammatape · Order flow + GEX trên một biểu đồ">
+<meta property="og:description" content="Dòng tiền thật và tường giá của dealer trên một biểu đồ, cho Vàng, ES, NQ, crypto. Nhịp thị trường miễn phí mỗi ngày.">
+<meta property="og:image" content="https://gammatape.github.io/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+/* Brand tokens (same palette as the Gammatape ad set). Dark is the default; light is opt-in. */
 :root {
-  --bg: #f5f6f8; --panel: #ffffff; --line: #e2e5e9; --text: #14171c; --muted: #636a74;
-  --accent: #0f9f6e; --accent-soft: #e1f4ec; --up: #0f9f6e; --down: #d23c3c; --warn: #d9861a;
-  --chip: #eceff2; --track: #e6e9ed; --shadow: 0 1px 2px rgba(0,0,0,.05);
+  color-scheme: dark;
+  --bg: #0b0f17; --bg2: #0e1420; --panel: #121826; --panel2: #161e2e; --line: #1f2a3d; --line2: #2a3650;
+  --text: #e8edf5; --muted: #8a96ab; --faint: #7d889c;
+  --green: #22c55e; --gold: #f5b301; --red: #ef4444; --warn: #f59e0b;
+  --green-soft: rgba(34,197,94,.14); --gold-soft: rgba(245,179,1,.14); --red-soft: rgba(239,68,68,.14);
+  --on-gold: #111; --shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 20px 50px rgba(0,0,0,.35);
+  --track: #1b2436;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0c0f13; --panel: #141920; --line: #232a33; --text: #e6e9ed; --muted: #8a929d;
-    --accent: #2fd398; --accent-soft: #11301f; --up: #2fd398; --down: #f06363; --warn: #f0a640;
-    --chip: #1c222a; --track: #222932; --shadow: none;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0c0f13; --panel: #141920; --line: #232a33; --text: #e6e9ed; --muted: #8a929d;
-  --accent: #2fd398; --accent-soft: #11301f; --up: #2fd398; --down: #f06363; --warn: #f0a640;
-  --chip: #1c222a; --track: #222932; --shadow: none;
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f5f7fa; --bg2: #eef1f6; --panel: #ffffff; --panel2: #f8fafc; --line: #e2e7ef; --line2: #cfd7e3;
+  --text: #0f1724; --muted: #4f5a6c; --faint: #5b6577;
+  --green: #15803d; --gold: #8a6100; --red: #dc2626; --warn: #c2410c;
+  --green-soft: rgba(21,128,61,.10); --gold-soft: rgba(245,179,1,.18); --red-soft: rgba(220,38,38,.10);
+  --on-gold: #111; --shadow: 0 1px 2px rgba(15,23,36,.06), 0 10px 30px rgba(15,23,36,.06);
+  --track: #e6eaf0;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+html { scroll-behavior: smooth; scroll-padding-top: 112px; -webkit-text-size-adjust: 100%; }
+@media (min-width: 900px) { html { scroll-padding-top: 72px; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
 body { margin: 0; background: var(--bg); color: var(--text);
-  font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  font: 15.5px/1.6 "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
 a { color: inherit; }
-.wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+img { max-width: 100%; }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
 .num { font-variant-numeric: tabular-nums; }
-.up { color: var(--up); } .down { color: var(--down); } .muted { color: var(--muted); }
+.up { color: var(--green); } .down { color: var(--red); } .muted { color: var(--muted); }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
 
-/* Đầu trang */
-.hero { padding-top: 28px; padding-bottom: 8px; }
-.hero h1 { margin: 0; font-size: 28px; letter-spacing: -.01em; display: flex; align-items: center; gap: 10px; }
-.hero h1 i { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
-.hero p { margin: 4px 0 0; color: var(--muted); }
-.status { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; font-size: 13px; }
-.pill { background: var(--chip); border-radius: 999px; padding: 3px 10px; }
-.pill.free { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+/* Buttons: one style with two variants */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 18px;
+  border-radius: 10px; border: 1px solid var(--line2); background: var(--panel); color: var(--text);
+  font: inherit; font-weight: 700; font-size: 15px; text-decoration: none; cursor: pointer; white-space: nowrap;
+  transition: transform 160ms ease-out, background-color 160ms ease-out, border-color 160ms ease-out; }
+/* Button gold stays the brand #f5b301 in both themes; --gold is only for gold text */
+.btn.gold { background: #f5b301; border-color: #f5b301; color: var(--on-gold); }
+.btn.sm { min-height: 44px; padding: 7px 14px; font-size: 14px; }
+.btn svg { width: 18px; height: 18px; flex: none; }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover { border-color: var(--muted); }
+  .btn.gold:hover { background: #ffc21a; border-color: #ffc21a; }
+}
+.btn:active { transform: scale(.98); }
 
-nav.sections { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
-nav.sections .wrap { display: flex; align-items: center; gap: 4px; overflow-x: auto; scrollbar-width: none; }
-nav.sections a { white-space: nowrap; text-decoration: none; color: var(--muted); font-size: 14px; font-weight: 600;
-  padding: 12px 10px; border-bottom: 2px solid transparent; }
-nav.sections a:hover { color: var(--text); }
-nav.sections a.on { color: var(--text); border-color: var(--accent); }
-.iconbtn { margin-left: auto; border: 1px solid var(--line); background: var(--panel); color: var(--text); border-radius: 8px;
-  width: 34px; height: 34px; flex: none; cursor: pointer; }
+/* Top bar */
+.topbar { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(140%) blur(12px); -webkit-backdrop-filter: saturate(140%) blur(12px); border-bottom: 1px solid var(--line); }
+@supports not (backdrop-filter: blur(1px)) { .topbar { background: var(--bg); } }
+.topbar .wrap { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 4px 12px; min-height: 60px; }
+.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 19px; letter-spacing: -.3px; }
+.logo img { width: 30px; height: 30px; border-radius: 8px; }
+.links { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+.links::-webkit-scrollbar { display: none; }
+.links a { white-space: nowrap; text-decoration: none; color: var(--muted); font-size: 14px; font-weight: 600; padding: 8px 10px; border-radius: 8px; }
+.links a.on { color: var(--text); background: var(--panel2); }
+@media (hover: hover) and (pointer: fine) { .links a:hover { color: var(--text); } }
+.tools { display: flex; align-items: center; gap: 8px; }
+.iconbtn { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--line2);
+  background: var(--panel); color: var(--text); cursor: pointer; }
+.iconbtn svg { width: 18px; height: 18px; }
+.cta-short { display: none; }
+@media (max-width: 899px) {
+  .topbar .wrap { grid-template-columns: 1fr auto; padding-top: 6px; }
+  .links { grid-column: 1 / -1; grid-row: 2; margin: 0 -16px; padding: 0 12px 4px; gap: 4px;
+    -webkit-mask-image: linear-gradient(to right, #000 85%, transparent); mask-image: linear-gradient(to right, #000 85%, transparent); }
+  .links a { min-height: 44px; display: inline-flex; align-items: center; padding: 8px 12px; }
+  .chip { min-height: 40px; padding: 8px 14px; }
+  details.lesson summary { min-height: 44px; align-items: center; }
+  .cta-long { display: none; } .cta-short { display: inline; }
+}
 
-/* Khung nội dung */
-main { padding-top: 16px; padding-bottom: 8px; display: grid; gap: 16px; grid-template-columns: repeat(12, minmax(0, 1fr)); }
-section.card { grid-column: span 12; background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
-  padding: 16px; box-shadow: var(--shadow); min-width: 0; }
+/* Hero */
+.hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line);
+  background: radial-gradient(900px 520px at 88% -10%, var(--gold-soft), transparent 60%),
+              radial-gradient(800px 600px at -10% 110%, var(--green-soft), transparent 60%), var(--bg); }
+.hero .wrap { display: grid; gap: 32px; padding-top: 48px; padding-bottom: 48px; align-items: center; }
+@media (min-width: 980px) { .hero .wrap { grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); padding-top: 72px; padding-bottom: 72px; } }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--gold);
+  letter-spacing: .04em; text-transform: uppercase; }
+.eyebrow i { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px var(--green-soft); }
+.hero h1 { margin: 14px 0 0; font-size: clamp(32px, 5.2vw, 54px); line-height: 1.12; letter-spacing: -1.2px; font-weight: 800; text-wrap: balance; }
+.hero h1 em { font-style: normal; color: var(--gold); }
+.hero .sub { margin: 16px 0 0; font-size: clamp(16px, 1.6vw, 18px); color: var(--muted); max-width: 560px; }
+.hero .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.markets { margin: 18px 0 0; font-size: 14px; font-weight: 600; color: var(--muted); }
+.markets b { color: var(--text); font-weight: 700; }
+.risk { margin: 18px 0 0; font-size: 12.5px; color: var(--faint); max-width: 560px; }
+.visual { position: relative; padding-bottom: 36px; }
+.shot { margin: 0; border-radius: 14px; overflow: hidden; border: 1px solid var(--line2); background: #0b0f17; box-shadow: var(--shadow); line-height: 0; }
+.shot img { width: 100%; height: auto; display: block; }
+.visual .pc { box-shadow: 0 30px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(245,179,1,.10); }
+.visual .phone { position: absolute; right: -6px; bottom: 0; width: 30%; max-width: 190px; border-radius: 22px; border: 3px solid #2a3650;
+  box-shadow: 0 24px 60px rgba(0,0,0,.6); }
+@media (max-width: 560px) { .visual .phone { width: 34%; right: 0; } }
+/* Phone: show the product right under the buttons; market list and risk line follow the picture */
+@media (max-width: 979px) {
+  .hero .wrap { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
+  .hero .copy { display: contents; }
+  .hero .copy > * { order: 1; }
+  .hero .visual { order: 2; margin-top: 24px; }
+  .hero .markets, .hero .risk { order: 3; }
+  .hero .eyebrow { align-self: flex-start; }
+}
+
+:root[data-theme="light"] .hero { background: radial-gradient(900px 520px at 88% -10%, rgba(245,179,1,.07), transparent 60%),
+  radial-gradient(800px 600px at -10% 110%, rgba(21,128,61,.05), transparent 60%), var(--bg); }
+:root[data-theme="light"] .final { background: radial-gradient(700px 300px at 50% 0%, rgba(245,179,1,.08), transparent 70%), var(--panel); }
+:root[data-theme="light"] .shot { border-color: #d3dbe7; box-shadow: 0 1px 3px rgba(15,23,36,.08), 0 18px 40px -10px rgba(15,23,36,.22); }
+
+/* Section scaffolding */
+section.block { padding: 56px 0 8px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 8px 16px; margin-bottom: 18px; }
+.sec-head h2 { margin: 0; font-size: clamp(24px, 3vw, 32px); letter-spacing: -.6px; line-height: 1.2; }
+.sec-head p { margin: 6px 0 0; color: var(--muted); max-width: 640px; }
+.kicker { font-size: 12.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--green); }
+.pill { font-size: 13px; color: var(--muted); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; }
+
+/* Pulse tiles (KPI strip) */
+.pulse { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+@media (max-width: 560px) { .pulse { grid-template-columns: 1fr 1fr; gap: 10px; } }
+.tile { display: block; text-decoration: none; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; min-width: 0; }
+@media (hover: hover) and (pointer: fine) { a.tile:hover { border-color: var(--line2); } }
+.tile .lbl { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.tile .val { font-size: 24px; font-weight: 800; letter-spacing: -.4px; margin-top: 2px; line-height: 1.25; }
+.tile .val.small { font-size: 16px; letter-spacing: 0; }
+.tile .sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+.tile.hot { border-color: color-mix(in srgb, var(--red) 45%, var(--line)); }
+
+/* Data cards */
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(12, minmax(0, 1fr)); margin-top: 16px; }
+.card { grid-column: span 12; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px; min-width: 0; }
 @media (min-width: 900px) {
   #eia { grid-column: span 5; } #macro { grid-column: span 7; }
-  #news { grid-column: span 7; } #calendar { grid-column: span 5; }
+  #calendar { grid-column: span 5; } #news { grid-column: span 7; }
 }
-.card-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 10px; margin-bottom: 10px; }
-.card-head h2 { margin: 0; font-size: 17px; }
-.badge { font-size: 12px; color: var(--muted); background: var(--chip); border-radius: 4px; padding: 1px 7px; }
-.badge.ok { color: var(--accent); background: var(--accent-soft); }
-.note { color: var(--muted); font-size: 12.5px; margin: 12px 0 0; }
+@media (max-width: 560px) { .card { padding: 14px; } }
+.card-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 10px; margin-bottom: 12px; }
+.card-head h3 { margin: 0; font-size: 18px; letter-spacing: -.2px; }
+.badge { font-size: 12px; color: var(--muted); background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 1px 8px; }
+.badge.ok { color: var(--green); background: var(--green-soft); border-color: transparent; }
+.note { color: var(--faint); font-size: 12.5px; margin: 14px 0 0; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { border: 1px solid transparent; background: var(--chip); color: var(--text); border-radius: 999px;
-  padding: 4px 11px; font: inherit; font-size: 13px; cursor: pointer; }
-.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.chip { border: 1px solid var(--line); background: var(--panel2); color: var(--text); border-radius: 999px; min-height: 34px;
+  padding: 4px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--green-soft); border-color: var(--green); color: var(--green); font-weight: 700; }
 .empty { color: var(--muted); padding: 24px 0; text-align: center; }
-
-/* Biểu đồ */
-.tv { height: 440px; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); margin-top: 10px; }
-.tv > div { height: 100%; }
 
 /* COT */
 .cot-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-.cot { border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
-.cot h3 { margin: 0; font-size: 15px; display: flex; justify-content: space-between; gap: 8px; }
-.cot h3 span { color: var(--muted); font-weight: 500; font-size: 13px; }
-.cot .big { font-size: 22px; font-weight: 700; margin-top: 4px; }
+.cot { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--panel2); }
+.cot h4 { margin: 0; font-size: 15px; display: flex; justify-content: space-between; gap: 8px; }
+.cot h4 span { color: var(--muted); font-weight: 500; font-size: 13px; }
+.cot .big { font-size: 24px; font-weight: 800; margin-top: 4px; letter-spacing: -.4px; }
 .cot .sub { font-size: 12.5px; color: var(--muted); }
 .gauge { margin-top: 8px; font-size: 12px; }
 .gauge .row { display: flex; justify-content: space-between; color: var(--muted); }
 .bar { position: relative; height: 8px; background: var(--track); border-radius: 4px; margin: 3px 0 6px; }
 .bar b { position: absolute; top: -3px; width: 4px; height: 14px; border-radius: 2px; background: var(--text); transform: translateX(-2px); }
-.bar::before, .bar::after { content: ""; position: absolute; top: 0; height: 100%; width: 20%; opacity: .35; }
-.bar::before { left: 0; background: var(--down); border-radius: 4px 0 0 4px; }
-.bar::after { right: 0; background: var(--up); border-radius: 0 4px 4px 0; }
+.bar::before, .bar::after { content: ""; position: absolute; top: 0; height: 100%; width: 20%; opacity: .45; }
+.bar::before { left: 0; background: var(--red); border-radius: 4px 0 0 4px; }
+.bar::after { right: 0; background: var(--green); border-radius: 0 4px 4px 0; }
 .spark { width: 100%; height: 44px; display: block; margin-top: 4px; }
 
-/* Bảng */
+/* Tables */
 table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th, td { text-align: left; padding: 9px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { color: var(--muted); font-weight: 600; font-size: 12.5px; }
 td.r, th.r { text-align: right; }
 tr:last-child td { border-bottom: 0; }
 .macro-name { font-weight: 600; }
-.macro-name small { display: block; font-weight: 400; color: var(--muted); font-size: 12.5px; line-height: 1.4; margin-top: 2px; }
+.macro-name small { display: block; font-weight: 400; color: var(--muted); font-size: 12.5px; line-height: 1.45; margin-top: 2px; }
 .impacts { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
-.imp { font-size: 11.5px; font-weight: 700; border-radius: 4px; padding: 1px 5px; background: var(--chip); color: var(--muted); white-space: nowrap; }
-.imp.p { background: var(--accent-soft); color: var(--up); }
-.imp.n { background: color-mix(in srgb, var(--down) 15%, transparent); color: var(--down); }
+.imp { font-size: 11.5px; font-weight: 700; border-radius: 4px; padding: 1px 5px; background: var(--panel2); color: var(--muted); white-space: nowrap; }
+.imp.p { background: var(--green-soft); color: var(--green); }
+.imp.n { background: var(--red-soft); color: var(--red); }
 
-/* Kịch bản */
+/* Scenarios */
 .scen-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-.scen { border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
-.scen h3 { margin: 0 0 6px; font-size: 15px; display: flex; justify-content: space-between; align-items: center; }
-.tone { font-size: 12px; font-weight: 700; border-radius: 4px; padding: 1px 7px; }
-.tone.p { background: var(--accent-soft); color: var(--up); }
-.tone.n { background: color-mix(in srgb, var(--down) 15%, transparent); color: var(--down); }
-.tone.z { background: var(--chip); color: var(--muted); }
+.scen { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--panel2); }
+.scen h4 { margin: 0 0 6px; font-size: 15px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.tone { font-size: 12px; font-weight: 700; border-radius: 4px; padding: 1px 7px; white-space: nowrap; }
+.tone.p { background: var(--green-soft); color: var(--green); }
+.tone.n { background: var(--red-soft); color: var(--red); }
+.tone.z { background: var(--track); color: var(--muted); }
 .scen ul { margin: 0; padding-left: 18px; font-size: 13.5px; }
 .scen li { margin: 3px 0; }
 
-/* Tin tức */
+/* News */
 .controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
-.search { flex: 1 1 200px; min-width: 0; border: 1px solid var(--line); background: var(--bg); color: var(--text);
-  border-radius: 8px; padding: 7px 11px; font: inherit; }
-.item { padding: 10px 0; border-bottom: 1px solid var(--line); }
+.search { flex: 1 1 200px; min-width: 0; min-height: 40px; border: 1px solid var(--line); background: var(--bg2); color: var(--text);
+  border-radius: 10px; padding: 8px 12px; font: inherit; font-size: 16px; }
+.item { padding: 11px 0; border-bottom: 1px solid var(--line); }
 .item:last-child { border-bottom: 0; }
 .meta { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; font-size: 12.5px; color: var(--muted); }
 .meta .src { font-weight: 600; color: var(--text); }
-.meta .off { color: var(--accent); font-weight: 700; }
-.tag { background: var(--chip); border-radius: 4px; padding: 0 6px; font-size: 11.5px; font-weight: 600; }
-.item h3 { margin: 3px 0 2px; font-size: 15px; line-height: 1.4; }
-.item h3 a { text-decoration: none; } .item h3 a:hover { text-decoration: underline; }
+.meta .off { color: var(--green); font-weight: 700; }
+.tag { background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 0 6px; font-size: 11.5px; font-weight: 600; }
+.item h4 { margin: 3px 0 2px; font-size: 15px; line-height: 1.45; }
+.item h4 a { text-decoration: none; }
+@media (hover: hover) and (pointer: fine) { .item h4 a:hover { text-decoration: underline; } }
 .item p { margin: 0; color: var(--muted); font-size: 13.5px; }
 .more { display: block; margin: 10px auto 0; }
 
-/* Lịch */
+/* Calendar */
 .day { font-weight: 700; font-size: 13.5px; margin: 12px 0 4px; }
 .day:first-child { margin-top: 0; }
-.ev { display: grid; grid-template-columns: 46px 52px 1fr; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.ev { display: grid; grid-template-columns: 46px 52px 1fr; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
 .ev.past { opacity: .45; }
-.ev.next { background: var(--accent-soft); border-radius: 6px; padding: 6px; margin: 0 -6px; border-bottom-color: transparent; }
-.ev .t { font-weight: 600; }
+.ev.next { background: var(--gold-soft); border-radius: 8px; padding: 7px; margin: 0 -7px; border-bottom-color: transparent; }
+.ev .t { font-weight: 700; }
 .ev .c { font-weight: 700; font-size: 12.5px; display: flex; align-items: center; gap: 5px; }
 .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--muted); }
-.dot.High { background: var(--down); } .dot.Medium { background: var(--warn); }
+.dot.High { background: var(--red); } .dot.Medium { background: var(--warn); }
 .ev .nums { display: block; font-size: 12px; color: var(--muted); }
 .cal-list { max-height: 640px; overflow-y: auto; }
 
-/* Học */
-.learn-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-details.lesson { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
-details.lesson summary { cursor: pointer; font-weight: 700; list-style: none; display: flex; justify-content: space-between; gap: 8px; }
+/* Features */
+.feature { display: grid; gap: 22px; align-items: center; padding: 26px 0; border-top: 1px solid var(--line); }
+.feature:first-of-type { border-top: 0; }
+@media (min-width: 900px) {
+  .feature { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 48px; padding: 40px 0; }
+  .feature.flip .copy { order: 2; }
+}
+.feature h3 { margin: 8px 0 0; font-size: clamp(22px, 2.6vw, 28px); letter-spacing: -.5px; line-height: 1.25; }
+.feature h3 em { font-style: normal; color: var(--gold); }
+.feature p { color: var(--muted); margin: 10px 0 0; }
+.feature ul { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.feature li { position: relative; padding-left: 22px; font-size: 14.5px; }
+.feature li::before { content: ""; position: absolute; left: 2px; top: .55em; width: 9px; height: 9px; border-radius: 3px; background: var(--green); }
+.duo { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 12px; align-items: start; }
+@media (max-width: 700px) { .duo { grid-template-columns: 1fr; } .duo .shot + .shot { max-width: 360px; width: 100%; margin-inline: auto; } }
+.shot.tall { max-width: 420px; margin-inline: auto; max-height: 560px; }
+.shot.tall img { height: 560px; max-height: 100%; object-fit: cover; object-position: top; }
+@media (max-width: 560px) { .shot.tall, .shot.tall img { height: 460px; max-height: 460px; } }
+.cap { display: block; font-size: 12px; color: var(--faint); margin-top: 8px; line-height: 1.4; }
+.extras { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 8px; }
+.extra { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+.extra b { display: block; font-size: 15px; }
+.extra span { display: block; color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+
+/* Lessons */
+.learn-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+details.lesson { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+details.lesson summary { cursor: pointer; font-weight: 700; list-style: none; display: flex; justify-content: space-between; gap: 8px; min-height: 28px; }
 details.lesson summary::-webkit-details-marker { display: none; }
 details.lesson summary::after { content: "+"; color: var(--muted); font-weight: 400; }
 details.lesson[open] summary::after { content: "−"; }
@@ -153,109 +275,237 @@ details.lesson .lead { color: var(--muted); font-size: 13.5px; margin: 4px 0 0; 
 details.lesson .body { font-size: 14px; margin-top: 8px; }
 details.lesson .body p { margin: 6px 0; }
 details.lesson .body ul { margin: 6px 0; padding-left: 18px; }
-.soon { border: 1px dashed var(--line); border-radius: 10px; padding: 12px 14px; }
-.soon b { display: block; }
-.soon p { margin: 4px 0 0; color: var(--muted); font-size: 13.5px; }
 
-footer { color: var(--muted); font-size: 12.5px; padding-top: 16px; padding-bottom: 40px; }
+/* Closing call to action */
+.final { margin-top: 56px; border-radius: 18px; border: 1px solid var(--line2); padding: 36px 24px; text-align: center;
+  background: radial-gradient(700px 300px at 50% 0%, var(--gold-soft), transparent 70%), var(--panel); }
+.final img { width: 52px; height: 52px; border-radius: 12px; }
+.final h2 { margin: 12px auto 0; font-size: clamp(24px, 3vw, 32px); letter-spacing: -.6px; max-width: 640px; line-height: 1.2; }
+.final p { color: var(--muted); margin: 10px auto 0; max-width: 560px; }
+.final .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
+.final .risk { margin: 16px auto 0; }
+
+footer { color: var(--faint); font-size: 12.5px; padding-top: 32px; padding-bottom: calc(40px + env(safe-area-inset-bottom)); }
+footer .row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding-bottom: 14px;
+  border-bottom: 1px solid var(--line); margin-bottom: 12px; }
+footer .row a { color: var(--muted); text-decoration: none; font-weight: 600; }
 footer p { margin: 6px 0; }
 footer details { margin-top: 8px; }
 
 @media (max-width: 560px) {
-  .hero h1 { font-size: 23px; }
-  .tv { height: 360px; }
   .hide-sm { display: none; }
-  th, td { padding: 7px 4px; }
-  /* Bảng vĩ mô: tên + giải thích một dòng, số liệu và tác động xuống dòng dưới */
+  th, td { padding: 8px 4px; }
   #macro thead { display: none; }
-  #macro tr { display: grid; grid-template-columns: auto auto 1fr; gap: 2px 12px; align-items: center;
-    padding: 9px 0; border-bottom: 1px solid var(--line); }
+  #macro tr { display: grid; grid-template-columns: auto auto 1fr; gap: 2px 12px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); }
   #macro tr:last-child { border-bottom: 0; }
   #macro td { border: 0; padding: 0; }
   #macro td.macro-name { grid-column: 1 / -1; }
+  .hero .actions .btn { flex: 1 1 100%; }
+  .hero .wrap { padding-top: 28px; padding-bottom: 36px; }
+  .hero h1 { font-size: 30px; letter-spacing: -.8px; margin-top: 10px; }
+  .hero .sub { font-size: 15.5px; margin-top: 12px; }
+  .hero .actions { margin-top: 18px; }
+  .tile .val { font-size: 20px; }
 }
 </style>
 </head>
 <body>
 
-<header class="wrap hero">
-  <h1><i></i>Mạch Thị Trường</h1>
-  <p>Vĩ mô · Vị thế · Tin tức cho GC, ES, NQ, CL — công cụ học và theo dõi</p>
-  <div class="status">
-    <span class="pill free">Miễn phí cho tất cả</span>
-    <span class="pill" id="updated">Đang tải dữ liệu…</span>
+<header class="topbar">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Gammatape, về đầu trang"><img src="img/logo.png" alt="" width="30" height="30">Gammatape</a>
+    <nav class="links" aria-label="Mục trên trang">
+      <a href="#thi-truong">Thị trường</a>
+      <a href="#scenarios">Kịch bản</a>
+      <a href="#calendar">Lịch vĩ mô</a>
+      <a href="#news">Tin tức</a>
+      <a href="#tinh-nang">Tính năng</a>
+      <a href="#hoc">Học order flow</a>
+    </nav>
+    <div class="tools">
+      <button class="iconbtn" id="theme" type="button" aria-label="Đổi giao diện sáng / tối" title="Đổi giao diện sáng / tối">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18" /><path d="M12 3a9 9 0 0 1 0 18" fill="currentColor"/></svg>
+      </button>
+      <a class="btn gold sm" href="https://m.me/61596278051545?ref=gammatape_web" target="_blank" rel="noopener"><span class="cta-long">Inbox để nhận link dùng thử</span><span class="cta-short">Nhận link</span></a>
+    </div>
   </div>
 </header>
 
-<nav class="sections">
+<section class="hero" id="top">
   <div class="wrap">
-    <a href="#chart">Biểu đồ</a>
-    <a href="#cot">Vị thế COT</a>
-    <a href="#eia">Tồn kho dầu</a>
-    <a href="#macro">Vĩ mô</a>
-    <a href="#scenarios">Kịch bản</a>
-    <a href="#news">Tin tức</a>
-    <a href="#calendar">Lịch</a>
-    <a href="#learn">Học orderflow</a>
-    <button class="iconbtn" id="theme" title="Đổi giao diện sáng/tối" aria-label="Đổi giao diện">◐</button>
+    <div class="copy">
+      <span class="eyebrow"><i></i>Order flow · GEX · Tiếng Việt</span>
+      <h1>Dòng tiền thật và <em>tường giá của dealer</em>, trên một biểu đồ</h1>
+      <p class="sub">Footprint, heatmap sổ lệnh, lệnh lớn, iceberg và các mức Call Wall, Put Wall, Gamma Flip nằm chung một chart. Dùng trên PC lẫn điện thoại.</p>
+      <div class="actions">
+        <a class="btn gold" href="https://m.me/61596278051545?ref=gammatape_web" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.6L3 21l1.4-5.1A8.5 8.5 0 1 1 21 12Z"/></svg>
+          Inbox để nhận link dùng thử</a>
+        <a class="btn" href="#thi-truong">Xem nhịp thị trường hôm nay</a>
+      </div>
+      <p class="markets">Thị trường: <b>Vàng · ES · NQ · BTC · ETH · SOL</b></p>
+      <p class="risk">Gammatape là công cụ phân tích dữ liệu thị trường, không phải lời khuyên đầu tư. Giao dịch phái sinh và tài sản số có rủi ro cao.</p>
+    </div>
+    <div class="visual">
+      <figure class="shot pc"><img src="img/hero_heatmap.webp" width="1600" height="1115" fetchpriority="high"
+        alt="Chart Vàng trên Gammatape: heatmap sổ lệnh, bong bóng lệnh lớn, nhãn iceberg ICE và các mức GEX"></figure>
+      <figure class="shot phone"><img src="img/hero_phone.webp" width="780" height="1350" loading="lazy"
+        alt="Cùng chart heatmap trên điện thoại"></figure>
+    </div>
   </div>
-</nav>
+</section>
 
 <main class="wrap">
-  <section class="card" id="chart">
-    <div class="card-head"><h2>Biểu đồ giá tham chiếu</h2><span class="badge">TradingView</span></div>
-    <div class="chips" id="chart-tabs"></div>
-    <div class="tv" id="tv"></div>
-    <p class="note">Biểu đồ dùng giá tham chiếu (vàng giao ngay, chỉ số CFD, dầu WTI giao ngay) từ widget miễn phí của TradingView, có thể lệch nhẹ so với hợp đồng tương lai.</p>
-  </section>
-
-  <section class="card" id="cot">
-    <div class="card-head"><h2>Vị thế quỹ lớn (COT)</h2><span class="badge" id="cot-badge">Đang tải…</span></div>
-    <div class="cot-grid" id="cot-grid"></div>
-    <p class="note">Nguồn: báo cáo Commitments of Traders (Legacy, nhóm Non-commercial) của CFTC, chốt số thứ Ba, công bố thứ Sáu hằng tuần (sáng thứ Bảy giờ VN). COT Index = vị trí của vị thế ròng hiện tại trong biên cao–thấp của 26 hoặc 156 tuần (0 = thấp nhất, 100 = cao nhất). Vùng tô màu ở hai đầu thanh là vùng cực đoan (dưới 20, trên 80).</p>
-  </section>
-
-  <section class="card" id="eia">
-    <div class="card-head"><h2>Tồn kho dầu Mỹ · EIA</h2><span class="badge" id="eia-badge">Đang tải…</span></div>
-    <div id="eia-body"></div>
-    <p class="note">Nguồn: U.S. Energy Information Administration, báo cáo Weekly Petroleum Status công bố thứ Tư (khoảng 21:30 giờ VN). Tồn kho giảm thường được thị trường đọc là cầu mạnh.</p>
-  </section>
-
-  <section class="card" id="macro">
-    <div class="card-head"><h2>Động lực vĩ mô chính</h2><span class="badge" id="macro-badge">Đang tải…</span></div>
-    <div id="macro-body"></div>
-    <p class="note">Nguồn: lợi suất danh nghĩa và lợi suất thực từ Bộ Tài chính Mỹ (U.S. Treasury), lãi suất EFFR từ Fed New York. So sánh với khoảng 1 tháng trước. Nhãn ▲/▼ cho biết chiều tác động thường gặp lên từng tài sản, mang tính giáo dục, không phải dự báo.</p>
-  </section>
-
-  <section class="card" id="scenarios">
-    <div class="card-head"><h2>Kịch bản để quan sát</h2><span class="badge">Giáo dục</span></div>
-    <div class="scen-grid" id="scen-grid"></div>
-    <p class="note">Tự động suy ra từ số liệu COT, vĩ mô và EIA ở trên theo quy tắc đơn giản. Đây là cách đọc thị trường để tham khảo, không phải khuyến nghị mua bán.</p>
-  </section>
-
-  <section class="card" id="news">
-    <div class="card-head"><h2>Tin tức liên quan</h2><span class="badge" id="news-badge">Đang tải…</span></div>
-    <div class="controls">
-      <input class="search" id="q" type="search" placeholder="Tìm tin… (vd: Powell, OPEC, CPI)" autocomplete="off">
-      <div class="chips" id="langs"></div>
+  <section class="block" id="thi-truong">
+    <div class="sec-head">
+      <div>
+        <span class="kicker">Miễn phí cho tất cả</span>
+        <h2>Nhịp thị trường hôm nay</h2>
+        <p>Vĩ mô, vị thế quỹ lớn, tồn kho dầu, lịch kinh tế và tin tức cho Vàng, ES, NQ, dầu. Tự cập nhật mỗi 30 phút.</p>
+      </div>
+      <span class="pill" id="updated">Đang tải dữ liệu…</span>
     </div>
-    <div class="chips" id="topics"></div>
-    <div id="news-list"></div>
-    <p class="note">Nguồn: RSS của Federal Reserve, EIA, CFTC và các trang tin tài chính. Chỉ hiện tiêu đề, tóm tắt ngắn và link, bấm tiêu đề để đọc bài gốc.</p>
-  </section>
+    <div class="pulse" id="pulse"></div>
 
-  <section class="card" id="calendar">
-    <div class="card-head"><h2>Lịch vĩ mô (giờ VN)</h2><span class="badge" id="cal-badge">Đang tải…</span></div>
-    <div class="controls">
-      <div class="chips" id="impacts"></div>
-      <div class="chips" id="ccy"></div>
+    <div class="grid">
+      <section class="card" id="cot">
+        <div class="card-head"><h3>Vị thế quỹ lớn (COT)</h3><span class="badge" id="cot-badge">Đang tải…</span></div>
+        <div class="cot-grid" id="cot-grid"></div>
+        <p class="note">Nguồn: báo cáo Commitments of Traders (Legacy, nhóm Non-commercial) của CFTC, chốt số thứ Ba, công bố thứ Sáu hằng tuần (sáng thứ Bảy giờ VN). COT Index = vị trí của vị thế ròng hiện tại trong biên cao–thấp của 26 hoặc 156 tuần (0 = thấp nhất, 100 = cao nhất). Vùng tô màu ở hai đầu thanh là vùng cực đoan (dưới 20, trên 80).</p>
+      </section>
+
+      <section class="card" id="eia">
+        <div class="card-head"><h3>Tồn kho dầu Mỹ · EIA</h3><span class="badge" id="eia-badge">Đang tải…</span></div>
+        <div id="eia-body"></div>
+        <p class="note">Nguồn: U.S. Energy Information Administration, báo cáo Weekly Petroleum Status công bố thứ Tư (khoảng 21:30 giờ VN). Tồn kho giảm thường được thị trường đọc là cầu mạnh.</p>
+      </section>
+
+      <section class="card" id="macro">
+        <div class="card-head"><h3>Động lực vĩ mô chính</h3><span class="badge" id="macro-badge">Đang tải…</span></div>
+        <div id="macro-body"></div>
+        <p class="note">Nguồn: lợi suất danh nghĩa và lợi suất thực từ Bộ Tài chính Mỹ (U.S. Treasury), lãi suất EFFR từ Fed New York. So sánh với khoảng 1 tháng trước. Nhãn ▲/▼ cho biết chiều tác động thường gặp lên từng tài sản, mang tính giáo dục, không phải dự báo.</p>
+      </section>
+
+      <section class="card" id="scenarios">
+        <div class="card-head"><h3>Kịch bản để quan sát</h3><span class="badge">Giáo dục</span></div>
+        <div class="scen-grid" id="scen-grid"></div>
+        <p class="note">Tự động suy ra từ số liệu COT, vĩ mô và EIA ở trên theo quy tắc đơn giản. Đây là cách đọc thị trường để tham khảo, không phải khuyến nghị mua bán.</p>
+      </section>
+
+      <section class="card" id="calendar">
+        <div class="card-head"><h3>Lịch vĩ mô (giờ VN)</h3><span class="badge" id="cal-badge">Đang tải…</span></div>
+        <div class="controls">
+          <div class="chips" id="impacts"></div>
+          <div class="chips" id="ccy"></div>
+        </div>
+        <div class="cal-list" id="cal-list"></div>
+        <p class="note">Nguồn: lịch kinh tế tuần này của Forex Factory. Chấm đỏ = ảnh hưởng cao, cam = trung bình. Dòng tô vàng là sự kiện kế tiếp.</p>
+      </section>
+
+      <section class="card" id="news">
+        <div class="card-head"><h3>Tin tức liên quan</h3><span class="badge" id="news-badge">Đang tải…</span></div>
+        <div class="controls">
+          <input class="search" id="q" type="search" placeholder="Tìm tin… (vd: Powell, OPEC, CPI)" autocomplete="off" aria-label="Tìm tin">
+          <div class="chips" id="langs"></div>
+        </div>
+        <div class="chips" id="topics"></div>
+        <div id="news-list"></div>
+        <p class="note">Nguồn: RSS của Federal Reserve, EIA, CFTC và các trang tin tài chính. Chỉ hiện tiêu đề, tóm tắt ngắn và link, bấm tiêu đề để đọc bài gốc.</p>
+      </section>
     </div>
-    <div class="cal-list" id="cal-list"></div>
-    <p class="note">Nguồn: lịch kinh tế tuần này của Forex Factory. Chấm đỏ = ảnh hưởng cao, cam = trung bình.</p>
   </section>
 
-  <section class="card" id="learn">
-    <div class="card-head"><h2>Góc học orderflow</h2><span class="badge">Không dùng data CME thật</span></div>
+  <section class="block" id="tinh-nang">
+    <div class="sec-head">
+      <div>
+        <span class="kicker">Tính năng</span>
+        <h2>Xem ai đang giữ giá, ngay trên chart</h2>
+        <p>Mọi ảnh dưới đây chụp từ Gammatape với dữ liệu Vàng thật, phiên Mỹ ngày 11/11.</p>
+      </div>
+    </div>
+
+    <article class="feature">
+      <div class="copy">
+        <span class="kicker">Order flow + GEX</span>
+        <h3>Tường giá của dealer vẽ <em>ngay trên giá</em></h3>
+        <p>Các mức gamma tính mỗi ngày từ quyền chọn và khoá theo phiên. ES, NQ được quy sẵn ra điểm futures, Vàng cũng có đủ bộ mức.</p>
+        <ul>
+          <li>Call Wall, Put Wall, Gamma Flip (Zero Gamma), 0DTE và GEX1–5</li>
+          <li>Profile GEX theo từng strike ở cạnh phải chart</li>
+          <li>Mức nằm chung với footprint và heatmap, không cần mở hai công cụ</li>
+        </ul>
+      </div>
+      <figure class="shot"><img src="img/f_gex.webp" width="1200" height="857" loading="lazy" decoding="async"
+        alt="Chart Vàng 15 phút với Call Wall 4100, Zero Gamma 4085,6 và profile GEX theo strike"></figure>
+    </article>
+
+    <article class="feature flip">
+      <div class="copy">
+        <span class="kicker">Footprint · iceberg</span>
+        <h3>Thấy <em>ai mua, ai bán</em> ở từng mức giá</h3>
+        <p>Gammatape theo dõi từng lệnh chờ: khớp, rút, dời hay nạp lại, rồi gắn nhãn ngay trong nến.</p>
+        <ul>
+          <li>Footprint bid × ask, imbalance xếp chồng, POC từng nến</li>
+          <li>Nhãn ICE cho lệnh ẩn khối lượng, kèm mức như @POC, @VAL</li>
+          <li>Vùng hấp thụ và cú quét giá được dán nhãn rõ ràng</li>
+        </ul>
+      </div>
+      <figure class="shot"><img src="img/f_footprint.webp" width="1200" height="890" loading="lazy" decoding="async"
+        alt="Footprint Vàng 1 phút với nhãn ICE, sweep bán và hai vùng hấp thụ"></figure>
+    </article>
+
+    <article class="feature">
+      <div class="copy">
+        <span class="kicker">Bảng quyền chọn</span>
+        <h3>Biết dealer đang ở <em>thế nào</em> trước khi vào phiên</h3>
+        <p>Chế độ gamma, biên độ kỳ vọng, GEX theo kỳ hạn và Gamma Surface vẽ ngay sau nến.</p>
+        <ul>
+          <li>Gamma dương / âm và biên độ kỳ vọng 1 ngày</li>
+          <li>GEX, DEX theo kỳ hạn, có thay đổi so với hôm qua</li>
+          <li>IV, HV, VRP, skew 25-delta có lịch sử</li>
+        </ul>
+      </div>
+      <div class="duo">
+        <figure class="shot"><img src="img/f_surface.webp" width="1200" height="972" loading="lazy" decoding="async"
+          alt="Gamma Surface 10 phiên vẽ phía sau nến Vàng 1 giờ"></figure>
+        <figure class="shot"><img src="img/f_dash.webp" width="762" height="900" loading="lazy" decoding="async"
+          alt="Bảng GEX trên điện thoại: biên độ kỳ vọng, vị thế dealer, GEX theo kỳ hạn"></figure>
+      </div>
+    </article>
+
+    <article class="feature flip">
+      <div class="copy">
+        <span class="kicker">Bản tin phiên</span>
+        <h3>Bản tin <em>Á · Âu · Mỹ</em> bằng tiếng Việt, mỗi ngày</h3>
+        <p>Viết từ GEX, Volume Profile và order flow cho Vàng, ES, NQ, BTC, ETH. Mọi con số giá được đối chiếu với dữ liệu thật trước khi đăng.</p>
+        <ul>
+          <li>Bối cảnh phiên trước, các mức cần xem, kịch bản lên / xuống</li>
+          <li>Kèm dòng "ý kiến cá nhân, không phải lời khuyên đầu tư"</li>
+        </ul>
+      </div>
+      <div>
+        <figure class="shot tall"><img src="img/f_brief.webp" width="762" height="990" loading="lazy" decoding="async"
+          alt="Bản tin phiên Mỹ của Vàng trên điện thoại"></figure>
+        <span class="cap" style="text-align: center;">Bản tin là ý kiến cá nhân, không phải lời khuyên đầu tư.</span>
+      </div>
+    </article>
+
+    <div class="extras">
+      <div class="extra"><b>Volume Profile, TPO, VWAP</b><span>Profile phiên, cố định, cạnh phải; VWAP ±σ; CVD có phân kỳ.</span></div>
+      <div class="extra"><b>Đủ trên điện thoại</b><span>Heatmap, footprint, SuperDOM, GEX, cùng lõi với bản PC.</span></div>
+      <div class="extra"><b>Cảnh báo giá 24/7</b><span>Chạy trên máy chủ, đẩy thông báo về điện thoại dù đã tắt app.</span></div>
+      <div class="extra"><b>Replay để luyện tập</b><span>Chạy lại thị trường, vào lệnh giấy, xem thống kê.</span></div>
+    </div>
+  </section>
+
+  <section class="block" id="hoc">
+    <div class="sec-head">
+      <div>
+        <span class="kicker">Kiến thức nền</span>
+        <h2>Học order flow</h2>
+        <p>Bốn khái niệm cơ bản để đọc dòng tiền và vị thế. Mở từng mục để đọc.</p>
+      </div>
+    </div>
     <div class="learn-grid">
       <details class="lesson">
         <summary>Footprint là gì?</summary>
@@ -282,7 +532,7 @@ footer details { margin-top: 8px; }
         </div>
       </details>
       <details class="lesson">
-        <summary>Volume Profile, POC và Value Area</summary>
+        <summary>Volume Profile &amp; Value Area</summary>
         <p class="lead">Khối lượng phân bố theo giá trong một phiên hay một khoảng thời gian.</p>
         <div class="body">
           <p><b>POC</b> là mức giá có khối lượng lớn nhất. <b>Value Area</b> là vùng chứa khoảng 70% khối lượng, giới hạn bởi <b>VAH</b> (trên) và <b>VAL</b> (dưới).</p>
@@ -305,16 +555,27 @@ footer details { margin-top: 8px; }
           </ul>
         </div>
       </details>
-      <div class="soon">
-        <b>Tự kết nối data của bạn · sắp ra mắt</b>
-        <p>Công cụ footprint chạy trên tài khoản Rithmic/CQG hoặc NinjaTrader của chính người dùng. Data đi thẳng từ tài khoản của bạn tới máy của bạn, trang này không phát lại data sàn.</p>
-      </div>
     </div>
+  </section>
+
+  <section class="final" aria-labelledby="final-h">
+    <img src="img/logo.png" alt="" width="52" height="52" loading="lazy">
+    <h2 id="final-h">Xem phiên hôm nay trên Gammatape</h2>
+    <p>Footprint, heatmap, iceberg và GEX cho Vàng, ES, NQ, crypto. Trên PC, Mac, iPhone, Android.</p>
+    <div class="actions">
+      <a class="btn gold" href="https://m.me/61596278051545?ref=gammatape_web" target="_blank" rel="noopener">Inbox để nhận link dùng thử</a>
+      <a class="btn" href="https://t.me/gammatape" target="_blank" rel="noopener">Kênh Telegram</a>
+    </div>
+    <p class="risk">Gammatape là công cụ phân tích dữ liệu thị trường, không phải lời khuyên đầu tư. Giao dịch phái sinh và tài sản số có rủi ro cao.</p>
   </section>
 </main>
 
 <footer class="wrap">
-  <p><b>Miễn trừ trách nhiệm:</b> Nội dung trên Mạch Thị Trường chỉ nhằm mục đích giáo dục và cung cấp thông tin, không phải lời khuyên đầu tư hay khuyến nghị mua bán bất kỳ tài sản nào. Giao dịch hợp đồng tương lai có rủi ro cao và có thể mất toàn bộ vốn.</p>
+  <div class="row">
+    <a class="logo" href="#top" style="font-size: 16px; color: var(--text);"><img src="img/logo.png" alt="" width="24" height="24" loading="lazy" style="width:24px;height:24px">Gammatape</a>
+    <span><a href="https://www.facebook.com/profile.php?id=61596278051545" target="_blank" rel="noopener">Facebook</a> · <a href="https://t.me/gammatape" target="_blank" rel="noopener">Telegram</a> · <a href="https://discord.gg/BqzHXYZCG8" target="_blank" rel="noopener">Discord</a></span>
+  </div>
+  <p><b>Miễn trừ trách nhiệm:</b> Nội dung trên trang này chỉ nhằm mục đích giáo dục và cung cấp thông tin, không phải lời khuyên đầu tư hay khuyến nghị mua bán bất kỳ tài sản nào. Giao dịch hợp đồng tương lai và tài sản số có rủi ro cao và có thể mất toàn bộ vốn.</p>
   <p>Số liệu COT lấy từ CFTC, tồn kho dầu từ EIA, lợi suất từ U.S. Treasury, lãi suất EFFR từ Fed New York (dữ liệu công khai của các cơ quan Mỹ). Lịch kinh tế từ Forex Factory. Tin tức lấy từ RSS, bản quyền thuộc các nguồn gốc. Kịch bản là nội dung tự động mang tính minh hoạ.</p>
   <details><summary>Trạng thái nguồn dữ liệu</summary><div id="sources"></div></details>
 </footer>
@@ -322,14 +583,13 @@ footer details { margin-top: 8px; }
 <script>
 const VN = "Asia/Ho_Chi_Minh";
 const ASSETS = { GC: "Vàng", ES: "S&P 500", NQ: "Nasdaq 100", CL: "Dầu WTI" };
-const TV_SYMBOLS = { GC: "OANDA:XAUUSD", ES: "FOREXCOM:SPXUSD", NQ: "FOREXCOM:NSXUSD", CL: "TVC:USOIL" };
 const TOPICS = { all: "Tất cả", GC: "GC · Vàng", ES: "ES · S&P", NQ: "NQ · Nasdaq", CL: "CL · Dầu", FED: "Fed", MACRO: "Vĩ mô", official: "Nguồn chính thức" };
 const LANGS = { all: "Mọi ngôn ngữ", en: "English", vi: "Tiếng Việt" };
 const IMPACTS = { High: "Cao", Medium: "Trung bình", Low: "Thấp" };
 const CCYS = { all: "Mọi tiền tệ", USD: "USD" };
 const PAGE = 15, REFRESH_MS = 5 * 60 * 1000;
 
-const state = load("mtt-state", { chart: "GC", topic: "all", lang: "all", impacts: ["High", "Medium"], ccy: "USD" });
+const state = load("mtt-state", { topic: "all", lang: "all", impacts: ["High", "Medium"], ccy: "USD" });
 let news = null, cal = null, market = null, shown = PAGE;
 
 function load(k, d) { try { return { ...d, ...JSON.parse(localStorage.getItem(k)) }; } catch { return d; } }
@@ -346,7 +606,7 @@ const fmtN = (n, d = 0) => new Intl.NumberFormat("vi-VN", { minimumFractionDigit
 const signed = (n, d = 0) => (n > 0 ? "+" : n < 0 ? "−" : "") + fmtN(Math.abs(n), d);
 const cls = n => n > 0 ? "up" : n < 0 ? "down" : "muted";
 const vnTime = d => d.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit", timeZone: VN });
-// vi-VN in "25-10" khi không có năm, đổi về "25/10" cho thống nhất
+// vi-VN prints "25-10" without a year; normalise to "25/10"
 const vnDate = (d, o = { day: "2-digit", month: "2-digit", year: "numeric" }) =>
   d.toLocaleDateString("vi-VN", { ...o, timeZone: VN }).replace(/(\d{2})-(\d{2})/, "$1/$2");
 const rtf = new Intl.RelativeTimeFormat("vi", { numeric: "auto" });
@@ -358,26 +618,43 @@ function ago(iso) {
   if (Math.abs(s) < 86400) return rtf.format(Math.round(s / 3600), "hour");
   return rtf.format(Math.round(s / 86400), "day");
 }
+function until(d) {
+  const m = Math.max(0, Math.round((d - Date.now()) / 60000)), days = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), mm = m % 60;
+  return "còn " + (days ? `${days} ngày ${h} giờ` : h ? `${h} giờ ${mm} phút` : `${mm} phút`);
+}
 function chipGroup(box, options, isOn, onClick) {
   box.replaceChildren(...Object.entries(options).map(([k, label]) =>
-    el("button", { className: "chip", textContent: label, ariaPressed: String(isOn(k)), onclick: () => onClick(k) })));
+    el("button", { type: "button", className: "chip", textContent: label, ariaPressed: String(isOn(k)), onclick: () => onClick(k) })));
 }
-const isDark = () => getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() === "#0c0f13";
 
-// ---------- Biểu đồ TradingView ----------
-function renderChart() {
-  chipGroup($("chart-tabs"), Object.fromEntries(Object.entries(ASSETS).map(([k, v]) => [k, `${k} · ${v}`])),
-    k => state.chart === k, k => { state.chart = k; save(); renderChart(); });
-  const box = $("tv");
-  box.replaceChildren();
-  const inner = el("div", { className: "tradingview-widget-container__widget" });
-  const s = el("script", { src: "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js", async: true });
-  s.textContent = JSON.stringify({
-    autosize: true, symbol: TV_SYMBOLS[state.chart], interval: "60", timezone: VN, theme: isDark() ? "dark" : "light",
-    style: "1", locale: "vi_VN", allow_symbol_change: false, hide_side_toolbar: true, calendar: false,
-    support_host: "https://www.tradingview.com",
-  });
-  box.append(el("div", { className: "tradingview-widget-container" }, inner, s));
+// ---------- Pulse tiles ----------
+function tile(href, label, value, sub, extra = "") {
+  return el("a", { className: "tile " + extra, href },
+    el("div", { className: "lbl", textContent: label }), value, sub ? el("div", { className: "sub", textContent: sub }) : null);
+}
+function renderPulse() {
+  const out = [];
+  const now = Date.now();
+  const next = cal?.events.map(e => ({ ...e, d: new Date(e.time) }))
+    .filter(e => e.impact === "High" && e.country === "USD" && e.d > now).sort((a, b) => a.d - b.d)[0];
+  out.push(next
+    ? tile("#calendar", "Tin đỏ USD kế tiếp", el("div", { className: "val small", textContent: next.title }),
+        `${vnDate(next.d, { weekday: "short", day: "2-digit", month: "2-digit" })} ${vnTime(next.d)} · ${until(next.d)}`, "hot")
+    : tile("#calendar", "Tin đỏ USD kế tiếp", el("div", { className: "val small", textContent: "Hết tin đỏ tuần này" }), ""));
+  const ry = market?.macro?.find(m => /thực/.test(m.name));
+  if (ry) out.push(tile("#macro", "Lợi suất thực 10 năm",
+    // Neutral colour: a rising yield is not "good", so the impact is said in words instead
+    el("div", { className: "val num" }, fmtN(ry.value, 2) + "% ", el("small", { className: "num muted", style: "font-size:14px", textContent: signed(ry.change, 2) })),
+    "so với 1 tháng trước · " + (ry.change < 0 ? "thường hỗ trợ Vàng" : ry.change > 0 ? "thường gây áp lực lên Vàng" : "đi ngang")));
+  const gc = market?.cot?.assets?.GC;
+  if (gc) out.push(tile("#cot", "Quỹ lớn · Vàng (COT)",
+    el("div", { className: "val num " + cls(gc.net), textContent: signed(gc.net) }),
+    `hợp đồng ròng · COT Index 26 tuần ${gc.index26}`));
+  const crude = market?.eia?.rows?.[0];
+  if (crude) out.push(tile("#eia", "Tồn kho dầu thô Mỹ",
+    el("div", { className: "val num " + cls(-crude.change), textContent: signed(crude.change, 1) + " tr thùng" }),
+    `tuần · còn ${fmtN(crude.value, 1)} triệu thùng`));
+  $("pulse").replaceChildren(...out);
 }
 
 // ---------- COT ----------
@@ -388,10 +665,10 @@ function sparkline(hist) {
   const svg = document.createElementNS(ns, "svg");
   svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("preserveAspectRatio", "none"); svg.classList.add("spark");
   const zero = document.createElementNS(ns, "line");
-  Object.entries({ x1: 0, x2: W, y1: y(0), y2: y(0), stroke: "var(--line)", "stroke-dasharray": "3 3" }).forEach(([k, v]) => zero.setAttribute(k, v));
+  Object.entries({ x1: 0, x2: W, y1: y(0), y2: y(0), stroke: "var(--line2)", "stroke-dasharray": "3 3" }).forEach(([k, v]) => zero.setAttribute(k, v));
   const path = document.createElementNS(ns, "polyline");
   path.setAttribute("points", vals.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" "));
-  Object.entries({ fill: "none", stroke: vals.at(-1) >= 0 ? "var(--up)" : "var(--down)", "stroke-width": 1.8, "vector-effect": "non-scaling-stroke" })
+  Object.entries({ fill: "none", stroke: vals.at(-1) >= 0 ? "var(--green)" : "var(--red)", "stroke-width": 1.8, "vector-effect": "non-scaling-stroke" })
     .forEach(([k, v]) => path.setAttribute(k, v));
   const t = document.createElementNS(ns, "title");
   t.textContent = `Vị thế ròng 52 tuần: ${nf.format(Math.min(...vals))} → ${nf.format(Math.max(...vals))}`;
@@ -412,7 +689,7 @@ function renderCot() {
     const a = cot.assets[k];
     if (!a) return null;
     return el("div", { className: "cot" },
-      el("h3", {}, k, el("span", { textContent: a.name })),
+      el("h4", {}, k, el("span", { textContent: a.name })),
       el("div", { className: "big num " + cls(a.net), textContent: signed(a.net) }),
       el("div", { className: "sub" }, "hợp đồng ròng · tuần ", el("b", { className: "num " + cls(a.change), textContent: signed(a.change) }),
         ` · ${fmtN(a.net_pct_oi, 1)}% OI`),
@@ -434,12 +711,12 @@ function renderEia() {
     el("tbody", {}, eia.rows.map(r => el("tr", {},
       el("td", { textContent: r.name }),
       el("td", { className: "r num", textContent: fmtN(r.value, 1) }),
-      // Tồn kho giảm = cầu mạnh: tô xanh khi giảm, đỏ khi tăng
+      // Falling inventory = strong demand: green when it falls, red when it rises
       el("td", { className: "r num " + cls(-r.change), textContent: signed(r.change, 1) }),
       el("td", { className: "r num muted hide-sm", textContent: fmtN(r.year_ago, 1) }))))));
 }
 
-// ---------- Vĩ mô ----------
+// ---------- Macro ----------
 function renderMacro() {
   const macro = market?.macro;
   if (!macro?.length) { $("macro-body").replaceChildren(el("div", { className: "empty", textContent: "Chưa có dữ liệu vĩ mô." })); return; }
@@ -458,7 +735,7 @@ function renderMacro() {
       }))))))));
 }
 
-// ---------- Kịch bản ----------
+// ---------- Scenarios ----------
 function renderScenarios() {
   const sc = market?.scenarios;
   if (!sc) return;
@@ -467,12 +744,12 @@ function renderScenarios() {
     const s = sc[k]; if (!s) return null;
     const [c, label] = tone(s.bias);
     return el("div", { className: "scen" },
-      el("h3", {}, `${k} · ${ASSETS[k]}`, el("span", { className: "tone " + c, textContent: label })),
+      el("h4", {}, `${k} · ${ASSETS[k]}`, el("span", { className: "tone " + c, textContent: label })),
       el("ul", {}, s.notes.map(n => el("li", { textContent: n }))));
   }));
 }
 
-// ---------- Tin tức ----------
+// ---------- News ----------
 function renderNews() {
   if (!news) return;
   chipGroup($("topics"), TOPICS, k => state.topic === k, k => { state.topic = k; shown = PAGE; save(); renderNews(); });
@@ -490,13 +767,13 @@ function renderNews() {
       it.official ? el("span", { className: "off", textContent: "CHÍNH THỨC" }) : null,
       el("time", { textContent: ago(it.time), title: it.time ? new Date(it.time).toLocaleString("vi-VN", { timeZone: VN }) : "" }),
       it.topics.map(t => el("span", { className: "tag", textContent: t === "MACRO" ? "Vĩ mô" : t === "FED" ? "Fed" : t }))),
-    el("h3", {}, el("a", { href: safeUrl(it.link), target: "_blank", rel: "noopener noreferrer", textContent: it.title })),
+    el("h4", {}, el("a", { href: safeUrl(it.link), target: "_blank", rel: "noopener noreferrer", textContent: it.title })),
     it.summary ? el("p", { textContent: it.summary }) : null)),
-    items.length > shown ? el("button", { className: "chip more", textContent: `Xem thêm (${items.length - shown})`,
+    items.length > shown ? el("button", { type: "button", className: "chip more", textContent: `Xem thêm (${items.length - shown})`,
       onclick: () => { shown += PAGE; renderNews(); } }) : null);
 }
 
-// ---------- Lịch ----------
+// ---------- Calendar ----------
 function renderCal() {
   if (!cal) return;
   chipGroup($("impacts"), IMPACTS, k => state.impacts.includes(k), k => {
@@ -515,21 +792,20 @@ function renderCal() {
     const dk = vnDate(e.d, { weekday: "long", day: "2-digit", month: "2-digit" });
     if (dk !== day) { day = dk; out.push(el("div", { className: "day", textContent: dk[0].toUpperCase() + dk.slice(1) })); }
     const nums = [e.forecast && `Dự báo ${e.forecast}`, e.previous && `Trước ${e.previous}`].filter(Boolean).join(" · ");
-    const row = el("div", { className: "ev" + (e.d < now ? " past" : "") + (e === next ? " next" : "") },
+    out.push(el("div", { className: "ev" + (e.d < now ? " past" : "") + (e === next ? " next" : "") },
       el("span", { className: "t num", textContent: vnTime(e.d) }),
       el("span", { className: "c" }, el("span", { className: "dot " + e.impact, title: IMPACTS[e.impact] || e.impact }), e.country),
-      el("span", {}, e.title, nums ? el("span", { className: "nums num", textContent: nums }) : null));
-    out.push(row);
+      el("span", {}, e.title, nums ? el("span", { className: "nums num", textContent: nums }) : null)));
   }
   box.replaceChildren(...out);
   const n = box.querySelector(".next");
   if (n && !renderCal.done) { renderCal.done = true; box.scrollTop = n.offsetTop - box.offsetTop - 40; }
 }
 
-// ---------- Tải dữ liệu ----------
+// ---------- Data loading ----------
 function renderSources() {
   const rows = [];
-  if (market?.errors) for (const [k, v] of Object.entries(market.errors)) rows.push(`● ${k}: lỗi lần lấy gần nhất, đang hiện bản cũ`);
+  if (market?.errors) for (const [k] of Object.entries(market.errors)) rows.push(`● ${k}: lỗi lần lấy gần nhất, đang hiện bản cũ`);
   if (news) for (const s of news.sources) rows.push(`${s.ok ? "●" : "○"} ${s.source}: ${s.ok ? s.count + " tin" : "lỗi"}`);
   $("sources").replaceChildren(...rows.map(t => el("div", { textContent: t })));
 }
@@ -544,32 +820,31 @@ async function refresh() {
   if (c.status === "fulfilled") cal = c.value;
   if (m.status === "fulfilled") market = m.value;
   const upd = [news?.updated, market?.updated].filter(Boolean).sort().at(-1);
-  $("updated").textContent = upd ? `Dữ liệu cập nhật ${vnTime(new Date(upd))} ${vnDate(new Date(upd), { day: "2-digit", month: "2-digit" })} (giờ VN) · ${ago(upd)}`
+  $("updated").textContent = upd ? `Cập nhật ${vnTime(new Date(upd))} ${vnDate(new Date(upd), { day: "2-digit", month: "2-digit" })} (giờ VN) · ${ago(upd)}`
                                  : "Không tải được dữ liệu";
   if (news) { $("news-badge").textContent = `${news.items.length} tin · 3 ngày gần nhất`; $("news-badge").className = "badge ok"; }
-  renderCot(); renderEia(); renderMacro(); renderScenarios(); renderNews(); renderCal(); renderSources();
+  renderPulse(); renderCot(); renderEia(); renderMacro(); renderScenarios(); renderNews(); renderCal(); renderSources();
 }
 
-// ---------- Khởi động ----------
-const savedTheme = (() => { try { return localStorage.getItem("mtt-theme"); } catch { return null; } })();
-if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+// ---------- Start ----------
+const savedTheme = (() => { try { return localStorage.getItem("gt-theme"); } catch { return null; } })();
+if (savedTheme === "light") document.documentElement.dataset.theme = "light";
 $("theme").onclick = () => {
-  const t = isDark() ? "light" : "dark";
-  document.documentElement.dataset.theme = t;
-  try { localStorage.setItem("mtt-theme", t); } catch {}
-  renderChart();
+  const light = document.documentElement.dataset.theme !== "light";
+  if (light) document.documentElement.dataset.theme = "light"; else delete document.documentElement.dataset.theme;
+  try { localStorage.setItem("gt-theme", light ? "light" : "dark"); } catch {}
 };
 $("q").oninput = () => { shown = PAGE; renderNews(); };
 
-// Tô sáng mục đang xem trên thanh điều hướng
-const links = [...document.querySelectorAll("nav.sections a")];
+// Highlight the section in view on the top bar
+const links = [...document.querySelectorAll(".links a")];
+const watched = links.map(a => document.querySelector(a.getAttribute("href"))).filter(Boolean);
 const io = new IntersectionObserver(entries => {
   for (const e of entries) if (e.isIntersecting)
     links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id));
-}, { rootMargin: "-45% 0px -50% 0px" });
-document.querySelectorAll("main > section").forEach(s => io.observe(s));
+}, { rootMargin: "-40% 0px -55% 0px" });
+watched.forEach(s => io.observe(s));
 
-renderChart();
 refresh();
 setInterval(refresh, REFRESH_MS);
 </script>

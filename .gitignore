@@ -3,3 +3,4 @@ site/data/
 __pycache__/
 # Cấu hình xem thử trên máy
 .claude/
+.gravity/

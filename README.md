@@ -1,17 +1,22 @@
-# Mạch Thị Trường
+# Gammatape
 
-Vĩ mô · Vị thế · Tin tức cho GC, ES, NQ, CL — công cụ học và theo dõi. Công khai, miễn phí cho mọi người, chạy với chi phí 0 đồng.
+Địa chỉ: https://gammatape.github.io (repo `gammatape/gammatape.github.io`).
+
+Trang web của Gammatape: giới thiệu app (order flow + GEX trên một biểu đồ, ảnh chụp app thật, nút inbox nhận link dùng thử) và mục **Nhịp thị trường hôm nay** miễn phí cho mọi người: vĩ mô · vị thế · tin tức cho GC, ES, NQ, CL. Chạy với chi phí 0 đồng.
+
+Bộ nhận diện giống bộ ảnh quảng cáo: nền #0b0f17, xanh #22c55e, vàng #f5b301, font Be Vietnam Pro. Giao diện tối là mặc định, có nút đổi sang sáng.
 
 | Mục | Nguồn (miễn phí, không cần API key) | Tần suất |
 |---|---|---|
-| Biểu đồ giá tham chiếu | Widget TradingView | Trực tiếp |
+| Ô nhịp thị trường (tin đỏ kế tiếp, lợi suất thực, COT Vàng, tồn kho dầu) | Tính trên trang từ dữ liệu bên dưới | Mỗi lần tải |
 | Vị thế quỹ lớn (COT) | CFTC, báo cáo Legacy | Thứ Sáu hằng tuần |
 | Tồn kho dầu Mỹ | EIA, Weekly Petroleum Status | Thứ Tư hằng tuần |
 | Động lực vĩ mô | U.S. Treasury (lợi suất danh nghĩa, lợi suất thực), Fed New York (EFFR) | Hằng ngày |
 | Kịch bản để quan sát | Tự suy ra từ COT, vĩ mô, EIA (mang tính giáo dục) | Mỗi lần cập nhật |
 | Tin tức | RSS của Fed, EIA, CFTC và các trang tin tài chính | 30 phút |
 | Lịch vĩ mô (giờ VN) | Forex Factory | 30 phút |
-| Góc học orderflow | Nội dung tĩnh | — |
+| Tính năng Gammatape | Ảnh chụp app thật trong site/img (Vàng, phiên Mỹ 11/11) | — |
+| Học order flow | Nội dung tĩnh | — |
 
 Tin tức chỉ hiện tiêu đề, tóm tắt ngắn và link về bài gốc, không chép nguyên bài.
 
@@ -23,6 +28,7 @@ scripts/common.py             Hàm dùng chung
 scripts/fetch_news.py         Tin tức + lịch kinh tế  -> site/data/news.json, calendar.json
 scripts/fetch_market.py       COT, EIA, vĩ mô, kịch bản -> site/data/market.json
 site/index.html               Trang web (một file, không cần build)
+site/img/                     Ảnh chụp Gammatape (WebP, đã cắt bỏ thanh công cụ / danh sách theo dõi), logo, og.jpg 1200x630
 .github/workflows/update.yml  Chạy 2 script mỗi 30 phút và đăng lên GitHub Pages
 ```
 
@@ -39,10 +45,10 @@ py scripts/fetch_market.py
 ```
 
 ```bash
-py -m http.server 8765 --directory site
+py -m http.server 8771 --bind 127.0.0.1 --directory site
 ```
 
-Rồi mở http://localhost:8765
+Rồi mở http://127.0.0.1:8771
 
 ## Đăng lên mạng miễn phí (GitHub Pages) bằng GitHub Desktop
 
