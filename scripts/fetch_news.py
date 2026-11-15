@@ -27,10 +27,13 @@ TOPICS = {
            # "vàng" đứng một mình dễ dính "vững vàng", "đất vàng" nên dùng cụm cụ thể
            "giá vàng", "vàng miếng", "vàng nhẫn", "vàng sjc", "vàng thế giới", "vàng trong nước",
            "mua vàng", "bán vàng", "dự trữ vàng", "quỹ vàng", "thị trường vàng", "giá bạc"],
-    "ES": ["s&p", "s&p 500", "spx", "dow", "wall street", "stocks?", "equities", "earnings",
-           "chứng khoán mỹ", "phố wall"],
+    # "stocks"/"equities" đứng một mình khớp cả chứng khoán Ả Rập, châu Âu, Trung Quốc: chỉ lấy cụm chỉ thị trường Mỹ
+    "ES": ["s&p", "s&p 500", "spx", "dow jones", "the dow", "wall street", "u\\.?s\\.? stocks?", "american stocks?",
+           "u\\.?s\\.? equities", "chứng khoán mỹ", "phố wall"],
     "NQ": ["nasdaq", "nq", "tech stocks", "megacap", "nvidia", "apple", "microsoft", "semiconductors?", "chips?"],
     "CL": ["oil", "crude", "opec", "brent", "wti", "gasoline", "petroleum", "eia", "giá dầu", "xăng dầu"],
+    "CRYPTO": ["bitcoin", "btc", "ether", "ethereum", "solana", "crypto", "cryptocurrenc(?:y|ies)", "stablecoins?",
+               "spot etfs?", "tiền số", "tiền mã hoá", "tiền mã hóa", "tiền điện tử", "tài sản số"],
     "FED": ["fed", "federal reserve", "fomc", "powell", "rate cuts?", "rate hikes?", "interest rates?",
             "monetary policy", "lãi suất"],
     "MACRO": ["cpi", "pce", "inflation", "jobs report", "payrolls?", "nfp", "gdp", "pmi", "unemployment",

@@ -453,6 +453,59 @@ footer details { margin-top: 8px; }
 .full > summary::before { content: "▸"; color: var(--muted); transition: transform 160ms ease-out; }
 .full[open] > summary::before { transform: rotate(90deg); }
 .full .filters { margin-top: 6px; }
+
+/* ---- Crypto, macro rows with trend, news by time (2026-11-15) ---- */
+@media (min-width: 900px) { .four { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.coins { display: grid; gap: 10px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 600px) { .coins { grid-template-columns: 1fr; } }
+.coin { background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; padding: 12px; min-width: 0; }
+.coin .t { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+.coin .t b { font-size: 17px; } .coin .t .n { color: var(--muted); font-size: 12.5px; }
+.coin .v { font-size: 22px; font-weight: 800; letter-spacing: -.4px; margin-top: 4px; }
+.coin .chart { margin: 6px 0 4px; }
+.coin .s { font-size: 12px; color: var(--muted); }
+@media (max-width: 600px) {
+  .coin { display: grid; grid-template-columns: 1fr 120px; grid-template-areas: "t t" "v c" "s c"; column-gap: 12px; align-items: center; }
+  .coin .t { grid-area: t; } .coin .v { grid-area: v; } .coin .chart { grid-area: c; margin: 0; } .coin .s { grid-area: s; }
+}
+.fng { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr); gap: 8px 20px; align-items: center; margin-top: 14px;
+  background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; }
+@media (max-width: 560px) { .fng { grid-template-columns: 1fr; } .fg-gauge { max-width: 260px; margin: 0 auto; width: 100%; } }
+.fg-text .k { font-size: 12.5px; color: var(--muted); }
+.fg-v b { font-size: 34px; font-weight: 800; letter-spacing: -.5px; }
+.fg-v span { font-size: 16px; font-weight: 700; }
+
+/* macro rows: name + plain-language impact | 1-month trend | value */
+.mrow2 { border-bottom: 1px solid var(--line); }
+.mrow2:last-child { border-bottom: 0; }
+.mrow2 summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) 84px auto; gap: 4px 12px; align-items: center; padding: 10px 0; min-height: 52px; }
+.mrow2 summary::-webkit-details-marker { display: none; }
+.mrow2 .mn b { display: block; font-size: 14.5px; font-weight: 600; line-height: 1.35; }
+.mrow2 .it { display: block; font-size: 12px; font-weight: 600; margin-top: 2px; }
+.mrow2 .spk { display: block; }
+.mrow2 .mv { text-align: right; display: grid; }
+.mrow2 .mv b { font-size: 16px; font-weight: 800; }
+.mrow2 .mv span { font-size: 12px; }
+.mrow2[open] .mn b { color: var(--gold); }
+.mrow2 p { margin: 0 0 10px; color: var(--muted); font-size: 13.5px; }
+
+/* news: search + language on one row, topics in one scrolling row, items grouped by time */
+.news-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.news-bar .search { flex: 1 1 260px; }
+.chips.fade { -webkit-mask-image: linear-gradient(to right, #000 88%, transparent); mask-image: linear-gradient(to right, #000 88%, transparent); }
+.ngroup { margin-top: 14px; }
+.nh { font-size: 12.5px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: .04em; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+.nlist { display: grid; column-gap: 28px; }
+@media (min-width: 1000px) { .nlist { grid-template-columns: 1fr 1fr; } }
+.nitem { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.nitem .tm { font-size: 12.5px; font-weight: 700; color: var(--muted); padding-top: 2px; }
+.nitem .nt { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-decoration: none;
+  font-weight: 700; font-size: 15px; line-height: 1.4; }
+@media (hover: hover) and (pointer: fine) { .nitem .nt:hover { text-decoration: underline; } }
+.nitem .nm { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; margin-top: 4px; font-size: 12px; color: var(--muted); }
+.nitem .src { font-weight: 600; }
+.nitem .offb { color: var(--green); background: var(--green-soft); border-radius: 4px; padding: 0 6px; font-weight: 700; }
+.nitem.off .nt { color: var(--green); }
 </style>
 </head>
 <body>
@@ -464,6 +517,7 @@ footer details { margin-top: 8px; }
       <a href="#thi-truong">Thị trường</a>
       <a href="#cot">Theo mã</a>
       <a href="#calendar">Lịch tuần</a>
+      <a href="#crypto">Crypto</a>
       <a href="#loi-suat">Lợi suất</a>
       <a href="#flows">Ai mua bán</a>
       <a href="#news">Tin tức</a>
@@ -509,7 +563,7 @@ footer details { margin-top: 8px; }
       <div>
         <span class="kicker">Miễn phí cho tất cả</span>
         <h2>Nhịp thị trường hôm nay</h2>
-        <p>Vĩ mô, vị thế quỹ lớn, tồn kho dầu, lịch kinh tế và tin tức cho Vàng, ES, NQ, dầu. Tự cập nhật mỗi 30 phút.</p>
+        <p>Vĩ mô, vị thế quỹ lớn, tồn kho dầu, crypto, lịch kinh tế và tin tức cho Vàng, ES, NQ, dầu, BTC, ETH. Tự cập nhật mỗi 30 phút.</p>
       </div>
       <span class="pill" id="updated">Đang tải dữ liệu…</span>
     </div>
@@ -518,7 +572,7 @@ footer details { margin-top: 8px; }
     <div class="grid">
       <section class="card" id="cot">
         <div class="card-head"><h3>Quỹ lớn đang nghiêng về đâu?</h3><span class="badge" id="cot-badge">Đang tải…</span></div>
-        <p class="q">Vị thế ròng 52 tuần của 4 mã. Thanh dưới mỗi thẻ là COT Index 26 tuần: hai đầu tô màu là vùng đã đông người. Bấm một mã để xem kịch bản.</p>
+        <p class="q">Vị thế ròng 52 tuần của 6 mã. Thanh dưới mỗi thẻ là COT Index 26 tuần: hai đầu tô màu là vùng đã đông người. Bấm một mã để xem kịch bản.</p>
         <div class="four" id="four" role="tablist" aria-label="Chọn mã"></div>
         <div class="asset-panel" role="tabpanel" id="asset-panel" tabindex="0"></div>
         <p class="note">COT: báo cáo Commitments of Traders (Legacy, nhóm Non-commercial) của CFTC, chốt số thứ Ba, công bố thứ Sáu. COT Index là vị trí của vị thế ròng trong biên cao–thấp 26 hoặc 156 tuần (0 = thấp nhất, 100 = cao nhất). Kịch bản tự suy ra từ COT, vĩ mô và EIA theo quy tắc đơn giản, mang tính giáo dục, không phải khuyến nghị mua bán.</p>
@@ -541,6 +595,20 @@ footer details { margin-top: 8px; }
         <p class="note">Nguồn: lịch kinh tế tuần này của Forex Factory. Tên sự kiện dịch sang tiếng Việt, tên gốc ghi bên dưới.</p>
       </section>
 
+      <section class="card c7" id="crypto">
+        <div class="card-head"><h3>Crypto hôm nay</h3><span class="badge" id="crypto-badge">Đang tải…</span></div>
+        <p class="q">Giá tham khảo (USD), thay đổi 24 giờ và đường giá 7 ngày. Chỉ số Sợ hãi &amp; Tham lam đo tâm lý chung của thị trường crypto.</p>
+        <div class="coins" id="coins"></div>
+        <div class="fng" id="fng"></div>
+        <p class="note">Giá: <a href="https://www.coingecko.com" target="_blank" rel="noopener">CoinGecko</a>. Chỉ số Sợ hãi &amp; Tham lam: <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener">alternative.me</a>. Cập nhật mỗi 30 phút, không dùng để giao dịch.</p>
+      </section>
+      <section class="card c5" id="crowd">
+        <div class="card-head"><h3>Ai đang đông người?</h3></div>
+        <p class="q">COT Index của 6 mã trên một thang 0–100. Ở hai đầu là vùng dễ đảo chiều.</p>
+        <div class="chart" id="map"></div>
+        <div class="legend"><span><i style="background:#f5b301;border-radius:50%"></i>26 tuần</span><span><i style="border:2px solid var(--muted);border-radius:50%"></i>3 năm</span><span><i style="background:rgba(239,68,68,.35)"></i>Bán đã đông</span><span><i style="background:rgba(34,197,94,.35)"></i>Mua đã đông</span></div>
+      </section>
+
       <section class="card c7" id="loi-suat">
         <div class="card-head"><h3>Đường cong lợi suất Mỹ</h3><span class="badge" id="curve-badge">Đang tải…</span></div>
         <p class="q">Lợi suất trái phiếu chính phủ Mỹ theo kỳ hạn. Dốc lên là bình thường; đầu ngắn cao hơn đầu dài (đảo ngược) thường đi trước suy thoái.</p>
@@ -549,13 +617,12 @@ footer details { margin-top: 8px; }
         <p class="note">Nguồn: U.S. Treasury, Daily Treasury Par Yield Curve.</p>
       </section>
 
-      <section class="card c5" id="crowd">
-        <div class="card-head"><h3>Ai đang đông người?</h3></div>
-        <p class="q">COT Index của 4 mã trên một thang 0–100. Ở hai đầu là vùng dễ đảo chiều.</p>
-        <div class="chart" id="map"></div>
-        <div class="legend"><span><i style="background:#f5b301;border-radius:50%"></i>26 tuần</span><span><i style="border:2px solid var(--muted);border-radius:50%"></i>3 năm</span><span><i style="background:rgba(239,68,68,.35)"></i>Bán đã đông</span><span><i style="background:rgba(34,197,94,.35)"></i>Mua đã đông</span></div>
+      <section class="card c5" id="macro">
+        <div class="card-head"><h3>Vĩ mô Mỹ</h3><span class="badge" id="macro-badge">Đang tải…</span></div>
+        <p class="hint">So với khoảng 1 tháng trước. Bấm vào từng dòng để xem vì sao chỉ số này quan trọng.</p>
+        <div id="macro-body"></div>
+        <p class="note">Nguồn: U.S. Treasury, Fed New York. Nhãn ▲/▼ là chiều tác động thường gặp lên từng tài sản, mang tính giáo dục, không phải dự báo.</p>
       </section>
-
       <section class="card c7" id="flows">
         <div class="card-head"><h3>Ai đang mua, ai đang bán?</h3><div class="seg push" id="flow-asset" role="group" aria-label="Chọn mã"></div></div>
         <p class="q">Vị thế ròng của từng nhóm trên sàn. Quỹ đầu cơ thường đi theo xu hướng; nhà sản xuất và ngân hàng thường đứng phía phòng hộ.</p>
@@ -574,22 +641,16 @@ footer details { margin-top: 8px; }
         <p class="note">Sang trái (xanh) = tồn kho giảm, thường đọc là cầu mạnh; sang phải (đỏ) = tăng. Nguồn: U.S. EIA, Weekly Petroleum Status (thứ Tư, khoảng 21:30 giờ VN).</p>
       </section>
 
-      <section class="card c7" id="news">
+      <section class="card" id="news">
         <div class="card-head"><h3>Tin tức</h3><span class="badge" id="news-badge">Đang tải…</span></div>
-        <input class="search" id="q" type="search" placeholder="Tìm tin… (vd: Powell, OPEC, CPI)" autocomplete="off" aria-label="Tìm tin">
-        <div class="chips scroll" id="topics" role="group" aria-label="Chủ đề"></div>
-        <div class="seg sm" id="langs" role="group" aria-label="Ngôn ngữ"></div>
+        <div class="news-bar">
+          <input class="search" id="q" type="search" placeholder="Tìm tin… (vd: Powell, OPEC, CPI, bitcoin)" autocomplete="off" aria-label="Tìm tin">
+          <div class="seg" id="langs" role="group" aria-label="Ngôn ngữ"></div>
+        </div>
+        <div class="chips scroll fade" id="topics" role="group" aria-label="Chủ đề"></div>
         <div id="news-list"></div>
-        <p class="note">Nguồn: RSS của Federal Reserve, EIA, CFTC và các trang tin tài chính. Chỉ hiện tiêu đề, tóm tắt ngắn và link; bấm tiêu đề để đọc bài gốc.</p>
-      </section>
-
-      <section class="card c5" id="macro">
-        <div class="card-head"><h3>Vĩ mô Mỹ</h3><span class="badge" id="macro-badge">Đang tải…</span></div>
-        <p class="hint">So với khoảng 1 tháng trước. Bấm vào từng dòng để xem vì sao chỉ số này quan trọng.</p>
-        <div id="macro-body"></div>
-        <p class="note">Nguồn: U.S. Treasury, Fed New York. Nhãn ▲/▼ là chiều tác động thường gặp lên từng tài sản, mang tính giáo dục, không phải dự báo.</p>
-      </section>
-    </div>
+        <p class="note">Nguồn: RSS của Federal Reserve, EIA, CFTC và các trang tin tài chính, crypto. Chỉ hiện tiêu đề và link; bấm tiêu đề để đọc bài gốc.</p>
+      </section>    </div>
   </section>
 
   <section class="block" id="tinh-nang">
@@ -771,14 +832,14 @@ footer details { margin-top: 8px; }
 </footer>
 
 <script type="module">
-import { add, fresh, tipFor, divergingBars, levelLine, miniArea, curveChart } from "./charts.js";
+import { add, fresh, tipFor, divergingBars, levelLine, miniArea, miniLine, halfGauge, curveChart } from "./charts.js";
 const VN = "Asia/Ho_Chi_Minh";
-const ASSETS = { GC: "Vàng", ES: "S&P 500", NQ: "Nasdaq 100", CL: "Dầu WTI" };
-const TOPICS = { rel: "Liên quan", GC: "GC · Vàng", ES: "ES · S&P", NQ: "NQ · Nasdaq", CL: "CL · Dầu", FED: "Fed", MACRO: "Vĩ mô", official: "Nguồn chính thức", all: "Mọi tin" };
-const LANGS = { all: "Mọi ngôn ngữ", en: "English", vi: "Tiếng Việt" };
+const ASSETS = { GC: "Vàng", ES: "S&P 500", NQ: "Nasdaq 100", CL: "Dầu WTI", BTC: "Bitcoin", ETH: "Ether" };
+const TOPICS = { rel: "Liên quan", GC: "GC · Vàng", ES: "ES · S&P", NQ: "NQ · Nasdaq", CL: "CL · Dầu", CRYPTO: "Crypto", FED: "Fed", MACRO: "Vĩ mô", official: "Nguồn chính thức", all: "Mọi tin" };
+const LANGS = { all: "Tất cả", vi: "Tiếng Việt", en: "English" };
 const IMPACTS = { High: "Cao", Medium: "Trung bình", Low: "Thấp" };
 const CCYS = { all: "Mọi tiền tệ", USD: "USD" };
-const PAGE = 10, REFRESH_MS = 5 * 60 * 1000;
+const PAGE = 16, REFRESH_MS = 5 * 60 * 1000;
 
 const state = load("mtt-state", { topic: "rel", lang: "all", impacts: ["High", "Medium"], ccy: "USD", asset: "GC", showPast: false, weekImp: "Medium", flow: "GC" });
 let news = null, cal = null, market = null, shown = PAGE;
@@ -851,7 +912,7 @@ function renderPulse() {
 // ---------- Big funds: 4 markets at once + detail panel ----------
 const zone = v => v >= 80 ? "cao, cực đoan" : v <= 20 ? "thấp, cực đoan" : "vùng giữa";
 const BIAS = b => b > 0 ? ["p", "Thuận lợi"] : b < 0 ? ["n", "Áp lực"] : ["z", "Trung tính"];
-const SHORTNAME = { GC: "Vàng", ES: "S&P 500", NQ: "Nasdaq", CL: "Dầu WTI" };
+const SHORTNAME = { GC: "Vàng", ES: "S&P 500", NQ: "Nasdaq", CL: "Dầu WTI", BTC: "Bitcoin", ETH: "Ether" };
 function selectAsset(k, focus) { state.asset = k; save(); renderFour(); if (focus) $("tab-" + k)?.focus(); }
 function renderFour() {
   const cot = market?.cot, sc = market?.scenarios;
@@ -987,7 +1048,7 @@ function renderMap() {
     const a = cot.assets[k], cy = T + i * rowH + rowH / 2;
     add(s, "line", { x1: x(0), x2: x(100), y1: cy, y2: cy, stroke: "var(--line2)" });
     add(s, "text", { x: 0, y: cy + 5, fill: "var(--text)", "font-size": 14, "font-weight": 700 }, k);
-    add(s, "text", { x: 26, y: cy + 5, fill: "var(--muted)", "font-size": 11.5 }, SHORTNAME[k]);
+    add(s, "text", { x: k.length * 10 + 6, y: cy + 5, fill: "var(--muted)", "font-size": 11.5 }, SHORTNAME[k]);
     add(s, "line", { x1: x(a.index156), x2: x(a.index26), y1: cy, y2: cy, stroke: "var(--muted)", "stroke-width": 2 });
     add(s, "circle", { cx: x(a.index156), cy, r: 5, fill: "var(--panel)", stroke: "var(--muted)", "stroke-width": 2 });
     add(s, "circle", { cx: x(a.index26), cy, r: 8, fill: "#f5b301", stroke: "var(--panel)", "stroke-width": 2 });
@@ -1042,25 +1103,77 @@ function renderEia() {
   });
 }
 
-// ---------- Macro ----------
+// ---------- Macro (trend + plain-language impact) ----------
+const IMP_NAME = { GC: "Vàng", ES: "S&P", NQ: "Nasdaq", CL: "Dầu", BTC: "BTC", ETH: "ETH" };
 function renderMacro() {
   const macro = market?.macro;
   if (!macro?.length) { $("macro-body").replaceChildren(el("div", { className: "empty", textContent: "Chưa có dữ liệu vĩ mô." })); return; }
   $("macro-badge").textContent = `Ngày ${vnDate(new Date(macro[0].date + "T12:00:00Z"))}`; $("macro-badge").className = "badge ok";
-  $("macro-body").replaceChildren(...macro.map(m => el("details", { className: "mrow" },
-    el("summary", {},
-      el("span", { className: "nm", textContent: m.name }),
-      el("span", { className: "v num", textContent: fmtN(m.value, 2) + (m.unit === "%" ? "%" : "") }),
-      el("span", { className: "chg num muted", textContent: signed(m.change, 2), title: `${fmtN(m.prev, 2)} ngày ${vnDate(new Date(m.prev_date + "T12:00:00Z"))}` }),
-      el("span", { className: "impacts" }, Object.keys(ASSETS).map(a => {
-        const s = m.impact[a] || 0;
-        return el("span", { className: "imp " + (s > 0 ? "p" : s < 0 ? "n" : ""), textContent: a + (s > 0 ? "▲" : s < 0 ? "▼" : "–"),
-          title: s > 0 ? "Thường hỗ trợ" : s < 0 ? "Thường gây áp lực" : "Ít tác động" });
-      }))),
-    el("p", { textContent: m.note }))));
+  $("macro-body").replaceChildren(...macro.map(m => {
+    const sup = Object.keys(m.impact).filter(a => m.impact[a] > 0).map(a => IMP_NAME[a] || a);
+    const pre = Object.keys(m.impact).filter(a => m.impact[a] < 0).map(a => IMP_NAME[a] || a);
+    const unit = m.unit === "%" ? "%" : "";
+    const spark = el("span", { className: "spk" });
+    const row = el("details", { className: "mrow2" },
+      el("summary", {},
+        el("span", { className: "mn" }, el("b", { textContent: m.name }),
+          sup.length ? el("span", { className: "it up", textContent: "Thường hỗ trợ: " + sup.join(", ") }) : null,
+          pre.length ? el("span", { className: "it down", textContent: "Thường gây áp lực: " + pre.join(", ") }) : null,
+          !sup.length && !pre.length ? el("span", { className: "it muted", textContent: "Đi ngang, ít tác động" }) : null),
+        spark,
+        el("span", { className: "mv" }, el("b", { className: "num", textContent: fmtN(m.value, 2) + unit }),
+          el("span", { className: "num muted", textContent: (m.change > 0 ? "▲ " : m.change < 0 ? "▼ " : "") + signed(m.change, 2) }))),
+      el("p", {}, m.note, el("span", { className: "muted", textContent: ` 1 tháng trước: ${fmtN(m.prev, 2)}${unit} (${vnDate(new Date(m.prev_date + "T12:00:00Z"), { day: "2-digit", month: "2-digit" })}).` })));
+    return [row, spark, m];
+  }).map(([row, spark, m]) => { queueMicrotask(() => m.history?.length > 1 && miniLine(spark, m.history.map(h => h[1]), { h: 34, color: "var(--muted)", fill: false })); return row; }));
 }
 
-// ---------- News ----------
+// ---------- Crypto ----------
+const FNG_ZONES = [
+  { from: 0, to: 25, color: "#ef4444", label: "Sợ hãi tột độ" }, { from: 25, to: 45, color: "#f59e0b", label: "Sợ hãi" },
+  { from: 45, to: 55, color: "#8a96ab", label: "Trung lập" }, { from: 55, to: 75, color: "#84cc16", label: "Tham lam" },
+  { from: 75, to: 100, color: "#22c55e", label: "Tham lam tột độ" }];
+const money = v => v >= 1000 ? fmtN(v, 0) : v >= 1 ? fmtN(v, 2) : fmtN(v, 4);
+const pct = v => v == null ? "–" : signed(v, 2) + "%";
+function renderCrypto() {
+  const c = market?.crypto;
+  if (!c?.coins?.length) { $("coins").replaceChildren(el("div", { className: "empty", textContent: "Chưa có dữ liệu crypto." })); return; }
+  $("crypto-badge").textContent = `Lúc ${vnTime(new Date(c.time))} · ${ago(c.time)}`; $("crypto-badge").className = "badge ok";
+  $("coins").replaceChildren(...c.coins.map(x => {
+    const ch = el("span", { className: "chart" });
+    const card = el("div", { className: "coin" },
+      el("div", { className: "t" }, el("span", {}, el("b", { textContent: x.sym }), " ", el("span", { className: "n", textContent: x.name })),
+        el("span", { className: "bias " + (x.ch24 >= 0 ? "p" : "n"), textContent: pct(x.ch24) })),
+      el("div", { className: "v num", textContent: "$" + money(x.price) }),
+      ch,
+      el("div", { className: "s num" }, "7 ngày ", el("b", { className: cls(x.ch7), textContent: pct(x.ch7) }), " · 30 ngày ", el("b", { className: cls(x.ch30), textContent: pct(x.ch30) })));
+    queueMicrotask(() => x.spark?.length > 1 && miniLine(ch, x.spark, { h: 46, color: x.ch7 >= 0 ? "var(--green)" : "var(--red)" }));
+    return card;
+  }));
+  const f = c.fng;
+  if (!f) { $("fng").replaceChildren(); return; }
+  const z = FNG_ZONES.find(z => f.value >= z.from && f.value < z.to) || FNG_ZONES.at(-1);
+  const g = el("div", { className: "chart g" }), trend = el("div", { className: "chart" });
+  $("fng").replaceChildren(
+    el("div", { className: "fg-gauge" }, g),
+    el("div", { className: "fg-text" },
+      el("div", { className: "k", textContent: "Chỉ số Sợ hãi & Tham lam" }),
+      el("div", { className: "fg-v" }, el("b", { className: "num", textContent: f.value }), el("span", { style: `color:${z.color}`, textContent: " " + f.label })),
+      el("div", { className: "k", textContent: `30 ngày: thấp ${Math.min(...f.history)} · cao ${Math.max(...f.history)}` }),
+      trend));
+  queueMicrotask(() => { halfGauge(g, f.value, FNG_ZONES, { h: 112 }); if (f.history?.length > 1) miniLine(trend, f.history, { h: 36, color: z.color }); });
+}
+
+// ---------- News (grouped by time, headline first) ----------
+const TAG_VI = { GC: "Vàng", ES: "S&P", NQ: "Nasdaq", CL: "Dầu", CRYPTO: "Crypto", FED: "Fed", MACRO: "Vĩ mô" };
+function bucket(iso) {
+  if (!iso) return "Trước đó";
+  const d = new Date(iso), key = x => vnDate(x, { day: "2-digit", month: "2-digit", year: "numeric" });
+  if (Date.now() - d < 36e5) return "Trong 1 giờ qua";
+  if (key(d) === key(new Date())) return "Hôm nay";
+  if (key(d) === key(new Date(Date.now() - 864e5))) return "Hôm qua";
+  return "Trước đó";
+}
 function renderNews() {
   if (!news) return;
   chipGroup($("topics"), TOPICS, k => state.topic === k, k => { state.topic = k; shown = PAGE; save(); renderNews(); });
@@ -1070,16 +1183,24 @@ function renderNews() {
     (state.topic === "all" || (state.topic === "rel" ? it.topics.length > 0 || it.official : state.topic === "official" ? it.official : it.topics.includes(state.topic))) &&
     (state.lang === "all" || it.lang === state.lang) &&
     (!q || (it.title + " " + it.summary + " " + it.source).toLowerCase().includes(q)));
+  $("news-badge").textContent = `${items.length} tin · 3 ngày gần nhất`; $("news-badge").className = "badge ok";
   const box = $("news-list");
   if (!items.length) { box.replaceChildren(el("div", { className: "empty", textContent: "Không có tin phù hợp. Thử bỏ bớt bộ lọc." })); return; }
-  box.replaceChildren(...items.slice(0, shown).map(it => el("article", { className: "item" },
-    el("div", { className: "meta" },
-      el("span", { className: "src", textContent: it.source }),
-      it.official ? el("span", { className: "off", textContent: "Chính thức" }) : null,
-      el("time", { textContent: ago(it.time), title: it.time ? new Date(it.time).toLocaleString("vi-VN", { timeZone: VN }) : "" }),
-      it.topics.map(t => el("span", { className: "tag", textContent: t === "MACRO" ? "Vĩ mô" : t === "FED" ? "Fed" : t }))),
-    el("h4", {}, el("a", { href: safeUrl(it.link), target: "_blank", rel: "noopener noreferrer", textContent: it.title })),
-    it.summary ? el("p", { textContent: it.summary }) : null)),
+  const groups = new Map();
+  for (const it of items.slice(0, shown)) { const b = bucket(it.time); if (!groups.has(b)) groups.set(b, []); groups.get(b).push(it); }
+  box.replaceChildren(...[...groups].map(([label, list]) => el("div", { className: "ngroup" },
+    el("div", { className: "nh" }, label, el("span", { className: "muted", textContent: ` · ${list.length}` })),
+    el("div", { className: "nlist" }, list.map(it => {
+      const d = it.time ? new Date(it.time) : null, recent = d && Date.now() - d < 36e5;
+      return el("article", { className: "nitem" + (it.official ? " off" : "") },
+        el("time", { className: "tm num", textContent: !d ? "" : recent ? Math.max(1, Math.round((Date.now() - d) / 6e4)) + " phút" : vnTime(d),
+          title: d ? d.toLocaleString("vi-VN", { timeZone: VN }) : "" }),
+        el("div", { className: "nb" },
+          el("a", { className: "nt", href: safeUrl(it.link), target: "_blank", rel: "noopener noreferrer", textContent: it.title }),
+          el("div", { className: "nm" }, el("span", { className: "src", textContent: it.source }),
+            it.official ? el("span", { className: "offb", textContent: "Chính thức" }) : null,
+            it.topics.map(t => el("span", { className: "tag", textContent: TAG_VI[t] || t })))));
+    })))),
     items.length > shown ? el("button", { type: "button", className: "btn more", textContent: `Xem thêm ${Math.min(PAGE, items.length - shown)} tin`,
       onclick: () => { shown += PAGE; renderNews(); } }) : null);
 }
@@ -1185,8 +1306,7 @@ async function refresh() {
   const upd = [news?.updated, market?.updated].filter(Boolean).sort().at(-1);
   $("updated").textContent = upd ? `Cập nhật ${vnTime(new Date(upd))} ${vnDate(new Date(upd), { day: "2-digit", month: "2-digit" })} (giờ VN) · ${ago(upd)}`
                                  : "Không tải được dữ liệu";
-  if (news) { $("news-badge").textContent = `${news.items.length} tin · 3 ngày gần nhất`; $("news-badge").className = "badge ok"; }
-  renderPulse(); renderFour(); renderWeek(); renderCurve(); renderMap(); renderFlows(); renderEia(); renderMacro(); renderNews(); renderCal(); renderSources();
+  renderPulse(); renderFour(); renderWeek(); renderCrypto(); renderCurve(); renderMap(); renderFlows(); renderEia(); renderMacro(); renderNews(); renderCal(); renderSources();
 }
 
 // ---------- Start ----------
@@ -1210,7 +1330,7 @@ watched.forEach(s => io.observe(s));
 
 refresh();
 setInterval(refresh, REFRESH_MS);
-let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (market) { renderFour(); renderCurve(); renderMap(); renderFlows(); renderEia(); } if (cal) renderWeek(); }, 150); });
+let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (market) { renderFour(); renderCrypto(); renderCurve(); renderMap(); renderFlows(); renderEia(); renderMacro(); } if (cal) renderWeek(); }, 150); });
 </script>
 </body>
 </html>

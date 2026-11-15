@@ -104,6 +104,31 @@ export function miniArea(box, vals, { h = 64 } = {}) {
   add(s, "circle", { cx: x(vals.length - 1) - 3, cy: y(vals.at(-1)), r: 3.5, fill: c, stroke: "var(--panel2)", "stroke-width": 2 });
 }
 
+// Tiny min-max line (price or rate trend), last point marked
+export function miniLine(box, vals, { h = 40, color = "var(--gold)", fill = true } = {}) {
+  const [s, W] = fresh(box, h, 80), P = 4, lo = Math.min(...vals), hi = Math.max(...vals);
+  const x = i => i / (vals.length - 1) * (W - 6), y = v => P + (hi - v) / (hi - lo || 1) * (h - 2 * P);
+  const d = vals.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join("");
+  if (fill) add(s, "path", { d: d + `L${x(vals.length - 1)},${h}L0,${h}Z`, fill: color, opacity: .10 });
+  add(s, "path", { d, fill: "none", stroke: color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" });
+  add(s, "circle", { cx: x(vals.length - 1), cy: y(vals.at(-1)), r: 3, fill: color });
+}
+
+// Half-circle gauge 0..100 with labelled zones; needle at value
+export function halfGauge(box, value, zones, { h = 120 } = {}) {
+  const [s, W] = fresh(box, h, 200), cx = W / 2, r = Math.min(W / 2 - 10, h - 22), cy = r + 8, sw = 16;
+  const pt = (v, rr) => { const a = Math.PI * (1 - v / 100); return [cx + rr * Math.cos(a), cy - rr * Math.sin(a)]; };
+  zones.forEach(z => {
+    const [x0, y0] = pt(z.from + .6, r), [x1, y1] = pt(z.to - .6, r);
+    add(s, "path", { d: `M${x0},${y0}A${r},${r} 0 0 1 ${x1},${y1}`, fill: "none", stroke: z.color, "stroke-width": sw, opacity: value >= z.from && value < z.to + (z.to === 100) ? 1 : .35 });
+  });
+  const [nx, ny] = pt(value, r - sw / 2 - 6);
+  add(s, "line", { x1: cx, y1: cy, x2: nx, y2: ny, stroke: "var(--text)", "stroke-width": 3, "stroke-linecap": "round" });
+  add(s, "circle", { cx, cy, r: 6, fill: "var(--text)" });
+  const g = add(s, "g", { class: "axis" });
+  [[0, "0"], [100, "100"]].forEach(([v, t]) => { const [tx, ty] = pt(v, r); add(g, "text", { x: tx, y: ty + 16, "text-anchor": "middle" }, t); });
+}
+
 // Multi-line chart over a categorical x axis (yield curve)
 export function curveChart(box, labels, series, { h = 230 } = {}) {
   const [s, W] = fresh(box, h), H = h, L = 40, R = 70, T = 14, B = 26;

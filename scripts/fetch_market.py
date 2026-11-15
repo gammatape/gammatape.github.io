@@ -22,6 +22,8 @@ ASSETS = {
     "ES": {"name": "S&P 500 E-mini", "code": "13874A"},
     "NQ": {"name": "Nasdaq 100 E-mini", "code": "209742"},
     "CL": {"name": "Dầu WTI", "code": "067651"},
+    "BTC": {"name": "Bitcoin (CME)", "code": "133741"},
+    "ETH": {"name": "Ether (CME)", "code": "146021"},
 }
 COT_URL = "https://www.cftc.gov/files/dea/history/deacot{year}.zip"
 
@@ -35,7 +37,8 @@ def cot_index(values, weeks):
 
 def get_cot(prev):
     # Báo cáo chốt số thứ Ba, công bố thứ Sáu. Bản cũ còn mới (chưa tới kỳ công bố sau) thì dùng lại.
-    if prev and prev.get("cot"):
+    # Danh sách mã đổi (vd. thêm BTC, ETH) thì tải lại ngay.
+    if prev and prev.get("cot") and set(prev["cot"].get("assets", {})) == set(ASSETS):
         last = date.fromisoformat(prev["cot"]["report_date"])
         if date.today() < last + timedelta(days=10):
             return prev["cot"], "giữ bản cũ (chưa có báo cáo mới)"
@@ -182,12 +185,12 @@ def month_ago(series):
 
 # Quan hệ phổ biến khi chỉ số TĂNG: +1 = thường hỗ trợ giá, -1 = thường gây áp lực. Mang tính giáo dục.
 IMPACT = {
-    "real10": {"GC": -1, "ES": -1, "NQ": -1, "CL": 0},
-    "y10":    {"GC": -1, "ES": -1, "NQ": -1, "CL": 0},
-    "y2":     {"GC": -1, "ES": -1, "NQ": -1, "CL": 0},
-    "be10":   {"GC": 1, "ES": 0, "NQ": 0, "CL": 1},
-    "curve":  {"GC": 0, "ES": 0, "NQ": 0, "CL": 0},
-    "effr":   {"GC": -1, "ES": -1, "NQ": -1, "CL": 0},
+    "real10": {"GC": -1, "ES": -1, "NQ": -1, "CL": 0, "BTC": -1, "ETH": -1},
+    "y10":    {"GC": -1, "ES": -1, "NQ": -1, "CL": 0, "BTC": -1, "ETH": -1},
+    "y2":     {"GC": -1, "ES": -1, "NQ": -1, "CL": 0, "BTC": -1, "ETH": -1},
+    "be10":   {"GC": 1, "ES": 0, "NQ": 0, "CL": 1, "BTC": 0, "ETH": 0},
+    "curve":  {"GC": 0, "ES": 0, "NQ": 0, "CL": 0, "BTC": 0, "ETH": 0},
+    "effr":   {"GC": -1, "ES": -1, "NQ": -1, "CL": 0, "BTC": -1, "ETH": -1},
 }
 FLAT = 0.05  # thay đổi dưới 0,05 điểm % xem như đi ngang
 
@@ -196,13 +199,15 @@ SHORT = {"real10": "lợi suất thực", "y10": "lợi suất 10 năm", "y2": "
          "be10": "lạm phát kỳ vọng", "curve": "chênh lệch 10–2 năm", "effr": "lãi suất EFFR"}
 
 
-def macro_item(key, name, cur, old, unit, note):
+def macro_item(key, name, cur, old, unit, note, series=None):
     chg = round(cur[1] - old[1], 2)
     direction = 0 if abs(chg) < FLAT else (1 if chg > 0 else -1)
     return {
         "key": key, "name": name, "short": SHORT[key], "value": round(cur[1], 2), "date": cur[0].isoformat(),
         "prev": round(old[1], 2), "prev_date": old[0].isoformat(), "change": chg, "unit": unit,
         "impact": {a: s * direction for a, s in IMPACT[key].items()}, "note": note,
+        # khoảng 1 tháng gần nhất, cũ -> mới, để vẽ đường xu hướng
+        "history": [[d.isoformat(), round(v, 3)] for d, v in reversed(series or []) if d >= old[0]],
     }
 
 
@@ -217,21 +222,21 @@ def get_macro():
 
     items = [
         macro_item("real10", "Lợi suất thực 10 năm (TIPS)", r10[0], month_ago(r10), "%",
-                   "Chi phí cơ hội của việc giữ vàng. Tăng thường gây áp lực lên vàng và cổ phiếu công nghệ."),
+                   "Chi phí cơ hội của việc giữ vàng. Tăng thường gây áp lực lên vàng và cổ phiếu công nghệ.", r10),
         macro_item("y10", "Lợi suất trái phiếu 10 năm", y10[0], month_ago(y10), "%",
-                   "Mức chiết khấu cho định giá cổ phiếu. Tăng nhanh thường làm Nasdaq chịu áp lực hơn S&P."),
+                   "Mức chiết khấu cho định giá cổ phiếu. Tăng nhanh thường làm Nasdaq chịu áp lực hơn S&P.", y10),
         macro_item("y2", "Lợi suất 2 năm", y2[0], month_ago(y2), "%",
-                   "Phản ánh kỳ vọng lãi suất Fed trong 1–2 năm tới."),
+                   "Phản ánh kỳ vọng lãi suất Fed trong 1–2 năm tới.", y2),
         macro_item("be10", "Lạm phát kỳ vọng 10 năm (breakeven)", be[0], month_ago(be), "%",
-                   "= lợi suất danh nghĩa − lợi suất thực. Tăng thường hỗ trợ vàng và dầu."),
+                   "= lợi suất danh nghĩa − lợi suất thực. Tăng thường hỗ trợ vàng và dầu.", be),
         macro_item("curve", "Chênh lệch 10 năm − 2 năm", curve[0], month_ago(curve), "điểm %",
-                   "Âm (đường cong đảo ngược) từng đi trước nhiều đợt suy thoái."),
+                   "Âm (đường cong đảo ngược) từng đi trước nhiều đợt suy thoái.", curve),
     ]
     try:
         effr = json.loads(fetch(EFFR_URL))["refRates"]
         s = [(date.fromisoformat(r["effectiveDate"]), r["percentRate"]) for r in effr]
         items.append(macro_item("effr", "Lãi suất qua đêm Fed (EFFR)", s[0], s[-1], "%",
-                                f"Biên mục tiêu của Fed: {effr[0]['targetRateFrom']}–{effr[0]['targetRateTo']}%."))
+                                f"Biên mục tiêu của Fed: {effr[0]['targetRateFrom']}–{effr[0]['targetRateTo']}%.", s))
     except Exception:
         pass
     return items
@@ -248,6 +253,44 @@ def get_curve():
     pick = lambda name, s: {"name": name, "date": s[0].isoformat(), "v": [s[1][c] for c, _ in CURVE_COLS]}
     return {"labels": [l for _, l in CURVE_COLS],
             "series": [pick("Hôm nay", nom[0]), pick("1 tháng trước", month_ago(nom)), pick("Đầu năm", year_start)]}
+
+
+# ------------------------------------------------------------- Crypto ----
+# Giá: CoinGecko (API công khai, phải ghi nguồn). Tâm lý: Crypto Fear & Greed Index của alternative.me (phải ghi nguồn).
+COINS = [("bitcoin", "BTC", "Bitcoin"), ("ethereum", "ETH", "Ether"), ("solana", "SOL", "Solana")]
+CG_URL = ("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids={ids}"
+          "&sparkline=true&price_change_percentage=24h,7d,30d")
+FNG_URL = "https://api.alternative.me/fng/?limit=30"
+FNG_VI = {"Extreme Fear": "Sợ hãi tột độ", "Fear": "Sợ hãi", "Neutral": "Trung lập",
+          "Greed": "Tham lam", "Extreme Greed": "Tham lam tột độ"}
+
+
+def get_crypto():
+    rows = {r["id"]: r for r in json.loads(fetch(CG_URL.format(ids=",".join(c[0] for c in COINS))))}
+    coins = []
+    for cid, sym, name in COINS:
+        r = rows[cid]
+        spark = (r.get("sparkline_in_7d") or {}).get("price") or []
+        step = max(1, len(spark) // 56)  # khoảng 56 điểm là đủ cho đường 7 ngày
+        pts = spark[::step]
+        if spark and pts[-1] != spark[-1]:
+            pts.append(spark[-1])
+        coins.append({
+            "sym": sym, "name": name, "price": r["current_price"],
+            "ch24": r.get("price_change_percentage_24h_in_currency"),
+            "ch7": r.get("price_change_percentage_7d_in_currency"),
+            "ch30": r.get("price_change_percentage_30d_in_currency"),
+            "high24": r.get("high_24h"), "low24": r.get("low_24h"),
+            "spark": [round(v, 2) for v in pts],
+        })
+    fng = None
+    try:
+        data = json.loads(fetch(FNG_URL))["data"]  # mới -> cũ
+        fng = {"value": int(data[0]["value"]), "label": FNG_VI.get(data[0]["value_classification"], data[0]["value_classification"]),
+               "history": [int(d["value"]) for d in reversed(data)]}
+    except Exception as e:
+        print(f"  ! fear & greed: {type(e).__name__}: {e}")
+    return {"time": datetime.now(timezone.utc).isoformat(), "coins": coins, "fng": fng}
 
 
 # ----------------------------------------------------------- Kịch bản ----
@@ -293,7 +336,7 @@ def main():
     prev = previous_json("market.json") or {}
     data = {"updated": datetime.now(timezone.utc).isoformat(), "errors": {}}
     for name, fn in (("cot", lambda: get_cot(prev)), ("flows", lambda: get_flows(prev)), ("eia", get_eia),
-                     ("macro", get_macro), ("curve", get_curve)):
+                     ("macro", get_macro), ("curve", get_curve), ("crypto", get_crypto)):
         try:
             res = fn()
             if name in ("cot", "flows"):

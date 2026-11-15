@@ -14,6 +14,8 @@
     { "name": "Investing.com Commodities", "url": "https://www.investing.com/rss/news_11.rss", "lang": "en" },
     { "name": "Investing.com Economy", "url": "https://www.investing.com/rss/news_14.rss", "lang": "en" },
     { "name": "Investing.com Indicators", "url": "https://www.investing.com/rss/news_95.rss", "lang": "en" },
+    { "name": "CoinDesk",          "url": "https://www.coindesk.com/arc/outboundfeeds/rss/", "lang": "en" },
+    { "name": "Cointelegraph",     "url": "https://cointelegraph.com/rss", "lang": "en" },
     { "name": "VnExpress Kinh doanh", "url": "https://vnexpress.net/rss/kinh-doanh.rss", "lang": "vi" },
     { "name": "CafeF Chứng khoán", "url": "https://cafef.vn/thi-truong-chung-khoan.rss", "lang": "vi" }
   ],
