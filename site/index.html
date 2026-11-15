@@ -172,12 +172,6 @@ section.block { padding: 56px 0 8px; }
 .empty { color: var(--muted); padding: 24px 0; text-align: center; }
 
 /* COT */
-.cot-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-.cot { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--panel2); }
-.cot h4 { margin: 0; font-size: 15px; display: flex; justify-content: space-between; gap: 8px; }
-.cot h4 span { color: var(--muted); font-weight: 500; font-size: 13px; }
-.cot .big { font-size: 24px; font-weight: 800; margin-top: 4px; letter-spacing: -.4px; }
-.cot .sub { font-size: 12.5px; color: var(--muted); }
 .gauge { margin-top: 8px; font-size: 12px; }
 .gauge .row { display: flex; justify-content: space-between; color: var(--muted); }
 .bar { position: relative; height: 8px; background: var(--track); border-radius: 4px; margin: 3px 0 6px; }
@@ -201,15 +195,10 @@ tr:last-child td { border-bottom: 0; }
 .imp.n { background: var(--red-soft); color: var(--red); }
 
 /* Scenarios */
-.scen-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-.scen { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--panel2); }
-.scen h4 { margin: 0 0 6px; font-size: 15px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .tone { font-size: 12px; font-weight: 700; border-radius: 4px; padding: 1px 7px; white-space: nowrap; }
 .tone.p { background: var(--green-soft); color: var(--green); }
 .tone.n { background: var(--red-soft); color: var(--red); }
 .tone.z { background: var(--track); color: var(--muted); }
-.scen ul { margin: 0; padding-left: 18px; font-size: 13.5px; }
-.scen li { margin: 3px 0; }
 
 /* News */
 .controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
@@ -238,7 +227,6 @@ tr:last-child td { border-bottom: 0; }
 .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--muted); }
 .dot.High { background: var(--red); } .dot.Medium { background: var(--warn); }
 .ev .nums { display: block; font-size: 12px; color: var(--muted); }
-.cal-list { max-height: 640px; overflow-y: auto; }
 
 /* Features */
 .feature { display: grid; gap: 22px; align-items: center; padding: 26px 0; border-top: 1px solid var(--line); }
@@ -295,11 +283,6 @@ footer details { margin-top: 8px; }
 @media (max-width: 560px) {
   .hide-sm { display: none; }
   th, td { padding: 8px 4px; }
-  #macro thead { display: none; }
-  #macro tr { display: grid; grid-template-columns: auto auto 1fr; gap: 2px 12px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); }
-  #macro tr:last-child { border-bottom: 0; }
-  #macro td { border: 0; padding: 0; }
-  #macro td.macro-name { grid-column: 1 / -1; }
   .hero .actions .btn { flex: 1 1 100%; }
   .hero .wrap { padding-top: 28px; padding-bottom: 36px; }
   .hero h1 { font-size: 30px; letter-spacing: -.8px; margin-top: 10px; }
@@ -307,6 +290,118 @@ footer details { margin-top: 8px; }
   .hero .actions { margin-top: 18px; }
   .tile .val { font-size: 20px; }
 }
+
+/* ---- Module redesign: per-asset hub, rows, filters, social ---- */
+@media (min-width: 900px) {
+  #calendar { grid-column: span 5; } #news { grid-column: span 7; }
+  #macro { grid-column: span 7; } #eia { grid-column: span 5; }
+}
+.tile.hot { border-top: 3px solid var(--red); }
+.hint { margin: -4px 0 10px; color: var(--muted); font-size: 13.5px; }
+
+/* Asset tabs: a mini overview of all four markets that also switches the panel */
+.assets { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+.asset { display: grid; gap: 2px; text-align: left; min-height: 56px; padding: 10px 12px; border-radius: 12px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--panel2); color: var(--text); font: inherit;
+  transition: border-color 160ms ease-out, background-color 160ms ease-out; }
+.asset .tk { display: flex; align-items: baseline; gap: 6px; }
+.asset .tk b { font-size: 17px; }
+.asset .tk span { color: var(--muted); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.asset .ts { font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 5px; white-space: nowrap; overflow: hidden; }
+.asset[aria-selected="true"] { border-color: var(--gold); background: var(--gold-soft); }
+@media (hover: hover) and (pointer: fine) { .asset:hover { border-color: var(--line2); } .asset[aria-selected="true"]:hover { border-color: var(--gold); } }
+.dot2 { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--muted); }
+.dot2.p { background: var(--green); } .dot2.n { background: var(--red); }
+@media (max-width: 560px) {
+  .assets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.asset-panel { display: grid; gap: 14px; }
+@media (min-width: 900px) { .asset-panel { grid-template-columns: 1.05fr 1fr 1fr; } }
+.asset-panel:focus-visible { outline-offset: 4px; }
+.blk { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--panel2); min-width: 0; }
+.blk h4 { margin: 0 0 8px; font-size: 14px; color: var(--muted); font-weight: 700; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.blk .big { font-size: 28px; font-weight: 800; letter-spacing: -.5px; line-height: 1.2; }
+.blk .sub { font-size: 13px; color: var(--muted); }
+.cap2 { font-size: 11.5px; color: var(--faint); margin-top: 2px; }
+.bul { margin: 0; padding-left: 18px; font-size: 14px; display: grid; gap: 6px; }
+.imps { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 14px; }
+.imps li { display: grid; grid-template-columns: 18px 1fr; gap: 6px; align-items: start; }
+.imps .arrow { font-size: 12px; line-height: 1.8; }
+.imps li.p .arrow, .imps li.p .why { color: var(--green); }
+.imps li.n .arrow, .imps li.n .why { color: var(--red); }
+.imps .why { font-weight: 600; }
+.more-link { display: inline-block; margin-top: 12px; font-size: 13.5px; font-weight: 600; color: var(--green); text-decoration: none; }
+
+/* Segmented filters */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.seg { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 3px; border-radius: 11px; background: var(--bg2); border: 1px solid var(--line); }
+.seg .chip { border: 0; background: transparent; min-height: 34px; }
+.seg .chip[aria-pressed="true"] { background: var(--green-soft); color: var(--green); font-weight: 700; box-shadow: 0 0 0 1px var(--green); }
+.seg.sm { margin: 8px 0 4px; }
+.chips.scroll { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 10px -18px 0; padding: 0 18px 2px; }
+.chips.scroll::-webkit-scrollbar { display: none; }
+.chips.scroll .chip { flex: none; }
+@media (max-width: 560px) { .chips.scroll { margin: 10px -14px 0; padding: 0 14px 2px; } .seg .chip { min-height: 40px; } }
+
+/* Calendar rows */
+.toggle-past { width: 100%; min-height: 40px; margin-bottom: 6px; border: 1px dashed var(--line2); border-radius: 10px; background: transparent;
+  color: var(--muted); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+.day { font-weight: 700; font-size: 13px; color: var(--gold);
+  padding: 8px 0 4px; margin: 6px 0 0; }
+.ev { display: grid; grid-template-columns: 58px 1fr; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.ev .t { font-weight: 700; display: grid; gap: 2px; align-content: start; }
+.ev .c { font-size: 12px; font-weight: 700; color: var(--muted); display: flex; align-items: center; gap: 5px; }
+.ev .ti b { display: block; font-weight: 600; line-height: 1.4; }
+.ev .orig { display: block; font-size: 12px; color: var(--faint); }
+.ev .nums { display: flex; flex-wrap: wrap; gap: 4px 6px; margin-top: 4px; }
+.ev .kv { white-space: nowrap; font-size: 12px; color: var(--muted); background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 1px 7px; }
+.ev .kv b { display: inline; color: var(--text); font-weight: 700; }
+.ev .cd { font-size: 12px; font-weight: 700; color: var(--on-gold); background: #f5b301; border-radius: 6px; padding: 1px 7px; }
+.ev.next { background: var(--gold-soft); border-radius: 10px; padding: 9px 8px; margin: 2px -8px; border-bottom-color: transparent; }
+
+/* News */
+#news .search { width: 100%; }
+.item h4 { font-size: 15.5px; }
+.item p { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.meta .off { background: var(--green-soft); border-radius: 4px; padding: 0 6px; }
+.more { display: flex; width: 100%; margin-top: 12px; }
+
+/* Macro rows (expandable) */
+.mrow { border-bottom: 1px solid var(--line); }
+.mrow:last-child { border-bottom: 0; }
+.mrow summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr auto auto; gap: 4px 12px; align-items: center; padding: 10px 0; min-height: 44px; }
+.mrow summary::-webkit-details-marker { display: none; }
+.mrow .nm { font-weight: 600; font-size: 14.5px; }
+.mrow[open] .nm { color: var(--gold); }
+.mrow summary::after { content: ""; }
+.mrow .v { font-weight: 700; text-align: right; }
+.mrow .chg { font-size: 13px; text-align: right; min-width: 48px; }
+.mrow .impacts { grid-column: 1 / -1; justify-content: flex-start; }
+@media (min-width: 900px) { .mrow summary { grid-template-columns: 1fr auto auto 210px; } .mrow .impacts { grid-column: auto; justify-content: flex-end; } }
+.mrow p { margin: 0 0 10px; color: var(--muted); font-size: 13.5px; }
+
+/* EIA rows */
+.summary { margin: 0 0 10px; padding: 10px 12px; border-radius: 10px; background: var(--panel2); border: 1px solid var(--line); font-size: 14px; }
+.summary.up { border-color: color-mix(in srgb, var(--green) 40%, var(--line)); }
+.summary.down { border-color: color-mix(in srgb, var(--red) 40%, var(--line)); }
+.summary.up b { color: var(--green); } .summary.down b { color: var(--red); }
+.drow { display: grid; grid-template-columns: 1fr auto auto; gap: 2px 12px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.drow:last-child { border-bottom: 0; }
+.drow.main .nm { font-weight: 700; }
+.drow .v { font-weight: 700; text-align: right; }
+.drow .chg { text-align: right; min-width: 44px; font-weight: 600; }
+.drow .yr { grid-column: 1 / -1; font-size: 12px; color: var(--faint); }
+
+/* Social links */
+.social { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 16px; }
+.soc { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 14px; border-radius: 10px; text-decoration: none;
+  border: 1px solid var(--line2); background: var(--panel2); color: var(--text); font-weight: 600; font-size: 14px; }
+.soc svg { width: 18px; height: 18px; fill: currentColor; flex: none; }
+@media (hover: hover) and (pointer: fine) { .soc:hover { border-color: var(--muted); } }
+.social.icons { justify-content: flex-start; margin: 0; gap: 4px; }
+.social.icons .soc { padding: 0; width: 44px; justify-content: center; background: transparent; border-color: transparent; color: var(--muted); }
+@media (hover: hover) and (pointer: fine) { .social.icons .soc:hover { color: var(--text); border-color: var(--line2); } }
+.follow-h { margin: 22px 0 0; font-size: 13px; font-weight: 700; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -316,9 +411,10 @@ footer details { margin-top: 8px; }
     <a class="logo" href="#top" aria-label="Gammatape, về đầu trang"><img src="img/logo.png" alt="" width="30" height="30">Gammatape</a>
     <nav class="links" aria-label="Mục trên trang">
       <a href="#thi-truong">Thị trường</a>
-      <a href="#scenarios">Kịch bản</a>
+      <a href="#cot">Theo mã</a>
       <a href="#calendar">Lịch vĩ mô</a>
       <a href="#news">Tin tức</a>
+      <a href="#macro">Vĩ mô</a>
       <a href="#tinh-nang">Tính năng</a>
       <a href="#hoc">Học order flow</a>
     </nav>
@@ -368,49 +464,44 @@ footer details { margin-top: 8px; }
     <div class="pulse" id="pulse"></div>
 
     <div class="grid">
-      <section class="card" id="cot">
-        <div class="card-head"><h3>Vị thế quỹ lớn (COT)</h3><span class="badge" id="cot-badge">Đang tải…</span></div>
-        <div class="cot-grid" id="cot-grid"></div>
-        <p class="note">Nguồn: báo cáo Commitments of Traders (Legacy, nhóm Non-commercial) của CFTC, chốt số thứ Ba, công bố thứ Sáu hằng tuần (sáng thứ Bảy giờ VN). COT Index = vị trí của vị thế ròng hiện tại trong biên cao–thấp của 26 hoặc 156 tuần (0 = thấp nhất, 100 = cao nhất). Vùng tô màu ở hai đầu thanh là vùng cực đoan (dưới 20, trên 80).</p>
-      </section>
-
-      <section class="card" id="eia">
-        <div class="card-head"><h3>Tồn kho dầu Mỹ · EIA</h3><span class="badge" id="eia-badge">Đang tải…</span></div>
-        <div id="eia-body"></div>
-        <p class="note">Nguồn: U.S. Energy Information Administration, báo cáo Weekly Petroleum Status công bố thứ Tư (khoảng 21:30 giờ VN). Tồn kho giảm thường được thị trường đọc là cầu mạnh.</p>
-      </section>
-
-      <section class="card" id="macro">
-        <div class="card-head"><h3>Động lực vĩ mô chính</h3><span class="badge" id="macro-badge">Đang tải…</span></div>
-        <div id="macro-body"></div>
-        <p class="note">Nguồn: lợi suất danh nghĩa và lợi suất thực từ Bộ Tài chính Mỹ (U.S. Treasury), lãi suất EFFR từ Fed New York. So sánh với khoảng 1 tháng trước. Nhãn ▲/▼ cho biết chiều tác động thường gặp lên từng tài sản, mang tính giáo dục, không phải dự báo.</p>
-      </section>
-
-      <section class="card" id="scenarios">
-        <div class="card-head"><h3>Kịch bản để quan sát</h3><span class="badge">Giáo dục</span></div>
-        <div class="scen-grid" id="scen-grid"></div>
-        <p class="note">Tự động suy ra từ số liệu COT, vĩ mô và EIA ở trên theo quy tắc đơn giản. Đây là cách đọc thị trường để tham khảo, không phải khuyến nghị mua bán.</p>
+      <section class="card hub" id="cot">
+        <div class="card-head"><h3>Theo từng mã</h3><span class="badge" id="cot-badge">Đang tải…</span></div>
+        <div class="assets" role="tablist" aria-label="Chọn mã" id="asset-tabs"></div>
+        <div class="asset-panel" role="tabpanel" id="asset-panel" tabindex="0"></div>
+        <p class="note">COT: báo cáo Commitments of Traders (Legacy, nhóm Non-commercial) của CFTC, chốt số thứ Ba, công bố thứ Sáu. COT Index là vị trí của vị thế ròng trong biên cao–thấp 26 hoặc 156 tuần (0 = thấp nhất, 100 = cao nhất; dưới 20 hoặc trên 80 là cực đoan). Kịch bản tự suy ra từ COT, vĩ mô và EIA theo quy tắc đơn giản, mang tính giáo dục, không phải khuyến nghị mua bán.</p>
       </section>
 
       <section class="card" id="calendar">
-        <div class="card-head"><h3>Lịch vĩ mô (giờ VN)</h3><span class="badge" id="cal-badge">Đang tải…</span></div>
-        <div class="controls">
-          <div class="chips" id="impacts"></div>
-          <div class="chips" id="ccy"></div>
+        <div class="card-head"><h3>Lịch vĩ mô</h3><span class="badge">Giờ VN</span><span class="badge" id="cal-badge">Đang tải…</span></div>
+        <div class="filters">
+          <div class="seg" id="impacts" role="group" aria-label="Mức ảnh hưởng"></div>
+          <div class="seg" id="ccy" role="group" aria-label="Tiền tệ"></div>
         </div>
-        <div class="cal-list" id="cal-list"></div>
-        <p class="note">Nguồn: lịch kinh tế tuần này của Forex Factory. Chấm đỏ = ảnh hưởng cao, cam = trung bình. Dòng tô vàng là sự kiện kế tiếp.</p>
+        <div id="cal-list"></div>
+        <p class="note">Nguồn: lịch kinh tế tuần này của Forex Factory. Tên sự kiện dịch sang tiếng Việt, tên gốc ghi bên dưới. Chấm đỏ = ảnh hưởng cao, cam = trung bình.</p>
       </section>
 
       <section class="card" id="news">
-        <div class="card-head"><h3>Tin tức liên quan</h3><span class="badge" id="news-badge">Đang tải…</span></div>
-        <div class="controls">
-          <input class="search" id="q" type="search" placeholder="Tìm tin… (vd: Powell, OPEC, CPI)" autocomplete="off" aria-label="Tìm tin">
-          <div class="chips" id="langs"></div>
-        </div>
-        <div class="chips" id="topics"></div>
+        <div class="card-head"><h3>Tin tức</h3><span class="badge" id="news-badge">Đang tải…</span></div>
+        <input class="search" id="q" type="search" placeholder="Tìm tin… (vd: Powell, OPEC, CPI)" autocomplete="off" aria-label="Tìm tin">
+        <div class="chips scroll" id="topics" role="group" aria-label="Chủ đề"></div>
+        <div class="seg sm" id="langs" role="group" aria-label="Ngôn ngữ"></div>
         <div id="news-list"></div>
-        <p class="note">Nguồn: RSS của Federal Reserve, EIA, CFTC và các trang tin tài chính. Chỉ hiện tiêu đề, tóm tắt ngắn và link, bấm tiêu đề để đọc bài gốc.</p>
+        <p class="note">Nguồn: RSS của Federal Reserve, EIA, CFTC và các trang tin tài chính. Chỉ hiện tiêu đề, tóm tắt ngắn và link; bấm tiêu đề để đọc bài gốc.</p>
+      </section>
+
+      <section class="card" id="macro">
+        <div class="card-head"><h3>Vĩ mô Mỹ</h3><span class="badge" id="macro-badge">Đang tải…</span></div>
+        <p class="hint">So với khoảng 1 tháng trước. Bấm vào từng dòng để xem vì sao chỉ số này quan trọng.</p>
+        <div id="macro-body"></div>
+        <p class="note">Nguồn: lợi suất danh nghĩa và lợi suất thực từ Bộ Tài chính Mỹ (U.S. Treasury), lãi suất EFFR từ Fed New York. Nhãn ▲/▼ là chiều tác động thường gặp lên từng tài sản, mang tính giáo dục, không phải dự báo.</p>
+      </section>
+
+      <section class="card" id="eia">
+        <div class="card-head"><h3>Tồn kho dầu Mỹ</h3><span class="badge" id="eia-badge">Đang tải…</span></div>
+        <div id="eia-sum"></div>
+        <div id="eia-body"></div>
+        <p class="note">Nguồn: U.S. Energy Information Administration, báo cáo Weekly Petroleum Status công bố thứ Tư (khoảng 21:30 giờ VN). Tồn kho giảm (xanh) thường được đọc là cầu mạnh, tăng (đỏ) là cầu yếu.</p>
       </section>
     </div>
   </section>
@@ -564,8 +655,15 @@ footer details { margin-top: 8px; }
     <p>Footprint, heatmap, iceberg và GEX cho Vàng, ES, NQ, crypto. Trên PC, Mac, iPhone, Android.</p>
     <div class="actions">
       <a class="btn gold" href="https://m.me/61596278051545?ref=gammatape_web" target="_blank" rel="noopener">Inbox để nhận link dùng thử</a>
-      <a class="btn" href="https://t.me/gammatape" target="_blank" rel="noopener">Kênh Telegram</a>
     </div>
+    <p class="follow-h">Theo dõi Gammatape trên các kênh</p>
+    <nav class="social" aria-label="Kênh của Gammatape">
+      <a class="soc" href="https://t.me/gammatape" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>Telegram</a>
+      <a class="soc" href="https://www.facebook.com/profile.php?id=61596278051545" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg>Facebook</a>
+      <a class="soc" href="https://www.youtube.com/@Orcbladetrading" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>YouTube</a>
+      <a class="soc" href="https://www.tiktok.com/@orcblade" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>TikTok</a>
+      <a class="soc" href="https://discord.gg/BqzHXYZCG8" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>Discord</a>
+    </nav>
     <p class="risk">Gammatape là công cụ phân tích dữ liệu thị trường, không phải lời khuyên đầu tư. Giao dịch phái sinh và tài sản số có rủi ro cao.</p>
   </section>
 </main>
@@ -573,7 +671,13 @@ footer details { margin-top: 8px; }
 <footer class="wrap">
   <div class="row">
     <a class="logo" href="#top" style="font-size: 16px; color: var(--text);"><img src="img/logo.png" alt="" width="24" height="24" loading="lazy" style="width:24px;height:24px">Gammatape</a>
-    <span><a href="https://www.facebook.com/profile.php?id=61596278051545" target="_blank" rel="noopener">Facebook</a> · <a href="https://t.me/gammatape" target="_blank" rel="noopener">Telegram</a> · <a href="https://discord.gg/BqzHXYZCG8" target="_blank" rel="noopener">Discord</a></span>
+    <nav class="social icons" aria-label="Kênh của Gammatape">
+      <a class="soc" href="https://t.me/gammatape" target="_blank" rel="noopener" aria-label="Gammatape trên Telegram" title="Telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+      <a class="soc" href="https://www.facebook.com/profile.php?id=61596278051545" target="_blank" rel="noopener" aria-label="Gammatape trên Facebook" title="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg></a>
+      <a class="soc" href="https://www.youtube.com/@Orcbladetrading" target="_blank" rel="noopener" aria-label="Gammatape trên YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+      <a class="soc" href="https://www.tiktok.com/@orcblade" target="_blank" rel="noopener" aria-label="Gammatape trên TikTok" title="TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
+      <a class="soc" href="https://discord.gg/BqzHXYZCG8" target="_blank" rel="noopener" aria-label="Gammatape trên Discord" title="Discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></a>
+    </nav>
   </div>
   <p><b>Miễn trừ trách nhiệm:</b> Nội dung trên trang này chỉ nhằm mục đích giáo dục và cung cấp thông tin, không phải lời khuyên đầu tư hay khuyến nghị mua bán bất kỳ tài sản nào. Giao dịch hợp đồng tương lai và tài sản số có rủi ro cao và có thể mất toàn bộ vốn.</p>
   <p>Số liệu COT lấy từ CFTC, tồn kho dầu từ EIA, lợi suất từ U.S. Treasury, lãi suất EFFR từ Fed New York (dữ liệu công khai của các cơ quan Mỹ). Lịch kinh tế từ Forex Factory. Tin tức lấy từ RSS, bản quyền thuộc các nguồn gốc. Kịch bản là nội dung tự động mang tính minh hoạ.</p>
@@ -583,13 +687,13 @@ footer details { margin-top: 8px; }
 <script>
 const VN = "Asia/Ho_Chi_Minh";
 const ASSETS = { GC: "Vàng", ES: "S&P 500", NQ: "Nasdaq 100", CL: "Dầu WTI" };
-const TOPICS = { all: "Tất cả", GC: "GC · Vàng", ES: "ES · S&P", NQ: "NQ · Nasdaq", CL: "CL · Dầu", FED: "Fed", MACRO: "Vĩ mô", official: "Nguồn chính thức" };
+const TOPICS = { rel: "Liên quan", GC: "GC · Vàng", ES: "ES · S&P", NQ: "NQ · Nasdaq", CL: "CL · Dầu", FED: "Fed", MACRO: "Vĩ mô", official: "Nguồn chính thức", all: "Mọi tin" };
 const LANGS = { all: "Mọi ngôn ngữ", en: "English", vi: "Tiếng Việt" };
 const IMPACTS = { High: "Cao", Medium: "Trung bình", Low: "Thấp" };
 const CCYS = { all: "Mọi tiền tệ", USD: "USD" };
-const PAGE = 15, REFRESH_MS = 5 * 60 * 1000;
+const PAGE = 10, REFRESH_MS = 5 * 60 * 1000;
 
-const state = load("mtt-state", { topic: "all", lang: "all", impacts: ["High", "Medium"], ccy: "USD" });
+const state = load("mtt-state", { topic: "rel", lang: "all", impacts: ["High", "Medium"], ccy: "USD", asset: "GC", showPast: false });
 let news = null, cal = null, market = null, shown = PAGE;
 
 function load(k, d) { try { return { ...d, ...JSON.parse(localStorage.getItem(k)) }; } catch { return d; } }
@@ -638,115 +742,140 @@ function renderPulse() {
   const next = cal?.events.map(e => ({ ...e, d: new Date(e.time) }))
     .filter(e => e.impact === "High" && e.country === "USD" && e.d > now).sort((a, b) => a.d - b.d)[0];
   out.push(next
-    ? tile("#calendar", "Tin đỏ USD kế tiếp", el("div", { className: "val small", textContent: next.title }),
+    ? tile("#calendar", "Tin đỏ USD kế tiếp", el("div", { className: "val small", textContent: viTitle(next.title) }),
         `${vnDate(next.d, { weekday: "short", day: "2-digit", month: "2-digit" })} ${vnTime(next.d)} · ${until(next.d)}`, "hot")
     : tile("#calendar", "Tin đỏ USD kế tiếp", el("div", { className: "val small", textContent: "Hết tin đỏ tuần này" }), ""));
   const ry = market?.macro?.find(m => /thực/.test(m.name));
   if (ry) out.push(tile("#macro", "Lợi suất thực 10 năm",
     // Neutral colour: a rising yield is not "good", so the impact is said in words instead
     el("div", { className: "val num" }, fmtN(ry.value, 2) + "% ", el("small", { className: "num muted", style: "font-size:14px", textContent: signed(ry.change, 2) })),
-    "so với 1 tháng trước · " + (ry.change < 0 ? "thường hỗ trợ Vàng" : ry.change > 0 ? "thường gây áp lực lên Vàng" : "đi ngang")));
+    "so với 1 tháng · " + (ry.change < 0 ? "thường hỗ trợ Vàng" : ry.change > 0 ? "thường gây áp lực lên Vàng" : "đi ngang")));
   const gc = market?.cot?.assets?.GC;
   if (gc) out.push(tile("#cot", "Quỹ lớn · Vàng (COT)",
     el("div", { className: "val num " + cls(gc.net), textContent: signed(gc.net) }),
-    `hợp đồng ròng · COT Index 26 tuần ${gc.index26}`));
+    `hợp đồng ròng · COT Index ${gc.index26} (${zone(gc.index26)})`));
   const crude = market?.eia?.rows?.[0];
   if (crude) out.push(tile("#eia", "Tồn kho dầu thô Mỹ",
     el("div", { className: "val num " + cls(-crude.change), textContent: signed(crude.change, 1) + " tr thùng" }),
-    `tuần · còn ${fmtN(crude.value, 1)} triệu thùng`));
+    `trong tuần · ${crude.change > 0 ? "thường đọc là cầu yếu" : crude.change < 0 ? "thường đọc là cầu mạnh" : "đi ngang"}`));
   $("pulse").replaceChildren(...out);
 }
 
-// ---------- COT ----------
+// ---------- Per-asset hub: COT + scenario + macro impact ----------
+const zone = v => v >= 80 ? "cao, cực đoan" : v <= 20 ? "thấp, cực đoan" : "vùng giữa";
+const BIAS = b => b > 0 ? ["p", "Thuận lợi"] : b < 0 ? ["n", "Áp lực"] : ["z", "Trung tính"];
 function sparkline(hist) {
-  const ns = "http://www.w3.org/2000/svg", W = 240, H = 44;
+  const ns = "http://www.w3.org/2000/svg", W = 240, H = 48;
   const vals = hist.map(h => h.net), lo = Math.min(0, ...vals), hi = Math.max(0, ...vals);
   const x = i => (i / (vals.length - 1)) * W, y = v => H - 3 - ((v - lo) / (hi - lo || 1)) * (H - 6);
   const svg = document.createElementNS(ns, "svg");
   svg.setAttribute("viewBox", `0 0 ${W} ${H}`); svg.setAttribute("preserveAspectRatio", "none"); svg.classList.add("spark");
+  svg.setAttribute("role", "img");
   const zero = document.createElementNS(ns, "line");
   Object.entries({ x1: 0, x2: W, y1: y(0), y2: y(0), stroke: "var(--line2)", "stroke-dasharray": "3 3" }).forEach(([k, v]) => zero.setAttribute(k, v));
   const path = document.createElementNS(ns, "polyline");
   path.setAttribute("points", vals.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" "));
-  Object.entries({ fill: "none", stroke: vals.at(-1) >= 0 ? "var(--green)" : "var(--red)", "stroke-width": 1.8, "vector-effect": "non-scaling-stroke" })
+  Object.entries({ fill: "none", stroke: vals.at(-1) >= 0 ? "var(--green)" : "var(--red)", "stroke-width": 2, "vector-effect": "non-scaling-stroke" })
     .forEach(([k, v]) => path.setAttribute(k, v));
   const t = document.createElementNS(ns, "title");
-  t.textContent = `Vị thế ròng 52 tuần: ${nf.format(Math.min(...vals))} → ${nf.format(Math.max(...vals))}`;
-  svg.append(zero, path, t);
+  t.textContent = `Vị thế ròng 52 tuần: thấp nhất ${nf.format(Math.min(...vals))}, cao nhất ${nf.format(Math.max(...vals))}`;
+  svg.append(t, zero, path);
   return svg;
 }
 function gauge(label, v) {
   return el("div", { className: "gauge" },
-    el("div", { className: "row" }, el("span", { textContent: label }), el("b", { className: "num", textContent: v })),
+    el("div", { className: "row" }, el("span", { textContent: label }), el("b", { className: "num", textContent: `${v} · ${zone(v)}` })),
     el("div", { className: "bar" }, el("b", { style: `left:${v}%` })));
 }
-function renderCot() {
-  const cot = market?.cot;
-  if (!cot) { $("cot-grid").replaceChildren(el("div", { className: "empty", textContent: "Chưa có dữ liệu COT." })); return; }
-  const d = new Date(cot.report_date + "T12:00:00Z");
-  $("cot-badge").textContent = `Số liệu ngày ${vnDate(d)}`; $("cot-badge").className = "badge ok";
-  $("cot-grid").replaceChildren(...Object.keys(ASSETS).map(k => {
-    const a = cot.assets[k];
-    if (!a) return null;
-    return el("div", { className: "cot" },
-      el("h4", {}, k, el("span", { textContent: a.name })),
+function selectAsset(k, focus) {
+  state.asset = k; save(); renderHub();
+  if (focus) $("tab-" + k)?.focus();
+}
+function renderHub() {
+  const cot = market?.cot, sc = market?.scenarios;
+  if (!cot) { $("asset-panel").replaceChildren(el("div", { className: "empty", textContent: "Chưa có dữ liệu COT." })); return; }
+  $("cot-badge").textContent = `COT ngày ${vnDate(new Date(cot.report_date + "T12:00:00Z"))}`; $("cot-badge").className = "badge ok";
+  const keys = Object.keys(ASSETS).filter(k => cot.assets[k]);
+  if (!keys.includes(state.asset)) state.asset = keys[0];
+  $("asset-tabs").replaceChildren(...keys.map((k, i) => {
+    const a = cot.assets[k], [c, label] = BIAS(sc?.[k]?.bias ?? 0), on = k === state.asset;
+    return el("button", { type: "button", role: "tab", id: "tab-" + k, className: "asset", ariaSelected: String(on),
+        tabIndex: on ? 0 : -1, onclick: () => selectAsset(k),
+        onkeydown: e => {
+          const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+          if (d) { e.preventDefault(); selectAsset(keys[(i + d + keys.length) % keys.length], true); }
+        } },
+      el("span", { className: "tk" }, el("b", { textContent: k }), el("span", { textContent: ASSETS[k] })),
+      el("span", { className: "ts" }, el("i", { className: "dot2 " + c }), label, el("span", { className: "num muted", textContent: ` · COT ${a.index26}` })));
+  }));
+  $("asset-panel").setAttribute("aria-labelledby", "tab-" + state.asset);
+  const k = state.asset, a = cot.assets[k], s = sc?.[k], [c, label] = BIAS(s?.bias ?? 0);
+  const impacts = (market.macro || []).filter(m => m.impact?.[k]).map(m => {
+    const up = m.impact[k] > 0;
+    return el("li", { className: up ? "p" : "n" },
+      el("span", { className: "arrow", textContent: up ? "▲" : "▼", ariaHidden: "true" }),
+      el("span", {}, el("b", { textContent: m.name }),
+        el("span", { className: "muted num", textContent: ` ${fmtN(m.value, 2)}${m.unit === "%" ? "%" : ""} (${signed(m.change, 2)})` }),
+        el("span", { className: "why", textContent: up ? " · thường hỗ trợ" : " · thường gây áp lực" })));
+  });
+  if (k === "CL" && market.eia?.rows?.[0]) {
+    const r = market.eia.rows[0], up = r.change < 0;
+    impacts.push(el("li", { className: up ? "p" : "n" }, el("span", { className: "arrow", textContent: up ? "▲" : "▼", ariaHidden: "true" }),
+      el("span", {}, el("b", { textContent: "Tồn kho dầu thô" }), el("span", { className: "muted num", textContent: ` ${signed(r.change, 1)} triệu thùng / tuần` }),
+        el("span", { className: "why", textContent: up ? " · thường hỗ trợ" : " · thường gây áp lực" }))));
+  }
+  $("asset-panel").replaceChildren(
+    el("div", { className: "blk" },
+      el("h4", { textContent: "Quỹ lớn đang làm gì" }),
       el("div", { className: "big num " + cls(a.net), textContent: signed(a.net) }),
-      el("div", { className: "sub" }, "hợp đồng ròng · tuần ", el("b", { className: "num " + cls(a.change), textContent: signed(a.change) }),
+      el("div", { className: "sub" }, "hợp đồng ròng · trong tuần ", el("b", { className: "num " + cls(a.change), textContent: signed(a.change) }),
         ` · ${fmtN(a.net_pct_oi, 1)}% OI`),
       el("div", { className: "sub num" }, `Mua ${nf.format(a.long)} (${signed(a.long_change)}) · Bán ${nf.format(a.short)} (${signed(a.short_change)})`),
       gauge("COT Index 26 tuần", a.index26),
       gauge("COT Index 156 tuần", a.index156),
-      sparkline(a.history));
-  }));
+      sparkline(a.history),
+      el("div", { className: "cap2", textContent: "Vị thế ròng 52 tuần gần nhất" })),
+    el("div", { className: "blk" },
+      el("h4", {}, "Kịch bản để quan sát ", el("span", { className: "tone " + c, textContent: label })),
+      s ? el("ul", { className: "bul" }, s.notes.map(n => el("li", { textContent: n }))) : el("p", { className: "muted", textContent: "Chưa có kịch bản." })),
+    el("div", { className: "blk" },
+      el("h4", { textContent: `Vĩ mô tác động lên ${ASSETS[k]}` }),
+      impacts.length ? el("ul", { className: "imps" }, impacts) : el("p", { className: "muted", textContent: "Không có yếu tố vĩ mô nổi bật cho mã này." }),
+      el("a", { className: "more-link", href: "#macro", textContent: "Xem bảng vĩ mô đầy đủ →" })));
 }
 
 // ---------- EIA ----------
 function renderEia() {
   const eia = market?.eia;
   if (!eia) { $("eia-body").replaceChildren(el("div", { className: "empty", textContent: "Chưa có dữ liệu EIA." })); return; }
-  $("eia-badge").textContent = `Tuần kết thúc ${vnDate(new Date(eia.week + "T12:00:00Z"))}`; $("eia-badge").className = "badge ok";
-  $("eia-body").replaceChildren(el("table", {},
-    el("thead", {}, el("tr", {}, el("th", { textContent: "Triệu thùng" }), el("th", { className: "r", textContent: "Hiện tại" }),
-      el("th", { className: "r", textContent: "Tuần" }), el("th", { className: "r hide-sm", textContent: "Năm trước" }))),
-    el("tbody", {}, eia.rows.map(r => el("tr", {},
-      el("td", { textContent: r.name }),
-      el("td", { className: "r num", textContent: fmtN(r.value, 1) }),
-      // Falling inventory = strong demand: green when it falls, red when it rises
-      el("td", { className: "r num " + cls(-r.change), textContent: signed(r.change, 1) }),
-      el("td", { className: "r num muted hide-sm", textContent: fmtN(r.year_ago, 1) }))))));
+  $("eia-badge").textContent = `Tuần đến ${vnDate(new Date(eia.week + "T12:00:00Z"))}`; $("eia-badge").className = "badge ok";
+  const c = eia.rows[0];
+  $("eia-sum").replaceChildren(el("p", { className: "summary " + cls(-c.change) },
+    el("b", { className: "num", textContent: `Dầu thô ${c.change > 0 ? "tăng" : c.change < 0 ? "giảm" : "đi ngang"} ${fmtN(Math.abs(c.change), 1)} triệu thùng` }),
+    c.change ? ` · thường được đọc là cầu ${c.change > 0 ? "yếu" : "mạnh"}` : ""));
+  $("eia-body").replaceChildren(...eia.rows.map((r, i) => el("div", { className: "drow" + (i === 0 ? " main" : "") },
+    el("span", { className: "nm", textContent: r.name }),
+    el("span", { className: "v num", textContent: fmtN(r.value, 1) }),
+    el("span", { className: "chg num " + cls(-r.change), textContent: signed(r.change, 1) }),
+    el("span", { className: "yr num", textContent: `năm trước ${fmtN(r.year_ago, 1)}` }))));
 }
 
 // ---------- Macro ----------
 function renderMacro() {
   const macro = market?.macro;
   if (!macro?.length) { $("macro-body").replaceChildren(el("div", { className: "empty", textContent: "Chưa có dữ liệu vĩ mô." })); return; }
-  $("macro-badge").textContent = `Cập nhật ${vnDate(new Date(macro[0].date + "T12:00:00Z"))}`; $("macro-badge").className = "badge ok";
-  $("macro-body").replaceChildren(el("table", {},
-    el("thead", {}, el("tr", {}, el("th", { textContent: "Chỉ số" }), el("th", { className: "r", textContent: "Hiện tại" }),
-      el("th", { className: "r", textContent: "1 tháng" }), el("th", { className: "r", textContent: "Tác động" }))),
-    el("tbody", {}, macro.map(m => el("tr", {},
-      el("td", { className: "macro-name" }, m.name, el("small", { textContent: m.note })),
-      el("td", { className: "r num", textContent: fmtN(m.value, 2) + (m.unit === "%" ? "%" : "") }),
-      el("td", { className: "r num " + cls(m.change), textContent: signed(m.change, 2), title: `${fmtN(m.prev, 2)} ngày ${vnDate(new Date(m.prev_date + "T12:00:00Z"))}` }),
-      el("td", {}, el("div", { className: "impacts" }, Object.keys(ASSETS).map(a => {
+  $("macro-badge").textContent = `Ngày ${vnDate(new Date(macro[0].date + "T12:00:00Z"))}`; $("macro-badge").className = "badge ok";
+  $("macro-body").replaceChildren(...macro.map(m => el("details", { className: "mrow" },
+    el("summary", {},
+      el("span", { className: "nm", textContent: m.name }),
+      el("span", { className: "v num", textContent: fmtN(m.value, 2) + (m.unit === "%" ? "%" : "") }),
+      el("span", { className: "chg num muted", textContent: signed(m.change, 2), title: `${fmtN(m.prev, 2)} ngày ${vnDate(new Date(m.prev_date + "T12:00:00Z"))}` }),
+      el("span", { className: "impacts" }, Object.keys(ASSETS).map(a => {
         const s = m.impact[a] || 0;
-        return el("span", { className: "imp " + (s > 0 ? "p" : s < 0 ? "n" : ""), textContent: a + (s > 0 ? " ▲" : s < 0 ? " ▼" : " –"),
-          title: s > 0 ? "Thường hỗ trợ" : s < 0 ? "Thường gây áp lực" : "Ít tác động / đi ngang" });
-      }))))))));
-}
-
-// ---------- Scenarios ----------
-function renderScenarios() {
-  const sc = market?.scenarios;
-  if (!sc) return;
-  const tone = b => b > 0 ? ["p", "Nghiêng thuận lợi"] : b < 0 ? ["n", "Nghiêng áp lực"] : ["z", "Trung tính"];
-  $("scen-grid").replaceChildren(...Object.keys(ASSETS).map(k => {
-    const s = sc[k]; if (!s) return null;
-    const [c, label] = tone(s.bias);
-    return el("div", { className: "scen" },
-      el("h4", {}, `${k} · ${ASSETS[k]}`, el("span", { className: "tone " + c, textContent: label })),
-      el("ul", {}, s.notes.map(n => el("li", { textContent: n }))));
-  }));
+        return el("span", { className: "imp " + (s > 0 ? "p" : s < 0 ? "n" : ""), textContent: a + (s > 0 ? "▲" : s < 0 ? "▼" : "–"),
+          title: s > 0 ? "Thường hỗ trợ" : s < 0 ? "Thường gây áp lực" : "Ít tác động" });
+      }))),
+    el("p", { textContent: m.note }))));
 }
 
 // ---------- News ----------
@@ -756,50 +885,102 @@ function renderNews() {
   chipGroup($("langs"), LANGS, k => state.lang === k, k => { state.lang = k; shown = PAGE; save(); renderNews(); });
   const q = $("q").value.trim().toLowerCase();
   const items = news.items.filter(it =>
-    (state.topic === "all" || (state.topic === "official" ? it.official : it.topics.includes(state.topic))) &&
+    (state.topic === "all" || (state.topic === "rel" ? it.topics.length > 0 || it.official : state.topic === "official" ? it.official : it.topics.includes(state.topic))) &&
     (state.lang === "all" || it.lang === state.lang) &&
     (!q || (it.title + " " + it.summary + " " + it.source).toLowerCase().includes(q)));
   const box = $("news-list");
-  if (!items.length) { box.replaceChildren(el("div", { className: "empty", textContent: "Không có tin phù hợp." })); return; }
+  if (!items.length) { box.replaceChildren(el("div", { className: "empty", textContent: "Không có tin phù hợp. Thử bỏ bớt bộ lọc." })); return; }
   box.replaceChildren(...items.slice(0, shown).map(it => el("article", { className: "item" },
     el("div", { className: "meta" },
       el("span", { className: "src", textContent: it.source }),
-      it.official ? el("span", { className: "off", textContent: "CHÍNH THỨC" }) : null,
+      it.official ? el("span", { className: "off", textContent: "Chính thức" }) : null,
       el("time", { textContent: ago(it.time), title: it.time ? new Date(it.time).toLocaleString("vi-VN", { timeZone: VN }) : "" }),
       it.topics.map(t => el("span", { className: "tag", textContent: t === "MACRO" ? "Vĩ mô" : t === "FED" ? "Fed" : t }))),
     el("h4", {}, el("a", { href: safeUrl(it.link), target: "_blank", rel: "noopener noreferrer", textContent: it.title })),
     it.summary ? el("p", { textContent: it.summary }) : null)),
-    items.length > shown ? el("button", { type: "button", className: "chip more", textContent: `Xem thêm (${items.length - shown})`,
+    items.length > shown ? el("button", { type: "button", className: "btn more", textContent: `Xem thêm ${Math.min(PAGE, items.length - shown)} tin`,
       onclick: () => { shown += PAGE; renderNews(); } }) : null);
 }
 
 // ---------- Calendar ----------
+// Vietnamese names for the usual USD releases; the original title is always shown underneath.
+const VI_EVENTS = {
+  "Non-Farm Employment Change": "Bảng lương phi nông nghiệp (NFP)", "ADP Non-Farm Employment Change": "Việc làm ADP",
+  "Unemployment Rate": "Tỷ lệ thất nghiệp", "Unemployment Claims": "Đơn xin trợ cấp thất nghiệp",
+  "Average Hourly Earnings": "Thu nhập bình quân theo giờ", "JOLTS Job Openings": "Việc làm trống JOLTS",
+  "CPI": "CPI", "Core CPI": "CPI lõi", "PPI": "PPI", "Core PPI": "PPI lõi",
+  "Core PCE Price Index": "Chỉ số giá PCE lõi", "PCE Price Index": "Chỉ số giá PCE",
+  "Retail Sales": "Doanh số bán lẻ", "Core Retail Sales": "Doanh số bán lẻ lõi",
+  "Federal Funds Rate": "Quyết định lãi suất Fed", "FOMC Statement": "Tuyên bố FOMC", "FOMC Press Conference": "Họp báo FOMC",
+  "FOMC Meeting Minutes": "Biên bản họp FOMC", "FOMC Economic Projections": "Dự báo kinh tế của FOMC",
+  "ISM Manufacturing PMI": "PMI sản xuất ISM", "ISM Services PMI": "PMI dịch vụ ISM",
+  "Flash Manufacturing PMI": "PMI sản xuất sơ bộ", "Flash Services PMI": "PMI dịch vụ sơ bộ",
+  "Final Manufacturing PMI": "PMI sản xuất cuối", "Final Services PMI": "PMI dịch vụ cuối",
+  "Philly Fed Manufacturing Index": "Chỉ số sản xuất Philly Fed", "Empire State Manufacturing Index": "Chỉ số sản xuất Empire State",
+  "Advance GDP": "GDP lần đầu", "Prelim GDP": "GDP sơ bộ", "Final GDP": "GDP cuối",
+  "Durable Goods Orders": "Đơn hàng hàng bền", "Core Durable Goods Orders": "Đơn hàng hàng bền lõi",
+  "Industrial Production": "Sản lượng công nghiệp", "Trade Balance": "Cán cân thương mại",
+  "Building Permits": "Giấy phép xây dựng", "Housing Starts": "Nhà khởi công", "Existing Home Sales": "Doanh số nhà cũ",
+  "New Home Sales": "Doanh số nhà mới", "Pending Home Sales": "Doanh số nhà chờ bán",
+  "CB Consumer Confidence": "Niềm tin tiêu dùng CB",
+  "Prelim UoM Consumer Sentiment": "Niềm tin tiêu dùng UoM (sơ bộ)", "Revised UoM Consumer Sentiment": "Niềm tin tiêu dùng UoM (điều chỉnh)",
+  "Prelim UoM Inflation Expectations": "Kỳ vọng lạm phát UoM (sơ bộ)", "Revised UoM Inflation Expectations": "Kỳ vọng lạm phát UoM (điều chỉnh)",
+  "Crude Oil Inventories": "Tồn kho dầu thô EIA", "Natural Gas Storage": "Tồn trữ khí tự nhiên",
+  "Bank Holiday": "Nghỉ lễ ngân hàng", "Employment Cost Index": "Chỉ số chi phí lao động",
+  "Cleveland Fed Inflation Expectations": "Kỳ vọng lạm phát Cleveland Fed", "ADP Weekly Employment Change": "Việc làm ADP hằng tuần",
+  "Import Prices": "Giá nhập khẩu", "Capacity Utilization Rate": "Hiệu suất sử dụng công suất", "Business Inventories": "Tồn kho doanh nghiệp",
+  "NAHB Housing Market Index": "Chỉ số thị trường nhà NAHB", "API Weekly Statistical Bulletin": "Tồn kho dầu API hằng tuần",
+  "TIC Long-Term Purchases": "Dòng vốn dài hạn TIC", "CB Leading Index": "Chỉ số dẫn báo CB", "Mortgage Delinquencies": "Nợ quá hạn thế chấp",
+};
+const PERIOD = { "m/m": "tháng", "q/q": "quý", "y/y": "năm" };
+function viTitle(t) {
+  let m;
+  if ((m = t.match(/^Fed Chair(?:man)? (.+) Speaks$/))) return `Chủ tịch Fed ${m[1]} phát biểu`;
+  if ((m = t.match(/^FOMC Member (.+) Speaks$/))) return `Thành viên FOMC ${m[1]} phát biểu`;
+  if ((m = t.match(/^(\d+)-y Bond Auction$/))) return `Đấu giá trái phiếu ${m[1]} năm`;
+  if ((m = t.match(/^(.*?) (m\/m|q\/q|y\/y)$/)) && VI_EVENTS[m[1]]) return `${VI_EVENTS[m[1]]} (${PERIOD[m[2]]})`;
+  return VI_EVENTS[t] || t;
+}
+function dayLabel(d) {
+  const key = x => vnDate(x, { day: "2-digit", month: "2-digit", year: "numeric" });
+  const today = key(new Date()), tomorrow = key(new Date(Date.now() + 864e5));
+  const base = vnDate(d, { weekday: "long", day: "2-digit", month: "2-digit" });
+  const nice = base[0].toUpperCase() + base.slice(1);
+  return key(d) === today ? "Hôm nay · " + nice : key(d) === tomorrow ? "Ngày mai · " + nice : nice;
+}
 function renderCal() {
   if (!cal) return;
   chipGroup($("impacts"), IMPACTS, k => state.impacts.includes(k), k => {
     state.impacts = state.impacts.includes(k) ? state.impacts.filter(x => x !== k) : [...state.impacts, k]; save(); renderCal(); });
   chipGroup($("ccy"), CCYS, k => state.ccy === k, k => { state.ccy = k; save(); renderCal(); });
   const now = Date.now();
-  const evs = cal.events.map(e => ({ ...e, d: new Date(e.time) }))
+  const all = cal.events.map(e => ({ ...e, d: new Date(e.time) }))
     .filter(e => state.impacts.includes(e.impact) && (state.ccy === "all" || e.country === state.ccy))
     .sort((a, b) => a.d - b.d);
-  $("cal-badge").textContent = `${evs.length} sự kiện tuần này`; $("cal-badge").className = "badge ok";
-  const box = $("cal-list");
-  if (!evs.length) { box.replaceChildren(el("div", { className: "empty", textContent: "Không có sự kiện phù hợp." })); return; }
-  const next = evs.find(e => e.d > now);
-  const out = []; let day = "";
+  const past = all.filter(e => e.d < now), evs = state.showPast ? all : all.filter(e => e.d >= now);
+  $("cal-badge").textContent = `${all.length - past.length} sắp tới` + (past.length ? ` · ${past.length} đã qua` : ""); $("cal-badge").className = "badge ok";
+  const out = [];
+  if (past.length) out.push(el("button", { type: "button", className: "toggle-past", textContent: state.showPast ? `Ẩn ${past.length} sự kiện đã qua` : `Hiện ${past.length} sự kiện đã qua`,
+    onclick: () => { state.showPast = !state.showPast; save(); renderCal(); } }));
+  if (!evs.length) { out.push(el("div", { className: "empty", textContent: "Không còn sự kiện nào phù hợp trong tuần này." })); $("cal-list").replaceChildren(...out); return; }
+  const next = evs.find(e => e.d >= now);
+  let day = "";
   for (const e of evs) {
-    const dk = vnDate(e.d, { weekday: "long", day: "2-digit", month: "2-digit" });
-    if (dk !== day) { day = dk; out.push(el("div", { className: "day", textContent: dk[0].toUpperCase() + dk.slice(1) })); }
-    const nums = [e.forecast && `Dự báo ${e.forecast}`, e.previous && `Trước ${e.previous}`].filter(Boolean).join(" · ");
+    const dk = dayLabel(e.d);
+    if (dk !== day) { day = dk; out.push(el("div", { className: "day", textContent: dk })); }
+    const vi = viTitle(e.title);
+    const nums = [e.forecast && ["Dự báo", e.forecast], e.previous && ["Trước", e.previous]].filter(Boolean);
     out.push(el("div", { className: "ev" + (e.d < now ? " past" : "") + (e === next ? " next" : "") },
-      el("span", { className: "t num", textContent: vnTime(e.d) }),
-      el("span", { className: "c" }, el("span", { className: "dot " + e.impact, title: IMPACTS[e.impact] || e.impact }), e.country),
-      el("span", {}, e.title, nums ? el("span", { className: "nums num", textContent: nums }) : null)));
+      el("span", { className: "t num" }, vnTime(e.d), el("span", { className: "c" },
+        el("span", { className: "dot " + e.impact, title: IMPACTS[e.impact] || e.impact }), e.country)),
+      el("span", { className: "ti" },
+        el("b", { textContent: vi }),
+        vi !== e.title ? el("span", { className: "orig", textContent: e.title }) : null,
+        nums.length || e === next ? el("span", { className: "nums" },
+          e === next ? el("span", { className: "cd", textContent: until(e.d) }) : null,
+          nums.map(([k, v]) => el("span", { className: "kv num" }, k + " ", el("b", { textContent: v })))) : null)));
   }
-  box.replaceChildren(...out);
-  const n = box.querySelector(".next");
-  if (n && !renderCal.done) { renderCal.done = true; box.scrollTop = n.offsetTop - box.offsetTop - 40; }
+  $("cal-list").replaceChildren(...out);
 }
 
 // ---------- Data loading ----------
@@ -823,7 +1004,7 @@ async function refresh() {
   $("updated").textContent = upd ? `Cập nhật ${vnTime(new Date(upd))} ${vnDate(new Date(upd), { day: "2-digit", month: "2-digit" })} (giờ VN) · ${ago(upd)}`
                                  : "Không tải được dữ liệu";
   if (news) { $("news-badge").textContent = `${news.items.length} tin · 3 ngày gần nhất`; $("news-badge").className = "badge ok"; }
-  renderPulse(); renderCot(); renderEia(); renderMacro(); renderScenarios(); renderNews(); renderCal(); renderSources();
+  renderPulse(); renderHub(); renderEia(); renderMacro(); renderNews(); renderCal(); renderSources();
 }
 
 // ---------- Start ----------
