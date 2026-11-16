@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cài đặt Gammatape · Hướng dẫn từng bước</title>
+<meta name="description" content="Hướng dẫn cài đặt và đăng nhập Gammatape trên iPhone, Android, Windows và Mac: 3 bước, khoảng 5 phút, chỉ làm một lần.">
+<meta name="theme-color" content="#0b0f17">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://gammatape.github.io/huong-dan.html">
+<link rel="canonical" href="https://gammatape.github.io/huong-dan.html">
+<meta property="og:site_name" content="Gammatape">
+<meta property="og:title" content="Cài đặt Gammatape · Hướng dẫn từng bước">
+<meta property="og:description" content="iPhone, Android, Windows, Mac: 3 bước, khoảng 5 phút, chỉ làm một lần.">
+<meta property="og:image" content="https://gammatape.github.io/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  // Apply the saved theme before first paint (same key as the home page)
+  try { if (localStorage.getItem("gt-theme") === "light") document.documentElement.dataset.theme = "light"; } catch {}
+</script>
+<style>
+/* Brand tokens: same as index.html. Dark is the default; light is opt-in. */
+:root {
+  color-scheme: dark;
+  --bg: #0b0f17; --bg2: #0e1420; --panel: #121826; --panel2: #161e2e; --line: #1f2a3d; --line2: #2a3650;
+  --text: #e8edf5; --muted: #8a96ab; --faint: #7d889c;
+  --green: #22c55e; --gold: #f5b301; --red: #ef4444; --warn: #f59e0b;
+  --green-soft: rgba(34,197,94,.12); --gold-soft: rgba(245,179,1,.12); --red-soft: rgba(239,68,68,.14);
+  --on-gold: #111;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f5f7fa; --bg2: #eef1f6; --panel: #ffffff; --panel2: #f8fafc; --line: #e2e7ef; --line2: #cfd7e3;
+  --text: #0f1724; --muted: #4f5a6c; --faint: #5b6577;
+  --green: #15803d; --gold: #8a6100; --red: #dc2626; --warn: #c2410c;
+  --green-soft: rgba(21,128,61,.09); --gold-soft: rgba(245,179,1,.16); --red-soft: rgba(220,38,38,.10);
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 140px; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 16px/1.65 "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+a { color: inherit; }
+img { max-width: 100%; }
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 16px; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 18px;
+  border-radius: 10px; border: 1px solid var(--line2); background: var(--panel); color: var(--text);
+  font: inherit; font-weight: 700; font-size: 15px; text-decoration: none; cursor: pointer; white-space: nowrap; }
+.btn.gold { background: #f5b301; border-color: #f5b301; color: var(--on-gold); }
+.btn.sm { padding: 7px 14px; font-size: 14px; }
+@media (hover: hover) and (pointer: fine) { .btn:hover { border-color: var(--muted); } .btn.gold:hover { background: #ffc21a; border-color: #ffc21a; } }
+
+/* Top bar */
+.topbar { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 90%, transparent);
+  backdrop-filter: saturate(140%) blur(12px); -webkit-backdrop-filter: saturate(140%) blur(12px); border-bottom: 1px solid var(--line); }
+@supports not (backdrop-filter: blur(1px)) { .topbar { background: var(--bg); } }
+.topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 60px; max-width: 1200px; }
+.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 19px; letter-spacing: -.3px; }
+.logo img { width: 30px; height: 30px; border-radius: 8px; }
+.tools { display: flex; align-items: center; gap: 8px; }
+.iconbtn { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--line2);
+  background: var(--panel); color: var(--text); cursor: pointer; }
+.iconbtn svg { width: 18px; height: 18px; }
+.cta-short { display: none; }
+@media (max-width: 640px) { .cta-long { display: none; } .cta-short { display: inline; } .home-link { display: none; } }
+
+/* Intro */
+.intro { padding: 36px 0 8px; }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--gold); letter-spacing: .04em; text-transform: uppercase; }
+.eyebrow i { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px var(--green-soft); }
+h1 { margin: 12px 0 0; font-size: clamp(28px, 4.6vw, 42px); line-height: 1.15; letter-spacing: -1px; font-weight: 800; text-wrap: balance; }
+.lead { margin: 12px 0 0; color: var(--muted); font-size: 17px; max-width: 640px; }
+
+/* Device picker */
+.picker { position: sticky; top: 60px; z-index: 10; background: var(--bg); padding: 12px 0; margin-top: 16px; border-bottom: 1px solid var(--line); }
+.picker .lbl { font-size: 13px; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
+.tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.tabs button { font: inherit; font-size: 15px; font-weight: 700; min-height: 46px; padding: 6px 4px; border-radius: 10px; cursor: pointer;
+  border: 1px solid var(--line2); background: var(--panel); color: var(--muted); }
+.tabs button[aria-pressed="true"] { border-color: #f5b301; background: #f5b301; color: var(--on-gold); }
+@media (max-width: 480px) { .tabs button { font-size: 14px; } .tabs .long { display: none; } }
+@media (min-width: 481px) { .tabs .short { display: none; } }
+
+/* Device switching: a block tagged with d-* classes shows only when one of them is the chosen device */
+body[data-d="iphone"] :is(.d-android,.d-win,.d-mac):not(.d-iphone),
+body[data-d="android"] :is(.d-iphone,.d-win,.d-mac):not(.d-android),
+body[data-d="win"] :is(.d-iphone,.d-android,.d-mac):not(.d-win),
+body[data-d="mac"] :is(.d-iphone,.d-android,.d-win):not(.d-mac) { display: none !important; }
+
+/* Overview card */
+.road { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 18px 0 0; }
+.road div { display: flex; gap: 10px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; font-weight: 700; line-height: 1.3; }
+@media (max-width: 640px) { .road { grid-template-columns: 1fr; } }
+.n { flex: none; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 50%; background: #f5b301; color: var(--on-gold);
+  font-weight: 800; font-size: 16px; font-style: normal; }
+.have { margin-top: 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.have b.h { display: block; margin-bottom: 4px; }
+.have ul { margin: 0; padding-left: 20px; }
+.have li { margin: 2px 0; }
+.meta { margin-top: 10px; color: var(--muted); font-size: 14px; }
+
+/* Step cards */
+.step { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-top: 16px; }
+.step h2 { display: flex; gap: 12px; align-items: center; font-size: 22px; line-height: 1.25; margin: 0 0 10px; letter-spacing: -.3px; }
+.step h2 small { display: block; font-size: 12.5px; font-weight: 700; color: var(--gold); letter-spacing: .06em; }
+.step h2 .n { width: 38px; height: 38px; line-height: 38px; font-size: 18px; }
+.step h2 .n.alt { background: var(--green); color: #06120a; }
+.step h2 .n.q { background: var(--panel2); color: var(--text); border: 1px solid var(--line2); }
+.step p { margin: 8px 0; }
+@media (max-width: 480px) { .step { padding: 16px 14px; } .step h2 { font-size: 20px; } }
+ol.s { counter-reset: s; list-style: none; padding: 0; margin: 8px 0; }
+ol.s > li { counter-increment: s; position: relative; padding: 4px 0 10px 38px; }
+ol.s > li::before { content: counter(s); position: absolute; left: 0; top: 4px; width: 27px; height: 27px; line-height: 27px; text-align: center;
+  border-radius: 50%; background: var(--gold-soft); color: var(--gold); font-weight: 800; font-size: 14.5px; }
+.k { display: inline-block; padding: 0 8px; border: 1px solid var(--line2); border-radius: 6px; background: var(--panel2); font-weight: 700;
+  font-size: .94em; line-height: 1.6; white-space: nowrap; }
+.k.b { background: #2962ff; border-color: #2962ff; color: #fff; }
+.small { color: var(--muted); font-size: 14.5px; }
+.big { display: block; text-align: center; text-decoration: none; background: #f5b301; color: var(--on-gold); font-weight: 800; border-radius: 12px;
+  padding: 13px 10px; margin: 12px 0 4px; }
+.big small { display: block; font-weight: 600; font-size: 13px; opacity: .8; }
+.box { border-radius: 12px; padding: 11px 14px; margin: 12px 0 0; font-size: 15.5px; border: 1px solid transparent; }
+.box.done { background: var(--green-soft); border-color: color-mix(in srgb, var(--green) 35%, transparent); }
+.box.warn { background: var(--gold-soft); border-color: color-mix(in srgb, #f5b301 40%, transparent); }
+.box.note { background: var(--panel2); border-color: var(--line2); }
+.box b.t { color: var(--green); }
+table.m { border-collapse: collapse; width: 100%; font-size: 15.5px; margin-top: 6px; }
+table.m td { border-top: 1px solid var(--line); padding: 9px 6px; vertical-align: top; }
+table.m td:first-child { font-weight: 700; width: 34%; }
+@media (max-width: 560px) { table.m, table.m tbody, table.m tr, table.m td { display: block; width: auto !important; } table.m td:first-child { padding-bottom: 0; } table.m td + td { border-top: 0; padding-top: 2px; } }
+.faq { border-top: 1px solid var(--line); padding: 12px 0; }
+.faq:first-of-type { border: 0; padding-top: 4px; }
+.faq b { display: block; }
+.faq span { color: var(--muted); }
+
+/* App screenshots */
+.shot { margin: 12px auto 4px; max-width: 460px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line2); line-height: 0; background: #131722; }
+.shot img { width: 100%; height: auto; display: block; }
+.shots { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 640px) { .shots { grid-template-columns: 1fr; } }
+.cap { font-size: 13.5px; color: var(--muted); text-align: center; margin: 4px 0 6px; line-height: 1.4; }
+
+/* Device mock figures (drawn, not screenshots) */
+.figs { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 14px 0 2px; }
+.fig { text-align: center; flex: 1; min-width: 150px; max-width: 200px; }
+.phone { border: 6px solid #2a2e39; border-radius: 24px; background: #fff; color: #111; overflow: hidden; text-align: left; font-size: 12px; line-height: 1.35; min-height: 190px; }
+.phone.dark { background: #131722; color: #d1d4dc; }
+.phone.dim { background: #8e9096; }
+.bar { height: 20px; display: flex; justify-content: space-between; align-items: center; padding: 0 12px; font-size: 10px; font-weight: 700; }
+.vpn { background: #1d1f24; color: #fff; border-radius: 3px; padding: 0 3px; font-size: 9px; }
+.dark .vpn { background: #d1d4dc; color: #131722; }
+.scr { padding: 6px 10px 12px; }
+.hl { outline: 3px solid #ef4444; outline-offset: 2px; border-radius: 8px; }
+.dlg { background: #fff; border-radius: 12px; margin: 26px 10px; text-align: center; overflow: hidden; color: #111; }
+.dlg p { margin: 0; padding: 12px 8px; font-weight: 700; font-size: 11.5px; }
+.dlg div { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid #ddd; }
+.dlg span { padding: 8px 0; color: #007aff; font-weight: 700; }
+.dlg span + span { border-left: 1px solid #ddd; }
+.tsh { font-weight: 800; font-size: 14px; margin: 2px 0 8px; display: flex; justify-content: space-between; align-items: center; }
+.toggle { width: 38px; height: 22px; border-radius: 11px; background: #34c759; position: relative; }
+.toggle::after { content: ""; position: absolute; right: 2px; top: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; }
+.row { display: flex; align-items: center; gap: 7px; padding: 7px 2px; border-bottom: 1px solid #eee; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: #34c759; flex: none; }
+.addr { margin: 2px 8px 6px; background: #eceef2; border-radius: 8px; padding: 4px 6px; font-size: 10px; color: #333; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dark .addr { background: #2a2e39; color: #d1d4dc; }
+.ibtn { display: block; text-align: center; background: #2962ff; color: #fff; border-radius: 7px; padding: 7px; font-weight: 800; margin-top: 8px; }
+.ibtn.ghost { background: #fff; color: #333; border: 1px solid #ccc; }
+.lg { background: #1e222d; border: 1px solid #2a2e39; border-radius: 9px; padding: 10px; margin-top: 4px; }
+.lg b { color: #fff; font-size: 13px; }
+.lg label { display: block; color: #787b86; font-size: 10px; margin: 6px 0 2px; }
+.lg .in { height: 24px; border: 1px solid #2a2e39; background: #131722; border-radius: 5px; color: #fff; padding: 0 8px; line-height: 22px; }
+.lg .go { margin-top: 10px; height: 26px; line-height: 26px; text-align: center; background: #2962ff; color: #fff; border-radius: 5px; font-weight: 800; }
+.sheet { background: #f2f2f7; border-radius: 12px; padding: 6px; margin-top: 6px; }
+.sheet div { background: #fff; padding: 8px; border-bottom: 1px solid #e5e5ea; }
+.home { background: linear-gradient(160deg,#c9d6e3,#a9bfe0); padding: 16px 4px; display: grid; grid-template-columns: repeat(3,1fr); gap: 12px 4px; text-align: center; min-height: 178px; align-content: start; }
+.home .ap { width: 34px; height: 34px; border-radius: 9px; margin: 0 auto; background: #fff8; }
+.home img { width: 34px; height: 34px; border-radius: 9px; display: block; margin: 0 auto; }
+.home span { display: block; font-size: 9.5px; color: #fff; margin-top: 3px; text-shadow: 0 1px 2px #0007; }
+.tray { background: #1f2430; border-radius: 10px; padding: 10px; color: #fff; font-size: 13px; text-align: left; }
+.tray .menu { background: #fff; color: #111; border-radius: 8px; padding: 4px; width: 170px; margin: 0 0 8px auto; }
+.tray .menu div { padding: 6px 8px; border-radius: 5px; }
+.tray .tb { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
+.tray .ic { width: 22px; height: 22px; border-radius: 5px; background: #fff; color: #111; font-weight: 800; text-align: center; line-height: 22px; font-size: 11px; }
+/* Windows SmartScreen mock */
+.ss { background: #0067b8; color: #fff; border-radius: 6px; padding: 14px 16px 12px; font-size: 13px; line-height: 1.4; min-height: 172px; position: relative; text-align: left; }
+.ss h4 { margin: 0 0 8px; font-size: 17px; font-weight: 400; }
+.ss u { color: #fff; }
+.ss .bt { position: absolute; right: 12px; bottom: 12px; display: flex; gap: 6px; }
+.ss .bt span { border: 2px solid #fff; padding: 3px 12px; font-size: 12.5px; }
+.ss .bt span.solid { background: #fff; color: #0067b8; }
+.ss .hl { border-radius: 4px; outline-color: #ffd54f; }
+.figs.wide .fig { max-width: 330px; min-width: 240px; }
+
+/* Bottom */
+.final { margin-top: 28px; text-align: center; background: var(--panel); border: 1px solid var(--line2); border-radius: 16px; padding: 26px 18px; }
+.final h2 { margin: 0; font-size: 22px; letter-spacing: -.3px; }
+.final p { color: var(--muted); margin: 8px auto 0; max-width: 520px; }
+.final .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 16px; }
+footer { color: var(--faint); font-size: 12.5px; padding-top: 24px; padding-bottom: calc(40px + env(safe-area-inset-bottom)); }
+footer p { margin: 6px 0; }
+
+@media print {
+  .topbar, .picker, .final .actions { display: none !important; }
+  body { background: #fff; color: #111; }
+  .step { break-inside: avoid; }
+}
+</style>
+</head>
+<body data-d="iphone">
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="logo" href="./" aria-label="Gammatape, về trang chủ"><img src="img/logo.png" alt="" width="30" height="30">Gammatape</a>
+    <div class="tools">
+      <a class="btn sm home-link" href="./">Trang chủ</a>
+      <button class="iconbtn" id="theme" type="button" aria-label="Đổi giao diện sáng / tối" title="Đổi giao diện sáng / tối">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18" /><path d="M12 3a9 9 0 0 1 0 18" fill="currentColor"/></svg>
+      </button>
+      <a class="btn gold sm" href="https://m.me/61596278051545?ref=gammatape_huongdan" target="_blank" rel="noopener"><span class="cta-long">Inbox để nhận link dùng thử</span><span class="cta-short">Nhận link</span></a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section class="intro">
+  <span class="eyebrow"><i></i>Hướng dẫn cài đặt</span>
+  <h1>Vào Gammatape trong 3 bước</h1>
+  <p class="lead">Khoảng 5 phút, chỉ làm một lần. Chọn thiết bị bạn đang dùng, trang sẽ chỉ hiện đúng các bước cho thiết bị đó.</p>
+</section>
+
+<div class="picker">
+  <div class="lbl">Bạn đang dùng:</div>
+  <div class="tabs" role="group" aria-label="Chọn thiết bị">
+    <button type="button" data-d="iphone">iPhone</button>
+    <button type="button" data-d="android">Android</button>
+    <button type="button" data-d="win"><span class="long">Máy tính </span>Windows</button>
+    <button type="button" data-d="mac"><span class="long">Mac / trình duyệt</span><span class="short">Mac</span></button>
+  </div>
+</div>
+
+<!-- ===== Tổng quan ===== -->
+<div class="road d-iphone d-android d-mac">
+  <div><i class="n">1</i>Cài app Tailscale</div>
+  <div><i class="n">2</i>Bấm link mời</div>
+  <div><i class="n">3</i>Mở Gammatape và đăng nhập</div>
+</div>
+<div class="road d-win">
+  <div><i class="n">1</i>Mở app Gammatape</div>
+  <div><i class="n">2</i>Bấm nút xanh trong app</div>
+  <div><i class="n">3</i>Đăng nhập Gammatape</div>
+</div>
+<div class="have">
+  <b class="h">Trước khi bắt đầu, bạn cần có (Gammatape gửi qua tin nhắn khi bạn inbox xin dùng thử):</b>
+  <ul>
+    <li class="d-win">File <b>Gammatape.zip</b> (chứa app cho Windows)</li>
+    <li><b>1 link mời</b> Tailscale (dùng ở Bước 2)</li>
+    <li class="d-iphone d-android d-mac"><b>Địa chỉ Gammatape</b> (dùng ở Bước 3)</li>
+    <li><b>Tên đăng nhập + mật khẩu</b> (dùng ở Bước 3)</li>
+    <li>Một <b>Gmail cá nhân</b> để đăng nhập Tailscale (không dùng email công ty)</li>
+  </ul>
+</div>
+<p class="meta">Tailscale là app miễn phí, giống “chìa khoá” để máy bạn vào được Gammatape một cách riêng tư. Không cần thẻ, không mất tiền.</p>
+
+<!-- =================== iPhone / Android / Mac: BƯỚC 1 =================== -->
+<section class="step d-iphone d-android d-mac" id="buoc-1">
+  <h2><i class="n">1</i><span><small>BƯỚC 1</small>Cài app Tailscale</span></h2>
+
+  <a class="big d-iphone" href="https://apps.apple.com/app/tailscale/id1470499037" target="_blank" rel="noopener">Mở Tailscale trên App Store</a>
+  <a class="big d-android" href="https://play.google.com/store/apps/details?id=com.tailscale.ipn" target="_blank" rel="noopener">Mở Tailscale trên Google Play</a>
+  <a class="big d-mac" href="https://tailscale.com/download" target="_blank" rel="noopener">Tải Tailscale<small>tailscale.com/download</small></a>
+
+  <ol class="s d-iphone">
+    <li>Bấm <span class="k">Nhận</span> để cài, rồi mở app <b>Tailscale</b>.</li>
+    <li>Bấm <span class="k">Get Started</span>.</li>
+    <li>Máy hỏi <i>“Tailscale muốn thêm cấu hình VPN”</i> → bấm <span class="k">Cho phép</span>, nhập mật mã mở máy.</li>
+    <li>Bấm <span class="k">Log in</span> → <span class="k">Sign in with Google</span> → chọn <b>Gmail cá nhân</b> của bạn.</li>
+  </ol>
+  <ol class="s d-android">
+    <li>Bấm <span class="k">Cài đặt</span>, rồi mở app <b>Tailscale</b>.</li>
+    <li>Bấm <span class="k">Get Started</span>.</li>
+    <li>Máy hỏi <i>“Yêu cầu kết nối”</i> (VPN) → bấm <span class="k">OK</span>.</li>
+    <li>Bấm <span class="k">Sign in with Google</span> → chọn <b>Gmail cá nhân</b> của bạn.</li>
+  </ol>
+  <ol class="s d-mac">
+    <li><b>Mac:</b> tải bản cho macOS rồi mở file, làm theo màn hình (máy hỏi cho phép cấu hình VPN thì bấm <span class="k">Cho phép</span>).<br>
+      <span class="small"><b>Máy Windows không cài được app Gammatape</b> (máy công ty): bấm <span class="k">Download</span> bản Windows, mở file vừa tải, bấm <span class="k">Install</span>.</span></li>
+    <li>Tìm biểu tượng Tailscale: Mac ở <b>thanh menu trên cùng</b>; Windows ở <b>góc phải dưới, cạnh đồng hồ</b> (không thấy thì bấm mũi tên <b>^</b>).</li>
+    <li>Bấm vào biểu tượng (Windows: chuột phải) → <span class="k">Log in</span>.</li>
+    <li>Trình duyệt mở ra → <span class="k">Sign in with Google</span> → chọn <b>Gmail cá nhân</b> → <span class="k">Connect</span>.</li>
+  </ol>
+
+  <div class="figs d-iphone d-android">
+    <div class="fig">
+      <div class="phone dim"><div class="bar"></div>
+        <div class="dlg"><p class="d-iphone">“Tailscale” muốn thêm cấu hình VPN</p><p class="d-android">Yêu cầu kết nối<br>Tailscale muốn thiết lập kết nối VPN</p>
+          <div><span class="d-iphone">Không</span><span class="d-android">Huỷ</span><span class="hl"><span class="d-iphone" style="padding:0">Cho phép</span><span class="d-android" style="padding:0;border:0">OK</span></span></div></div>
+      </div>
+      <div class="cap">Máy hỏi thì bấm nút khoanh đỏ</div>
+    </div>
+    <div class="fig">
+      <div class="phone"><div class="bar"><span>9:41</span><span class="vpn">VPN</span></div>
+        <div class="scr"><div class="tsh">Tailscale <span class="toggle hl"></span></div>
+          <div style="color:#1a9e45;font-weight:800">● Connected</div>
+          <div class="row" style="margin-top:8px"><span class="dot"></span>máy của bạn</div></div>
+      </div>
+      <div class="cap">Kết quả: công tắc xanh</div>
+    </div>
+  </div>
+  <div class="figs d-mac">
+    <div class="fig" style="max-width:260px">
+      <div class="tray"><div class="menu"><div class="hl"><b>Log in…</b></div><div>About…</div><div>Exit</div></div>
+        <div class="tb"><span>^</span><span class="ic hl">⋮⋮</span><span>🔊</span><span>9:41</span></div></div>
+      <div class="cap">Bấm vào biểu tượng Tailscale → Log in</div>
+    </div>
+  </div>
+
+  <div class="box done"><b class="t">✔ Xong Bước 1 khi:</b> <span class="d-iphone d-android">app Tailscale có <b>công tắc màu xanh</b> và chữ <b>Connected</b>.</span><span class="d-mac">bấm vào biểu tượng Tailscale thấy chữ <b>Connected</b>.</span></div>
+  <div class="box warn"><b>Nhớ Gmail bạn vừa chọn.</b> Bước 2 phải dùng đúng Gmail đó.</div>
+</section>
+
+<!-- =================== iPhone / Android / Mac: BƯỚC 2 =================== -->
+<section class="step d-iphone d-android d-mac" id="buoc-2">
+  <h2><i class="n">2</i><span><small>BƯỚC 2</small>Bấm link mời</span></h2>
+  <ol class="s">
+    <li>Mở tin nhắn, bấm vào <b>link mời</b> Gammatape đã gửi.<br><span class="small">Link bắt đầu bằng <b>login.tailscale.com</b></span></li>
+    <li>Nếu trang hỏi đăng nhập: bấm <span class="k">Sign in with Google</span>, chọn <b>đúng Gmail ở Bước 1</b>.</li>
+    <li>Bấm nút <span class="k">Accept</span> (nghĩa là “Đồng ý”).</li>
+  </ol>
+  <div class="figs">
+    <div class="fig">
+      <div class="phone"><div class="bar"><span>9:41</span></div><div class="addr">🔒 login.tailscale.com</div>
+        <div class="scr" style="text-align:center"><b>Bạn được mời dùng máy</b><div style="font-weight:700;margin-top:4px">máy chủ Gammatape</div>
+          <div class="ibtn hl">Accept</div><div class="ibtn ghost">Decline</div></div>
+      </div>
+      <div class="cap">Bấm <b>Accept</b></div>
+    </div>
+    <div class="fig">
+      <div class="phone"><div class="bar"><span>9:41</span><span class="vpn">VPN</span></div>
+        <div class="scr"><div class="tsh">Tailscale <span class="toggle"></span></div>
+          <div class="row"><span class="dot"></span>máy của bạn</div>
+          <div class="row hl"><span class="dot"></span><b>máy chủ Gammatape</b></div></div>
+      </div>
+      <div class="cap">Kết quả: có thêm dòng máy chủ</div>
+    </div>
+  </div>
+  <div class="box done"><b class="t">✔ Xong Bước 2 khi:</b> mở lại Tailscale, thấy thêm dòng <b>máy chủ Gammatape</b> có chấm xanh (tên máy ghi trong tin nhắn kèm link mời).</div>
+  <div class="box warn">Link mời <b>chỉ dùng được 1 lần, cho 1 người</b>. Trang báo link hết hạn hoặc đã dùng → nhắn Gammatape xin link mới.</div>
+</section>
+
+<!-- =================== iPhone / Android / Mac: BƯỚC 3 =================== -->
+<section class="step d-iphone d-android d-mac" id="buoc-3">
+  <h2><i class="n">3</i><span><small>BƯỚC 3</small>Mở Gammatape và đăng nhập</span></h2>
+  <ol class="s">
+    <li>Kiểm tra Tailscale đang <b>bật</b> (công tắc xanh / Connected).</li>
+    <li>Bấm vào <b>địa chỉ Gammatape</b> trong tin nhắn<span class="d-iphone"> (mở bằng <b>Safari</b>)</span><span class="d-android"> (mở bằng <b>Chrome</b>)</span><span class="d-mac"> (mở bằng <b>Chrome</b>, <b>Edge</b> hoặc <b>Safari</b>)</span>.<br>
+      <span class="small">Địa chỉ này chỉ mở được khi Tailscale đang bật.</span></li>
+    <li>Nhập <b>tên đăng nhập</b> và <b>mật khẩu</b> → bấm <span class="k">Đăng nhập</span>.<br><span class="small">Gõ chữ thường, không có dấu cách.</span></li>
+  </ol>
+  <div class="figs">
+    <div class="fig" style="max-width:220px">
+      <div class="phone dark"><div class="bar"><span>9:41</span><span class="vpn">VPN</span></div><div class="addr">🔒 địa chỉ Gammatape</div>
+        <div class="scr"><div class="lg"><b>Gammatape · Đăng nhập</b>
+          <label>Tên đăng nhập</label><div class="in">tên của bạn</div>
+          <label>Mật khẩu</label><div class="in">••••••••</div>
+          <div class="go hl">Đăng nhập</div></div></div>
+      </div>
+      <div class="cap">Trang đăng nhập Gammatape</div>
+    </div>
+  </div>
+  <div class="box done"><b class="t">✔ Xong!</b> Bạn thấy biểu đồ là đã vào được Gammatape.</div>
+  <div class="box note"><b>Những lần sau</b> chỉ cần 2 việc: bật Tailscale (công tắc xanh) → mở Gammatape.</div>
+</section>
+
+<!-- =================== iPhone / Android: màn hình chính =================== -->
+<section class="step d-iphone d-android" id="man-hinh-chinh">
+  <h2><i class="n alt">+</i><span><small>NÊN LÀM · 1 PHÚT</small>Đưa Gammatape ra màn hình chính</span></h2>
+  <p>Để lần sau bấm một cái là mở, chạy toàn màn hình như app, và nhận được <b>thông báo giá</b>.</p>
+  <ol class="s d-iphone">
+    <li>Đang mở Gammatape trong <b>Safari</b>, bấm nút <b>Chia sẻ</b> <span class="k">⬆︎</span> (ô vuông có mũi tên lên).</li>
+    <li>Kéo xuống, bấm <span class="k">Thêm vào MH chính</span> → <span class="k">Thêm</span>.</li>
+    <li>Từ nay mở bằng biểu tượng <b>Gammatape</b> trên màn hình chính.</li>
+    <li>Khi máy hỏi cho phép thông báo → bấm <span class="k">Cho phép</span>.</li>
+  </ol>
+  <ol class="s d-android">
+    <li>Đang mở Gammatape trong <b>Chrome</b>, bấm dấu <span class="k">⋮</span> ở góc phải trên.</li>
+    <li>Bấm <span class="k">Thêm vào màn hình chính</span> (hoặc <b>Cài đặt ứng dụng</b>).</li>
+    <li>Từ nay mở bằng biểu tượng <b>Gammatape</b> trên màn hình chính.</li>
+    <li>Khi máy hỏi cho phép thông báo → bấm <span class="k">Cho phép</span>.</li>
+  </ol>
+  <div class="figs">
+    <div class="fig d-iphone">
+      <div class="phone"><div class="bar"><span>9:41</span></div><div class="scr"><div style="font-weight:800;text-align:center">Chia sẻ</div>
+        <div class="sheet"><div>Sao chép</div><div class="hl"><b>Thêm vào MH chính ⊞</b></div><div>Thêm dấu trang</div></div></div></div>
+      <div class="cap">Chia sẻ → Thêm vào MH chính</div>
+    </div>
+    <div class="fig d-android">
+      <div class="phone"><div class="bar"><span>9:41</span></div><div class="scr"><div style="font-weight:800;text-align:right">⋮</div>
+        <div class="sheet"><div>Thẻ mới</div><div class="hl"><b>Thêm vào màn hình chính</b></div><div>Cài đặt</div></div></div></div>
+      <div class="cap">⋮ → Thêm vào màn hình chính</div>
+    </div>
+    <div class="fig">
+      <div class="phone"><div class="home"><div><div class="ap"></div><span>Ảnh</span></div><div><div class="ap"></div><span>Tin nhắn</span></div><div><div class="ap"></div><span>Tailscale</span></div>
+        <div><img class="hl" src="img/logo.png" alt=""><span>Gammatape</span></div></div></div>
+      <div class="cap">Kết quả: có biểu tượng Gammatape</div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== Windows app: BƯỚC 1 =================== -->
+<section class="step d-win" id="win-1">
+  <h2><i class="n">1</i><span><small>BƯỚC 1</small>Mở app Gammatape</span></h2>
+  <ol class="s">
+    <li>Bấm <b>chuột phải</b> vào file <b>Gammatape.zip</b> → <span class="k">Giải nén tất cả…</span> (Extract All) → <span class="k">Giải nén</span>.</li>
+    <li>Thư mục mới mở ra. Bấm đúp vào <b>Gammatape.exe</b>.</li>
+    <li>Nếu Windows hiện khung xanh <b>“Windows đã bảo vệ PC của bạn”</b>: bấm <span class="k">Thông tin bổ sung</span> → <span class="k">Vẫn chạy</span>.</li>
+  </ol>
+  <div class="figs wide">
+    <div class="fig">
+      <div class="ss"><h4>Windows đã bảo vệ PC của bạn</h4>
+        Microsoft Defender SmartScreen đã ngăn một ứng dụng không xác định khởi động…<br><br>
+        <u class="hl">Thông tin bổ sung</u>
+        <div class="bt"><span class="solid">Không chạy</span></div></div>
+      <div class="cap">① Bấm <b>Thông tin bổ sung</b> (More info)</div>
+    </div>
+    <div class="fig">
+      <div class="ss"><h4>Windows đã bảo vệ PC của bạn</h4>
+        Ứng dụng: Gammatape.exe<br>Nhà phát hành: Không xác định
+        <div class="bt"><span class="hl">Vẫn chạy</span><span class="solid">Không chạy</span></div></div>
+      <div class="cap">② Bấm <b>Vẫn chạy</b> (Run anyway)</div>
+    </div>
+  </div>
+  <div class="box note">Khung xanh này chỉ hiện <b>lần đầu</b>. Windows hiện nó vì app chưa mua chứng chỉ ký số, không phải vì có virus.</div>
+  <div class="box done"><b class="t">✔ Xong Bước 1 khi:</b> thấy cửa sổ <b>Kết nối Gammatape</b>, và trên màn hình (Desktop) có thêm biểu tượng <b>Gammatape</b>.</div>
+  <figure class="shot"><img src="img/huong-dan/win-1-chua-cai.webp" width="632" height="583" loading="lazy" alt="Cửa sổ Kết nối Gammatape lúc mới mở, bước 1 Cài Tailscale"></figure>
+  <div class="cap">Cửa sổ Kết nối Gammatape lúc mới mở</div>
+</section>
+
+<!-- =================== Windows app: BƯỚC 2 =================== -->
+<section class="step d-win" id="win-2">
+  <h2><i class="n">2</i><span><small>BƯỚC 2</small>Bấm nút xanh trong app</span></h2>
+  <p>App tự kiểm tra máy bạn và chỉ hiện <b>đúng việc cần làm</b>. Làm xong việc nào, app tự đánh dấu ✓ và sang việc tiếp theo.</p>
+  <table class="m">
+    <tr><td>Cài Tailscale</td><td>Bấm <span class="k b">Cài Tailscale</span> → Windows hỏi thì bấm <span class="k">Yes / Có</span> → tích ô đồng ý → <span class="k">Install</span>.</td></tr>
+    <tr><td>Đăng nhập Tailscale</td><td>Bấm <span class="k b">Đăng nhập Tailscale</span> → trình duyệt mở ra → <span class="k">Sign in with Google</span> → chọn <b>Gmail cá nhân</b> → <span class="k">Connect</span>.</td></tr>
+    <tr><td>Nhận lời mời</td><td>Sao chép link mời trong tin nhắn → dán vào ô trong app (Ctrl+V) → bấm <span class="k b">Mở link mời</span> → trên trang mở ra bấm <span class="k">Accept</span>.</td></tr>
+  </table>
+  <div class="shots">
+    <div><figure class="shot"><img src="img/huong-dan/win-2-cho-dang-nhap.webp" width="632" height="597" loading="lazy" alt="App chờ đăng nhập Tailscale bằng Gmail"></figure><div class="cap">Đăng nhập Tailscale bằng Gmail</div></div>
+    <div><figure class="shot"><img src="img/huong-dan/win-3-link-moi.webp" width="632" height="711" loading="lazy" alt="App có ô dán link mời và nút Mở link mời"></figure><div class="cap">Dán link mời rồi bấm Mở link mời</div></div>
+  </div>
+  <div class="box warn">Mở link mời bằng <b>đúng Gmail</b> đã đăng nhập Tailscale (app ghi Gmail đó ngay trên ô dán link). Đừng dùng email công ty.</div>
+  <div class="box done"><b class="t">✔ Xong Bước 2 khi:</b> cả 4 dòng có dấu ✓ xanh và hiện nút lớn <b>Mở Gammatape</b>.</div>
+</section>
+
+<!-- =================== Windows app: BƯỚC 3 =================== -->
+<section class="step d-win" id="win-3">
+  <h2><i class="n">3</i><span><small>BƯỚC 3</small>Đăng nhập Gammatape</span></h2>
+  <figure class="shot" style="max-width:420px"><img src="img/huong-dan/win-5-san-sang.webp" width="632" height="586" loading="lazy" alt="Cả 4 bước có dấu tích xanh và nút Mở Gammatape"></figure>
+  <ol class="s">
+    <li>App tự mở Gammatape (hoặc bấm <span class="k b">Mở Gammatape</span>).</li>
+    <li>Nhập <b>tên đăng nhập</b> và <b>mật khẩu</b> → bấm <span class="k">Đăng nhập</span>. Gõ chữ thường, không có dấu cách.</li>
+  </ol>
+  <div class="box done"><b class="t">✔ Xong!</b> Bạn thấy biểu đồ là đã vào được Gammatape. App nhớ đăng nhập, lần sau không phải gõ lại.</div>
+  <div class="box note"><b>Những lần sau:</b> bấm đúp biểu tượng <b>Gammatape</b> trên màn hình là xong. Tailscale tự bật cùng Windows; nếu nó đang tắt, app sẽ hiện nút <b>Bật Tailscale</b>.</div>
+</section>
+
+<section class="step d-win" id="win-menu">
+  <h2><i class="n q">☰</i><span><small>MENU TRÊN CÙNG CỬA SỔ</small>Các nút có sẵn trong app</span></h2>
+  <table class="m">
+    <tr><td>Gammatape → Tải lại trang</td><td>Biểu đồ đứng hình hoặc lỗi hiển thị.</td></tr>
+    <tr><td>Gammatape → Kiểm tra kết nối</td><td>Quay lại màn hình kiểm tra 4 bước.</td></tr>
+    <tr><td>Gammatape → Mở bằng trình duyệt</td><td>Mở Gammatape bằng Chrome / Edge thay vì app.</td></tr>
+    <tr><td>Trợ giúp → Hướng dẫn sử dụng</td><td>Mở lại tài liệu hướng dẫn.</td></tr>
+    <tr><td>Trợ giúp → Sao chép thông tin gửi chủ</td><td>Sao chép tình trạng máy bạn để dán vào tin nhắn gửi Gammatape.</td></tr>
+  </table>
+</section>
+
+<!-- =================== Lỗi hay gặp =================== -->
+<section class="step" id="loi">
+  <h2><i class="n q">?</i><span><small>NẾU KHÔNG VÀO ĐƯỢC</small>Lỗi hay gặp</span></h2>
+  <div class="faq d-win"><b>Không có nút “Vẫn chạy”, hoặc phần mềm diệt virus xoá Gammatape.exe</b>
+    <span>Máy công ty thường chặn app lạ. Dùng trình duyệt thay app: bấm tab <a href="?d=mac#buoc-1" data-go="mac">Mac / trình duyệt</a> ở trên và làm theo (Chrome hoặc Edge).</span></div>
+  <div class="faq d-win"><b>Bước “Nhận lời mời” mãi không có dấu ✓</b>
+    <span>Bạn chưa bấm Accept, hoặc mở link mời bằng Gmail khác với Gmail của Tailscale. Nhắn Gammatape xin link mới, mở bằng đúng Gmail. Link chỉ dùng được 1 lần.</span></div>
+  <div class="faq d-win"><b>App báo “Máy chủ Gammatape đang tạm tắt”</b>
+    <span>Không phải lỗi của bạn. Cứ để app mở, app tự vào lại khi máy chủ bật.</span></div>
+  <div class="faq d-iphone d-android d-mac"><b>Trang quay mãi, không mở được</b>
+    <span>Tailscale đang tắt. Mở Tailscale, bật cho xanh (Connected), rồi mở lại Gammatape.</span></div>
+  <div class="faq d-iphone d-android d-mac"><b>Không thấy dòng máy chủ Gammatape trong Tailscale</b>
+    <span>Bạn chưa bấm Accept, hoặc bấm link mời bằng Gmail khác với Gmail ở Bước 1. Nhắn Gammatape xin link mới và làm lại Bước 2 bằng đúng Gmail.</span></div>
+  <div class="faq"><b>Báo sai tên đăng nhập hoặc mật khẩu</b>
+    <span>Gõ lại chữ thường, không dấu cách. Sai 5 lần liền sẽ bị khoá 10 phút, đợi rồi thử lại.</span></div>
+  <div class="faq"><b>Báo tài khoản hết hạn</b>
+    <span>Tài khoản dùng thử có thời hạn. Nhắn Gammatape để được hỗ trợ.</span></div>
+  <div class="box note"><b>Vẫn không được?</b> <span class="d-win">Trong app bấm <span class="k">Sao chép thông tin gửi chủ</span> (dưới cùng cửa sổ), dán vào tin nhắn gửi Gammatape, kèm ảnh chụp màn hình.</span><span class="d-iphone d-android d-mac">Chụp màn hình chỗ đang bị kẹt và gửi cho Gammatape qua tin nhắn.</span></div>
+</section>
+
+<section class="final" aria-labelledby="final-h">
+  <h2 id="final-h">Chưa có link mời?</h2>
+  <p>Inbox Gammatape, bạn sẽ nhận link mời, địa chỉ và tài khoản để vào xem footprint, heatmap và GEX.</p>
+  <div class="actions">
+    <a class="btn gold" href="https://m.me/61596278051545?ref=gammatape_huongdan" target="_blank" rel="noopener">Inbox để nhận link dùng thử</a>
+    <a class="btn" href="./">Về trang chủ</a>
+  </div>
+</section>
+
+</main>
+
+<footer class="wrap">
+  <p>Gammatape chỉ để xem dữ liệu và phân tích, không phải lời khuyên đầu tư. Giao dịch phái sinh và tài sản số có rủi ro cao.</p>
+  <p>Tài khoản của riêng bạn, vui lòng không chia sẻ mật khẩu. Tailscale, App Store, Google Play, Windows là tên của các chủ sở hữu tương ứng.</p>
+</footer>
+
+<script>
+(function () {
+  var OK = { iphone: 1, android: 1, win: 1, mac: 1 };
+  var buttons = document.querySelectorAll(".tabs button");
+  function pick(d, push) {
+    if (!OK[d]) d = "iphone";
+    document.body.dataset.d = d;
+    buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.d === d)); });
+    if (push) { try { history.replaceState(null, "", "?d=" + d + location.hash); } catch (e) {} }
+  }
+  function guess() {
+    var ua = navigator.userAgent;
+    if (/Android/i.test(ua)) return "android";
+    // iPadOS reports itself as a Mac; touch points tell them apart
+    if (/iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) return "iphone";
+    if (/Windows/i.test(ua)) return "win";
+    if (/Macintosh|Mac OS X|Linux|CrOS/i.test(ua)) return "mac";
+    return "iphone";
+  }
+  var q = new URLSearchParams(location.search).get("d");
+  pick(q && OK[q] ? q : guess(), false);
+  buttons.forEach(function (b) { b.onclick = function () { pick(b.dataset.d, true); }; });
+  document.querySelectorAll("[data-go]").forEach(function (a) {
+    a.onclick = function (e) { e.preventDefault(); pick(a.dataset.go, true); document.getElementById("buoc-1").scrollIntoView(); };
+  });
+
+  document.getElementById("theme").onclick = function () {
+    var light = document.documentElement.dataset.theme !== "light";
+    if (light) document.documentElement.dataset.theme = "light"; else delete document.documentElement.dataset.theme;
+    try { localStorage.setItem("gt-theme", light ? "light" : "dark"); } catch (e) {}
+  };
+})();
+</script>
+</body>
+</html>

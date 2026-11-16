@@ -30,6 +30,8 @@ scripts/common.py             Hàm dùng chung
 scripts/fetch_news.py         Tin tức + lịch kinh tế  -> site/data/news.json, calendar.json
 scripts/fetch_market.py       COT, EIA, vĩ mô, kịch bản -> site/data/market.json
 site/index.html               Trang web (không cần build)
+site/huong-dan.html           Hướng dẫn cài đặt cho khách (iPhone / Android / Windows / Mac), không ghi địa chỉ máy chủ
+site/img/huong-dan/           Ảnh app Windows lấy từ Tuong-Chart apps/gammatape_viewer/tests/shots (Gmail mẫu)
 site/charts.js                Bộ vẽ biểu đồ SVG tự viết (cột hai chiều, đường, đường cong, sparkline), không thư viện ngoài
 site/img/                     Ảnh chụp Gammatape (WebP, đã cắt bỏ thanh công cụ / danh sách theo dõi), logo, og.jpg 1200x630
 .github/workflows/update.yml  Chạy 2 script mỗi 30 phút và đăng lên GitHub Pages
