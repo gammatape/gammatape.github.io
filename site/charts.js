@@ -39,7 +39,8 @@ export function divergingBars(box, pts, { unit = "", digits = 2, labelAll = fals
   const [s, W] = fresh(box, h), H = h, L = 40, R = 8, T = 18, B = 24;
   const vals = pts.map(p => p.v), lo = Math.min(0, ...vals), hi = Math.max(0, ...vals);
   const ticks = niceTicks(lo, hi), y0v = Math.min(lo, ticks[0]), y1v = Math.max(hi, ticks.at(-1));
-  const y = v => T + (y1v - v) / (y1v - y0v || 1) * (H - T - B);
+  // room under the lowest bar for its value label, so it never sits on the date labels
+  const padB = lo < 0 ? 16 : 0, y = v => T + (y1v - v) / (y1v - y0v || 1) * (H - T - B - padB);
   const g = add(s, "g", { class: "axis" });
   ticks.forEach(t => {
     add(g, "line", { x1: L, x2: W - R, y1: y(t), y2: y(t), stroke: t === 0 ? "var(--zero)" : "var(--grid)" });
