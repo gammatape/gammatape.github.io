@@ -1,4 +1,4 @@
-// Small SVG chart kit for the Gammatape market section (draft). No dependencies.
+// Small SVG chart kit for the Wyckdelta market section (draft). No dependencies.
 export const NS = "http://www.w3.org/2000/svg";
 export const nf = (n, d = 2) => new Intl.NumberFormat("vi-VN", { minimumFractionDigits: d, maximumFractionDigits: d }).format(n);
 export const sg = (n, d = 2) => (n > 0 ? "+" : n < 0 ? "−" : "") + nf(Math.abs(n), d);

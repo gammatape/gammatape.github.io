@@ -3,25 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Gammatape · Order flow + GEX trên một biểu đồ</title>
-<meta name="description" content="Gammatape: footprint, heatmap sổ lệnh, iceberg và các mức GEX trên một biểu đồ cho Vàng, ES, NQ, crypto. Kèm nhịp thị trường miễn phí: COT, tồn kho dầu, vĩ mô, lịch kinh tế, tin tức.">
+<title>Wyckdelta · Order flow + GEX trên một biểu đồ</title>
+<meta name="description" content="Wyckdelta: footprint, heatmap sổ lệnh, iceberg và các mức GEX trên một biểu đồ cho Vàng, ES, NQ, crypto. Kèm nhịp thị trường miễn phí: COT, tồn kho dầu, vĩ mô, lịch kinh tế, tin tức.">
 <meta name="theme-color" content="#0b0f17">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://gammatape.github.io/">
-<link rel="canonical" href="https://gammatape.github.io/">
-<meta property="og:site_name" content="Gammatape">
-<meta property="og:title" content="Gammatape · Order flow + GEX trên một biểu đồ">
+<meta property="og:url" content="https://wyckdelta.com/">
+<link rel="canonical" href="https://wyckdelta.com/">
+<meta property="og:site_name" content="Wyckdelta">
+<meta property="og:title" content="Wyckdelta · Order flow + GEX trên một biểu đồ">
 <meta property="og:description" content="Dòng tiền thật và tường giá của dealer trên một biểu đồ, cho Vàng, ES, NQ, crypto. Nhịp thị trường miễn phí mỗi ngày.">
-<meta property="og:image" content="https://gammatape.github.io/img/og.jpg">
+<meta property="og:image" content="https://wyckdelta.com/img/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="img/logo.png" type="image/png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="img/favicon-16.svg" type="image/svg+xml">
+<link rel="icon" href="img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="img/icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* Brand tokens (same palette as the Gammatape ad set). Dark is the default; light is opt-in. */
+/* Brand tokens (Wyckdelta palette). Dark is the default; light is opt-in. */
 :root {
   color-scheme: dark;
   --bg: #0b0f17; --bg2: #0e1420; --panel: #121826; --panel2: #161e2e; --line: #1f2a3d; --line2: #2a3650;
@@ -514,7 +518,7 @@ footer details { margin-top: 8px; }
 
 <header class="topbar">
   <div class="wrap">
-    <a class="logo" href="#top" aria-label="Gammatape, về đầu trang"><img src="img/logo.png" alt="" width="30" height="30">Gammatape</a>
+    <a class="logo" href="#top" aria-label="Wyckdelta, về đầu trang"><img src="img/logo.png" alt="" width="30" height="30">Wyckdelta</a>
     <nav class="links" aria-label="Mục trên trang">
       <a href="#thi-truong">Thị trường</a>
       <a href="#cot">Theo mã</a>
@@ -531,7 +535,7 @@ footer details { margin-top: 8px; }
       <button class="iconbtn" id="theme" type="button" aria-label="Đổi giao diện sáng / tối" title="Đổi giao diện sáng / tối">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18" /><path d="M12 3a9 9 0 0 1 0 18" fill="currentColor"/></svg>
       </button>
-      <a class="btn gold sm" href="https://m.me/61596278051545?ref=gammatape_web" target="_blank" rel="noopener"><span class="cta-long">Inbox để nhận link dùng thử</span><span class="cta-short">Nhận link</span></a>
+      <a class="btn gold sm" href="https://m.me/61596278051545?ref=wyckdelta_web" target="_blank" rel="noopener"><span class="cta-long">Inbox để nhận link dùng thử</span><span class="cta-short">Nhận link</span></a>
     </div>
   </div>
 </header>
@@ -543,17 +547,17 @@ footer details { margin-top: 8px; }
       <h1>Dòng tiền thật và <em>tường giá của dealer</em>, trên một biểu đồ</h1>
       <p class="sub">Footprint, heatmap sổ lệnh, lệnh lớn, iceberg và các mức Call Wall, Put Wall, Gamma Flip nằm chung một chart. Dùng trên PC lẫn điện thoại.</p>
       <div class="actions">
-        <a class="btn gold" href="https://m.me/61596278051545?ref=gammatape_web" target="_blank" rel="noopener">
+        <a class="btn gold" href="https://m.me/61596278051545?ref=wyckdelta_web" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.6L3 21l1.4-5.1A8.5 8.5 0 1 1 21 12Z"/></svg>
           Inbox để nhận link dùng thử</a>
         <a class="btn" href="#thi-truong">Xem nhịp thị trường hôm nay</a>
       </div>
       <p class="markets">Thị trường: <b>Vàng · ES · NQ · BTC · ETH · SOL</b></p>
-      <p class="risk">Gammatape là công cụ phân tích dữ liệu thị trường, không phải lời khuyên đầu tư. Giao dịch phái sinh và tài sản số có rủi ro cao.</p>
+      <p class="risk">Wyckdelta là công cụ phân tích dữ liệu thị trường, không phải lời khuyên đầu tư. Giao dịch phái sinh và tài sản số có rủi ro cao.</p>
     </div>
     <div class="visual">
       <figure class="shot pc"><img src="img/hero_heatmap.webp" width="1600" height="1115" fetchpriority="high"
-        alt="Chart Vàng trên Gammatape: heatmap sổ lệnh, bong bóng lệnh lớn, nhãn iceberg ICE và các mức GEX"></figure>
+        alt="Chart Vàng trên Wyckdelta: heatmap sổ lệnh, bong bóng lệnh lớn, nhãn iceberg ICE và các mức GEX"></figure>
       <figure class="shot phone"><img src="img/hero_phone.webp" width="780" height="1350" loading="lazy"
         alt="Cùng chart heatmap trên điện thoại"></figure>
     </div>
@@ -672,7 +676,7 @@ footer details { margin-top: 8px; }
       <div>
         <span class="kicker">Tính năng</span>
         <h2>Xem ai đang giữ giá, ngay trên chart</h2>
-        <p>Mọi ảnh dưới đây chụp từ Gammatape với dữ liệu Vàng thật, phiên Mỹ ngày 11/11.</p>
+        <p>Mọi ảnh dưới đây chụp từ Wyckdelta với dữ liệu Vàng thật, phiên Mỹ ngày 11/11.</p>
       </div>
     </div>
 
@@ -695,7 +699,7 @@ footer details { margin-top: 8px; }
       <div class="copy">
         <span class="kicker">Footprint · iceberg</span>
         <h3>Thấy <em>ai mua, ai bán</em> ở từng mức giá</h3>
-        <p>Gammatape theo dõi từng lệnh chờ: khớp, rút, dời hay nạp lại, rồi gắn nhãn ngay trong nến.</p>
+        <p>Wyckdelta theo dõi từng lệnh chờ: khớp, rút, dời hay nạp lại, rồi gắn nhãn ngay trong nến.</p>
         <ul>
           <li>Footprint bid × ask, imbalance xếp chồng, POC từng nến</li>
           <li>Nhãn ICE cho lệnh ẩn khối lượng, kèm mức như @POC, @VAL</li>
@@ -812,33 +816,33 @@ footer details { margin-top: 8px; }
 
   <section class="final" aria-labelledby="final-h">
     <img src="img/logo.png" alt="" width="52" height="52" loading="lazy">
-    <h2 id="final-h">Xem phiên hôm nay trên Gammatape</h2>
+    <h2 id="final-h">Xem phiên hôm nay trên Wyckdelta</h2>
     <p>Footprint, heatmap, iceberg và GEX cho Vàng, ES, NQ, crypto. Trên PC, Mac, iPhone, Android.</p>
     <div class="actions">
-      <a class="btn gold" href="https://m.me/61596278051545?ref=gammatape_web" target="_blank" rel="noopener">Inbox để nhận link dùng thử</a>
+      <a class="btn gold" href="https://m.me/61596278051545?ref=wyckdelta_web" target="_blank" rel="noopener">Inbox để nhận link dùng thử</a>
       <a class="btn" href="huong-dan.html">Hướng dẫn cài đặt</a>
     </div>
-    <p class="follow-h">Theo dõi Gammatape trên các kênh</p>
-    <nav class="social" aria-label="Kênh của Gammatape">
+    <p class="follow-h">Theo dõi Wyckdelta trên các kênh</p>
+    <nav class="social" aria-label="Kênh của Wyckdelta">
       <a class="soc" href="https://t.me/gammatape" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>Telegram</a>
       <a class="soc" href="https://www.facebook.com/profile.php?id=61596278051545" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg>Facebook</a>
       <a class="soc" href="https://www.youtube.com/@Orcbladetrading" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>YouTube</a>
       <a class="soc" href="https://www.tiktok.com/@orcblade" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>TikTok</a>
       <a class="soc" href="https://discord.gg/BqzHXYZCG8" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>Discord</a>
     </nav>
-    <p class="risk">Gammatape là công cụ phân tích dữ liệu thị trường, không phải lời khuyên đầu tư. Giao dịch phái sinh và tài sản số có rủi ro cao.</p>
+    <p class="risk">Wyckdelta là công cụ phân tích dữ liệu thị trường, không phải lời khuyên đầu tư. Giao dịch phái sinh và tài sản số có rủi ro cao.</p>
   </section>
 </main>
 
 <footer class="wrap">
   <div class="row">
-    <a class="logo" href="#top" style="font-size: 16px; color: var(--text);"><img src="img/logo.png" alt="" width="24" height="24" loading="lazy" style="width:24px;height:24px">Gammatape</a>
-    <nav class="social icons" aria-label="Kênh của Gammatape">
-      <a class="soc" href="https://t.me/gammatape" target="_blank" rel="noopener" aria-label="Gammatape trên Telegram" title="Telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
-      <a class="soc" href="https://www.facebook.com/profile.php?id=61596278051545" target="_blank" rel="noopener" aria-label="Gammatape trên Facebook" title="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg></a>
-      <a class="soc" href="https://www.youtube.com/@Orcbladetrading" target="_blank" rel="noopener" aria-label="Gammatape trên YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
-      <a class="soc" href="https://www.tiktok.com/@orcblade" target="_blank" rel="noopener" aria-label="Gammatape trên TikTok" title="TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
-      <a class="soc" href="https://discord.gg/BqzHXYZCG8" target="_blank" rel="noopener" aria-label="Gammatape trên Discord" title="Discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></a>
+    <a class="logo" href="#top" style="font-size: 16px; color: var(--text);"><img src="img/logo.png" alt="" width="24" height="24" loading="lazy" style="width:24px;height:24px">Wyckdelta</a>
+    <nav class="social icons" aria-label="Kênh của Wyckdelta">
+      <a class="soc" href="https://t.me/gammatape" target="_blank" rel="noopener" aria-label="Wyckdelta trên Telegram" title="Telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
+      <a class="soc" href="https://www.facebook.com/profile.php?id=61596278051545" target="_blank" rel="noopener" aria-label="Wyckdelta trên Facebook" title="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg></a>
+      <a class="soc" href="https://www.youtube.com/@Orcbladetrading" target="_blank" rel="noopener" aria-label="Wyckdelta trên YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+      <a class="soc" href="https://www.tiktok.com/@orcblade" target="_blank" rel="noopener" aria-label="Wyckdelta trên TikTok" title="TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
+      <a class="soc" href="https://discord.gg/BqzHXYZCG8" target="_blank" rel="noopener" aria-label="Wyckdelta trên Discord" title="Discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></a>
     </nav>
   </div>
   <p><b>Miễn trừ trách nhiệm:</b> Nội dung trên trang này chỉ nhằm mục đích giáo dục và cung cấp thông tin, không phải lời khuyên đầu tư hay khuyến nghị mua bán bất kỳ tài sản nào. Giao dịch hợp đồng tương lai và tài sản số có rủi ro cao và có thể mất toàn bộ vốn.</p>
