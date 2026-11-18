@@ -1,6 +1,6 @@
 # Wyckdelta
 
-Địa chỉ: https://wyckdelta.com (GitHub Pages: repo `gammatape/gammatape.github.io`, custom domain qua `site/CNAME`).
+Địa chỉ: https://gammatape.github.io (repo `gammatape/gammatape.github.io`). Tên miền riêng https://wyckdelta.com sẽ dùng khi DNS Cloudflare trỏ về GitHub Pages và đặt Custom domain trong Settings → Pages; lúc đó GitHub tự chuyển hướng địa chỉ cũ sang tên miền mới.
 
 Trang web của Wyckdelta: giới thiệu app (order flow + GEX trên một biểu đồ, ảnh chụp app thật, nút inbox nhận link dùng thử) và mục **Nhịp thị trường hôm nay** miễn phí cho mọi người: vĩ mô · vị thế · tin tức cho GC, ES, NQ, CL. Chạy với chi phí 0 đồng.
 
@@ -34,7 +34,7 @@ site/index.html               Trang web (không cần build)
 site/huong-dan.html           Hướng dẫn cài đặt cho khách (iPhone / Android / Windows / Mac), không ghi địa chỉ máy chủ
 site/img/huong-dan/           Ảnh app Windows lấy từ Tuong-Chart apps/gammatape_viewer/tests/shots (Gmail mẫu)
 site/charts.js                Bộ vẽ biểu đồ SVG tự viết (cột hai chiều, đường, đường cong, sparkline), không thư viện ngoài
-site/CNAME                    Tên miền riêng (wyckdelta.com) cho GitHub Pages
+site/CNAME                    Ghi tên miền riêng (wyckdelta.com). Trang đăng bằng Actions nên GitHub bỏ qua file này: tên miền đặt ở Settings → Pages
 site/img/                     Ảnh chụp Wyckdelta (WebP, đã cắt bỏ thanh công cụ / danh sách theo dõi), logo, favicon, og.jpg 1200x630
 .github/workflows/update.yml  Chạy 2 script mỗi 30 phút và đăng lên GitHub Pages
 ```
