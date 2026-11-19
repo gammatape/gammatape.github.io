@@ -13,7 +13,6 @@ Bộ nhận diện giống bộ ảnh quảng cáo: nền #0b0f17, xanh #22c55e,
 | Ai đang mua, ai đang bán (quỹ đầu cơ / nhà sản xuất / ngân hàng, Vàng và Dầu) | CFTC, báo cáo Disaggregated | Thứ Sáu hằng tuần |
 | Đường cong lợi suất Mỹ (hôm nay, 1 tháng trước, đầu năm) | U.S. Treasury, Daily Par Yield Curve | Hằng ngày |
 | Tồn kho dầu Mỹ | EIA, Weekly Petroleum Status | Thứ Tư hằng tuần |
-| Quỹ vàng SPDR (GLD): số tấn đang giữ, mua / bán mỗi phiên | File lưu trữ của SPDR Gold Shares (xlsx), chỉ đăng số tấn và thay đổi | Mỗi ngày giao dịch (tải lại tối đa 3 giờ / lần) |
 | Động lực vĩ mô | U.S. Treasury (lợi suất danh nghĩa, lợi suất thực), Fed New York (EFFR) | Hằng ngày |
 | Kịch bản để quan sát | Tự suy ra từ COT, vĩ mô, EIA (mang tính giáo dục) | Mỗi lần cập nhật |
 | Tin tức | RSS của Fed, EIA, CFTC và các trang tin tài chính | 30 phút |
@@ -23,13 +22,17 @@ Bộ nhận diện giống bộ ảnh quảng cáo: nền #0b0f17, xanh #22c55e,
 
 Tin tức chỉ hiện tiêu đề, tóm tắt ngắn và link về bài gốc, không chép nguyên bài.
 
+Không đăng số tấn vàng quỹ SPDR Gold Shares (GLD): file lưu trữ của quỹ cấm phân phối lại khi chưa có văn bản đồng ý,
+điều khoản spdrgoldshares.com cấm dùng thương mại và truy cập tự động, robots.txt của API chặn mọi bot
+(kiểm 2026-11-19). Báo chí đăng số này theo bản quyền tin của họ; trang này thì không.
+
 ## Cấu trúc
 
 ```
 feeds.json                    Danh sách nguồn RSS (sửa ở đây để thêm/bớt nguồn)
 scripts/common.py             Hàm dùng chung
 scripts/fetch_news.py         Tin tức + lịch kinh tế  -> site/data/news.json, calendar.json
-scripts/fetch_market.py       COT, EIA, vĩ mô, quỹ GLD, kịch bản -> site/data/market.json
+scripts/fetch_market.py       COT, EIA, vĩ mô, crypto, kịch bản -> site/data/market.json
 site/index.html               Trang web (không cần build)
 site/huong-dan.html           Hướng dẫn cài đặt cho khách (iPhone / Android / Windows / Mac), không ghi địa chỉ máy chủ
 site/img/huong-dan/           Ảnh app Windows lấy từ Tuong-Chart apps/gammatape_viewer/tests/shots (Gmail mẫu)
