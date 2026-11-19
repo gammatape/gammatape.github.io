@@ -4,6 +4,7 @@
 - Vị thế theo nhóm (quỹ đầu cơ, nhà sản xuất, ngân hàng) cho Vàng và Dầu từ báo cáo Disaggregated của CFTC
 - Tồn kho dầu hằng tuần từ EIA
 - Lợi suất trái phiếu (danh nghĩa và thực) và đường cong lợi suất từ Bộ Tài chính Mỹ, lãi suất EFFR từ Fed New York
+- Số tấn vàng quỹ SPDR Gold Shares (GLD) nắm giữ, từ file lưu trữ công khai của quỹ
 - Kịch bản quan sát mang tính giáo dục, suy ra từ các số liệu trên
 Tất cả là dữ liệu công khai của cơ quan nhà nước Mỹ.
 """
@@ -255,9 +256,84 @@ def get_curve():
             "series": [pick("Hôm nay", nom[0]), pick("1 tháng trước", month_ago(nom)), pick("Đầu năm", year_start)]}
 
 
-# Không dùng số tấn vàng của quỹ SPDR Gold Shares (GLD): file lưu trữ của quỹ ghi "Reproduction or redistribution
-# ... expressly prohibited without prior written consent", điều khoản trang cấm dùng thương mại và truy cập tự động,
-# robots.txt của api.spdrgoldshares.com chặn mọi bot. Chỉ đưa lại khi có văn bản đồng ý của World Gold Trust Services.
+# ----------------------------------------------------- Quỹ vàng GLD ----
+# File lưu trữ chính thức của SPDR Gold Shares (xlsx), cột "Tonnes of Gold". Quỹ cập nhật mỗi ngày giao dịch sau giờ
+# đóng cửa New York. Chỉ đăng số tấn và thay đổi (như báo chí vẫn đăng), không đăng lại cả file.
+# Điều khoản của quỹ chỉ cho dùng cá nhân / phi thương mại và robots.txt của API chặn bot: chủ chấp nhận rủi ro
+# (2026-11-19), nên tải ít nhất có thể (một lần mỗi ngày giao dịch), ghi nguồn + nhãn hiệu, quỹ yêu cầu thì gỡ ngay.
+GLD_URL = "https://api.spdrgoldshares.com/api/v1/historical-archive?product=gld&exchange=NYSE&lang=en"
+GLD_SHEET = "US GLD Historical Archive"
+GLD_KEEP_DAYS = 183  # khoảng 6 tháng cho biểu đồ
+GLD_SLOT_HOUR = 23  # giờ UTC (6:00 VN): quỹ đã công bố số của phiên New York vừa đóng
+
+
+def gld_slot(now):
+    """Mốc tải gần nhất: 23:00 UTC của ngày giao dịch gần nhất (thứ 7, chủ nhật lùi về thứ 6)."""
+    s = now.replace(hour=GLD_SLOT_HOUR, minute=0, second=0, microsecond=0)
+    if now < s:
+        s -= timedelta(days=1)
+    while s.weekday() >= 5:
+        s -= timedelta(days=1)
+    return s
+
+
+def xlsx_rows(blob, sheet_name):
+    """Đọc một sheet xlsx bằng thư viện chuẩn: danh sách hàng, mỗi hàng là {cột: giá trị chuỗi}."""
+    import re
+    import xml.etree.ElementTree as ET
+    ns = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+    rid = "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id"
+    z = zipfile.ZipFile(io.BytesIO(blob))
+    strings = ["".join(t.text or "" for t in si.iter(f"{{{ns['m']}}}t"))
+               for si in ET.fromstring(z.read("xl/sharedStrings.xml")).findall("m:si", ns)]
+    sheet = next(s for s in ET.fromstring(z.read("xl/workbook.xml")).find("m:sheets", ns) if s.get("name") == sheet_name)
+    rels = ET.fromstring(z.read("xl/_rels/workbook.xml.rels"))
+    target = next(r.get("Target") for r in rels if r.get("Id") == sheet.get(rid)).lstrip("/")
+    root = ET.fromstring(z.read(target if target.startswith("xl/") else "xl/" + target))
+    rows = []
+    for row in root.iter(f"{{{ns['m']}}}row"):
+        out = {}
+        for c in row.findall("m:c", ns):
+            v = c.find("m:v", ns)
+            if v is None:
+                continue
+            col = re.match(r"[A-Z]+", c.get("r")).group()
+            out[col] = strings[int(v.text)] if c.get("t") == "s" else v.text
+        rows.append(out)
+    return rows
+
+
+def get_gld(prev):
+    old = prev.get("gld")
+    if old and datetime.fromisoformat(old["fetched"]) >= gld_slot(datetime.now(timezone.utc)):
+        return old  # đã tải sau mốc của ngày giao dịch gần nhất: không gọi lại máy chủ của quỹ
+    rows = xlsx_rows(fetch(GLD_URL, timeout=60), GLD_SHEET)
+    head = rows[0]
+    col = {name: c for c, name in head.items()}
+    dcol, tcol = col["Date"], col["Tonnes of Gold"]
+    series = []
+    for r in rows[1:]:
+        try:
+            d = datetime.strptime(r[dcol].strip(), "%d-%b-%Y").date()
+            t = float(r[tcol])
+        except (KeyError, ValueError):
+            continue  # ngày nghỉ ghi chữ "HOLIDAY", hoặc hàng trống
+        series.append((d, t))
+    series.sort(key=lambda x: x[0], reverse=True)  # mới -> cũ, như các chuỗi lợi suất
+    if len(series) < 30:
+        raise ValueError("File GLD quá ít dòng")
+    cur = series[0]
+    ago = lambda days: next((s for s in series if s[0] <= cur[0] - timedelta(days=days)), series[-1])
+    year_end = next(s for s in series if s[0].year < cur[0].year)
+    chg = lambda old: round(cur[1] - old[1], 2)
+    last_year = [t for d, t in series if d > cur[0] - timedelta(days=365)]
+    return {
+        "fetched": datetime.now(timezone.utc).isoformat(), "date": cur[0].isoformat(), "tonnes": round(cur[1], 2),
+        "d1": chg(series[1]), "d1_date": series[1][0].isoformat(),
+        "w1": chg(ago(7)), "m1": chg(ago(30)), "ytd": chg(year_end), "year_end_date": year_end[0].isoformat(),
+        "high52": round(max(last_year), 2), "low52": round(min(last_year), 2),
+        "history": [[d.isoformat(), round(t, 2)] for d, t in reversed(series) if d > cur[0] - timedelta(days=GLD_KEEP_DAYS)],
+    }
 
 
 # ------------------------------------------------------------- Crypto ----
@@ -299,7 +375,7 @@ def get_crypto():
 
 
 # ----------------------------------------------------------- Kịch bản ----
-def scenarios(cot, macro, eia):
+def scenarios(cot, macro, eia, gld=None):
     """Gợi ý những điều nên quan sát, suy ra theo quy tắc đơn giản. Không phải khuyến nghị."""
     out = {}
     for key in ASSETS:
@@ -333,6 +409,10 @@ def scenarios(cot, macro, eia):
             way = "giảm" if crude["change"] < 0 else "tăng"
             notes.append(f"Tồn kho dầu thô thương mại tuần gần nhất {way} {abs(crude['change']):.1f} triệu thùng"
                          + (" (thường được đọc là cầu mạnh)." if crude["change"] < 0 else " (thường được đọc là cầu yếu)."))
+        if key == "GC" and gld and abs(gld["m1"]) >= 0.5:
+            way = "mua ròng" if gld["m1"] > 0 else "bán ròng"
+            vn = lambda v: f"{v:,.1f}".replace(",", " ").replace(".", ",").replace(" ", ".")  # 1.044,4
+            notes.append(f"Quỹ vàng SPDR (GLD) 1 tháng qua {way} {vn(abs(gld['m1']))} tấn, đang giữ {vn(gld['tonnes'])} tấn.")
         out[key] = {"bias": (score > 0) - (score < 0), "notes": notes}
     return out
 
@@ -341,7 +421,7 @@ def main():
     prev = previous_json("market.json") or {}
     data = {"updated": datetime.now(timezone.utc).isoformat(), "errors": {}}
     for name, fn in (("cot", lambda: get_cot(prev)), ("flows", lambda: get_flows(prev)), ("eia", get_eia),
-                     ("macro", get_macro), ("curve", get_curve), ("crypto", get_crypto)):
+                     ("macro", get_macro), ("curve", get_curve), ("crypto", get_crypto), ("gld", lambda: get_gld(prev))):
         try:
             res = fn()
             if name in ("cot", "flows"):
@@ -353,7 +433,7 @@ def main():
             data["errors"][name] = f"{type(e).__name__}: {e}"
             data[name] = prev.get(name)  # nguồn lỗi thì giữ bản cũ
             print(f"  ! {name}: {data['errors'][name]}")
-    data["scenarios"] = scenarios(data.get("cot"), data.get("macro") or [], data.get("eia"))
+    data["scenarios"] = scenarios(data.get("cot"), data.get("macro") or [], data.get("eia"), data.get("gld"))
     write_json("market.json", data)
     cot = data.get("cot") or {}
     print(f"COT {cot.get('report_date')}, nhóm {(data.get('flows') or {}).get('report_date')}, "
