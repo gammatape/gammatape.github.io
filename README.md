@@ -1,6 +1,6 @@
 # Wyckdelta
 
-Địa chỉ: https://gammatape.github.io (repo `gammatape/gammatape.github.io`). Tên miền riêng https://wyckdelta.com sẽ dùng khi DNS Cloudflare trỏ về GitHub Pages và đặt Custom domain trong Settings → Pages; lúc đó GitHub tự chuyển hướng địa chỉ cũ sang tên miền mới.
+Địa chỉ: https://wyckdelta.com (GitHub Pages, repo `gammatape/gammatape.github.io`; địa chỉ cũ gammatape.github.io tự chuyển hướng về đây). DNS ở Cloudflare (DNS only), tên miền đã xác minh trong tổ chức gammatape.
 
 Trang web của Wyckdelta: giới thiệu app (order flow + GEX trên một biểu đồ, ảnh chụp app thật, nút inbox nhận link dùng thử) và mục **Nhịp thị trường hôm nay** miễn phí cho mọi người: vĩ mô · vị thế · tin tức cho GC, ES, NQ, CL. Chạy với chi phí 0 đồng.
 
