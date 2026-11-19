@@ -264,7 +264,9 @@ def get_curve():
 GLD_URL = "https://api.spdrgoldshares.com/api/v1/historical-archive?product=gld&exchange=NYSE&lang=en"
 GLD_SHEET = "US GLD Historical Archive"
 GLD_KEEP_DAYS = 183  # khoảng 6 tháng cho biểu đồ
-GLD_SLOT_HOUR = 23  # giờ UTC (6:00 VN): quỹ đã công bố số của phiên New York vừa đóng
+GLD_SLOT_HOUR = 23  # giờ UTC (6:00 VN): sớm nhất có thể đã có số của phiên New York vừa đóng
+GLD_RETRY = timedelta(hours=3)  # quỹ công bố muộn (00:49 UTC vẫn chưa có): thử lại cách 3 giờ
+GLD_GIVE_UP = timedelta(hours=12)  # sau mốc 12 giờ vẫn chưa có (ngày nghỉ lễ Mỹ): thôi, chờ mốc sau
 
 
 def gld_slot(now):
@@ -275,6 +277,14 @@ def gld_slot(now):
     while s.weekday() >= 5:
         s -= timedelta(days=1)
     return s
+
+
+def gld_fresh(old, now):
+    """Bản cũ còn dùng được, không cần gọi máy chủ của quỹ: đã có số của phiên ứng với mốc gần nhất, hoặc vừa thử
+    trong GLD_RETRY, hoặc đã quá GLD_GIVE_UP sau mốc (phiên đó không có số)."""
+    slot, fetched = gld_slot(now), datetime.fromisoformat(old["fetched"])
+    return (date.fromisoformat(old["date"]) >= slot.date() or now - fetched < GLD_RETRY
+            or fetched >= slot + GLD_GIVE_UP)
 
 
 def xlsx_rows(blob, sheet_name):
@@ -305,8 +315,8 @@ def xlsx_rows(blob, sheet_name):
 
 def get_gld(prev):
     old = prev.get("gld")
-    if old and datetime.fromisoformat(old["fetched"]) >= gld_slot(datetime.now(timezone.utc)):
-        return old  # đã tải sau mốc của ngày giao dịch gần nhất: không gọi lại máy chủ của quỹ
+    if old and gld_fresh(old, datetime.now(timezone.utc)):
+        return old
     rows = xlsx_rows(fetch(GLD_URL, timeout=60), GLD_SHEET)
     head = rows[0]
     col = {name: c for c, name in head.items()}

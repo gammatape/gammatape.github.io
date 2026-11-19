@@ -13,7 +13,7 @@ Bộ nhận diện giống bộ ảnh quảng cáo: nền #0b0f17, xanh #22c55e,
 | Ai đang mua, ai đang bán (quỹ đầu cơ / nhà sản xuất / ngân hàng, Vàng và Dầu) | CFTC, báo cáo Disaggregated | Thứ Sáu hằng tuần |
 | Đường cong lợi suất Mỹ (hôm nay, 1 tháng trước, đầu năm) | U.S. Treasury, Daily Par Yield Curve | Hằng ngày |
 | Tồn kho dầu Mỹ | EIA, Weekly Petroleum Status | Thứ Tư hằng tuần |
-| Quỹ vàng SPDR (GLD): số tấn đang giữ, mua / bán mỗi phiên | File lưu trữ của SPDR Gold Shares (xlsx), chỉ đăng số tấn và thay đổi | Mỗi ngày giao dịch (tải 1 lần, sau 6:00 giờ VN) |
+| Quỹ vàng SPDR (GLD): số tấn đang giữ, mua / bán mỗi phiên | File lưu trữ của SPDR Gold Shares (xlsx), chỉ đăng số tấn và thay đổi | Mỗi ngày giao dịch (tải 1 lần khi quỹ đã công bố, buổi sáng giờ VN; chưa có thì thử lại cách 3 giờ) |
 | Động lực vĩ mô | U.S. Treasury (lợi suất danh nghĩa, lợi suất thực), Fed New York (EFFR) | Hằng ngày |
 | Kịch bản để quan sát | Tự suy ra từ COT, vĩ mô, EIA (mang tính giáo dục) | Mỗi lần cập nhật |
 | Tin tức | RSS của Fed, EIA, CFTC và các trang tin tài chính | 30 phút |
