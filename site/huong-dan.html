@@ -291,14 +291,14 @@ footer p { margin: 6px 0; }
   <div><i class="n">3</i>Mở Wyckdelta và đăng nhập</div>
 </div>
 <div class="road d-win">
-  <div><i class="n">1</i>Mở app Wyckdelta</div>
+  <div><i class="n">1</i>Tải và mở app Wyckdelta</div>
   <div><i class="n">2</i>Bấm nút xanh trong app</div>
   <div><i class="n">3</i>Đăng nhập Wyckdelta</div>
 </div>
 <div class="have">
-  <b class="h">Trước khi bắt đầu, bạn cần có (Wyckdelta gửi qua tin nhắn khi bạn inbox xin dùng thử):</b>
+  <b class="h">Trước khi bắt đầu, bạn cần có (link mời và tài khoản: Wyckdelta gửi qua tin nhắn khi bạn inbox xin dùng thử):</b>
   <ul>
-    <li class="d-win">File <b>Wyckdelta.zip</b> (chứa app cho Windows)</li>
+    <li class="d-win">File <b>Wyckdelta.zip</b> (app cho Windows): tải ở <a href="#win-1">Bước 1</a> ngay bên dưới</li>
     <li><b>1 link mời</b> Tailscale (dùng ở Bước 2)</li>
     <li><b>Tên đăng nhập + mật khẩu</b> Wyckdelta (dùng ở Bước 3)</li>
     <li>Một <b>Gmail cá nhân</b> để đăng nhập Tailscale (không dùng email công ty)</li>
@@ -312,7 +312,7 @@ footer p { margin: 6px 0; }
   <ol>
     <li class="d-iphone d-android d-mac"><a href="#buoc-1">Bước 1 · Cài Tailscale</a></li>
     <li class="d-iphone d-android d-mac"><a href="#buoc-2">Bước 2 · Bấm link mời</a></li>
-    <li class="d-win"><a href="#win-1">Bước 1 · Mở app Wyckdelta</a></li>
+    <li class="d-win"><a href="#win-1">Bước 1 · Tải và mở app Wyckdelta</a></li>
     <li class="d-win"><a href="#win-2">Bước 2 · Bấm nút xanh trong app</a></li>
     <li><a href="#buoc-3">Bước 3 · Trang đăng nhập</a></li>
     <li><a href="#sau-dang-nhap">Sau khi đăng nhập</a></li>
@@ -413,8 +413,10 @@ footer p { margin: 6px 0; }
 
 <!-- =================== Windows app: BƯỚC 1 =================== -->
 <section class="step d-win" id="win-1">
-  <h2><i class="n">1</i><span><small>BƯỚC 1</small>Mở app Wyckdelta</span></h2>
+  <h2><i class="n">1</i><span><small>BƯỚC 1</small>Tải và mở app Wyckdelta</span></h2>
+  <a class="big" href="download/Wyckdelta.zip" download>Tải app Wyckdelta cho Windows<small>Wyckdelta.zip · 15 MB · Windows 10 / 11</small></a>
   <ol class="s">
+    <li>Bấm nút vàng ở trên. File <b>Wyckdelta.zip</b> nằm trong thư mục <b>Tải xuống</b> (Downloads). Trình duyệt hỏi có giữ file không thì bấm <span class="k">Giữ lại</span> (Keep).</li>
     <li>Bấm <b>chuột phải</b> vào file <b>Wyckdelta.zip</b> → <span class="k">Giải nén tất cả…</span> (Extract All) → <span class="k">Giải nén</span>.</li>
     <li>Thư mục mới mở ra. Bấm đúp vào <b>Wyckdelta.exe</b>.</li>
     <li>Nếu Windows hiện khung xanh <b>“Windows đã bảo vệ PC của bạn”</b>: bấm <span class="k">Thông tin bổ sung</span> → <span class="k">Vẫn chạy</span>.</li>
@@ -436,7 +438,7 @@ footer p { margin: 6px 0; }
   </div>
   <div class="box note">Khung xanh này chỉ hiện <b>lần đầu</b>. Windows hiện nó vì app chưa mua chứng chỉ ký số, không phải vì có virus.</div>
   <div class="box done"><b class="t">✔ Xong Bước 1 khi:</b> thấy cửa sổ <b>Kết nối Wyckdelta</b>, và trên màn hình (Desktop) có thêm biểu tượng <b>Wyckdelta</b>.</div>
-  <figure class="shot"><img src="img/huong-dan/win-1-chua-cai.webp" width="632" height="583" loading="lazy" alt="Cửa sổ Kết nối Wyckdelta lúc mới mở, bước 1 Cài Tailscale"></figure>
+  <figure class="shot"><img src="img/huong-dan/win-1-chua-cai.webp" width="632" height="578" loading="lazy" alt="Cửa sổ Kết nối Wyckdelta lúc mới mở, bước 1 Cài Tailscale"></figure>
   <div class="cap">Cửa sổ Kết nối Wyckdelta lúc mới mở</div>
 </section>
 
@@ -451,12 +453,12 @@ footer p { margin: 6px 0; }
     <tr><td>Kết nối tới Wyckdelta</td><td>App tự kiểm tra đường tới máy chủ. Báo máy chủ tạm tắt thì cứ để app mở, app tự vào lại. Báo lỗi thì tắt VPN khác (nếu có) rồi thử lại.</td></tr>
   </table>
   <div class="shots">
-    <div><figure class="shot"><img src="img/huong-dan/win-2-cho-dang-nhap.webp" width="632" height="597" loading="lazy" alt="App chờ đăng nhập Tailscale bằng Gmail"></figure><div class="cap">Đăng nhập Tailscale bằng Gmail</div></div>
-    <div><figure class="shot"><img src="img/huong-dan/win-3-link-moi.webp" width="632" height="711" loading="lazy" alt="App có ô dán link mời và nút Mở link mời"></figure><div class="cap">Dán link mời rồi bấm Mở link mời</div></div>
+    <div><figure class="shot"><img src="img/huong-dan/win-2-cho-dang-nhap.webp" width="632" height="592" loading="lazy" alt="App chờ đăng nhập Tailscale bằng Gmail"></figure><div class="cap">Đăng nhập Tailscale bằng Gmail</div></div>
+    <div><figure class="shot"><img src="img/huong-dan/win-3-link-moi.webp" width="632" height="706" loading="lazy" alt="App có ô dán link mời và nút Mở link mời"></figure><div class="cap">Dán link mời rồi bấm Mở link mời</div></div>
   </div>
   <div class="box warn">Mở link mời bằng <b>đúng Gmail</b> đã đăng nhập Tailscale (app ghi Gmail đó ngay trên ô dán link). Đừng dùng email công ty.</div>
   <div class="box done"><b class="t">✔ Xong Bước 2 khi:</b> cả 4 dòng có dấu ✓ xanh và hiện nút lớn <b>Mở Wyckdelta</b>.</div>
-  <figure class="shot" style="max-width:420px"><img src="img/huong-dan/win-5-san-sang.webp" width="632" height="586" loading="lazy" alt="Cả 4 bước có dấu tích xanh và nút Mở Wyckdelta"></figure>
+  <figure class="shot" style="max-width:420px"><img src="img/huong-dan/win-5-san-sang.webp" width="632" height="581" loading="lazy" alt="Cả 4 bước có dấu tích xanh và nút Mở Wyckdelta"></figure>
   <div class="cap">Đủ 4 dấu ✓: app mở trang đăng nhập (Bước 3)</div>
 </section>
 
