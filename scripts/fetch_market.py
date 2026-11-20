@@ -198,13 +198,15 @@ FLAT = 0.05  # thay đổi dưới 0,05 điểm % xem như đi ngang
 
 SHORT = {"real10": "lợi suất thực", "y10": "lợi suất 10 năm", "y2": "lợi suất 2 năm",
          "be10": "lạm phát kỳ vọng", "curve": "chênh lệch 10–2 năm", "effr": "lãi suất EFFR"}
+SHORT_EN = {"real10": "real yield", "y10": "10-year yield", "y2": "2-year yield",
+            "be10": "inflation expectations", "curve": "10–2 year spread", "effr": "EFFR rate"}
 
 
 def macro_item(key, name, cur, old, unit, note, series=None):
     chg = round(cur[1] - old[1], 2)
     direction = 0 if abs(chg) < FLAT else (1 if chg > 0 else -1)
     return {
-        "key": key, "name": name, "short": SHORT[key], "value": round(cur[1], 2), "date": cur[0].isoformat(),
+        "key": key, "name": name, "short": SHORT[key], "short_en": SHORT_EN[key], "value": round(cur[1], 2), "date": cur[0].isoformat(),
         "prev": round(old[1], 2), "prev_date": old[0].isoformat(), "change": chg, "unit": unit,
         "impact": {a: s * direction for a, s in IMPACT[key].items()}, "note": note,
         # khoảng 1 tháng gần nhất, cũ -> mới, để vẽ đường xu hướng
@@ -386,44 +388,65 @@ def get_crypto():
 
 # ----------------------------------------------------------- Kịch bản ----
 def scenarios(cot, macro, eia, gld=None):
-    """Gợi ý những điều nên quan sát, suy ra theo quy tắc đơn giản. Không phải khuyến nghị."""
+    """Gợi ý những điều nên quan sát, suy ra theo quy tắc đơn giản. Không phải khuyến nghị.
+    Mỗi câu viết luôn hai thứ tiếng: notes (Việt) và notes_en (Anh) cho nút VI / EN của trang."""
     out = {}
     for key in ASSETS:
-        notes = []
+        notes, notes_en = [], []
+
+        def add(vi, en):
+            notes.append(vi)
+            notes_en.append(en)
+
         c = cot["assets"].get(key) if cot else None
         if c:
             i = c["index156"]
             if i >= 80:
-                notes.append(f"Quỹ lớn đang mua ròng gần mức cao nhất 3 năm (COT Index {i}). "
-                             "Vị thế đông người dễ bị chốt lời mạnh khi có tin bất lợi.")
+                add(f"Quỹ lớn đang mua ròng gần mức cao nhất 3 năm (COT Index {i}). "
+                    "Vị thế đông người dễ bị chốt lời mạnh khi có tin bất lợi.",
+                    f"Large funds are net long near a 3-year high (COT Index {i}). "
+                    "A crowded position can see sharp profit-taking on bad news.")
             elif i <= 20:
-                notes.append(f"Vị thế ròng của quỹ lớn gần mức thấp nhất 3 năm (COT Index {i}). "
-                             "Bên bán đã đông, chú ý khả năng đảo chiều khi có tin tốt.")
+                add(f"Vị thế ròng của quỹ lớn gần mức thấp nhất 3 năm (COT Index {i}). "
+                    "Bên bán đã đông, chú ý khả năng đảo chiều khi có tin tốt.",
+                    f"Large funds' net position is near a 3-year low (COT Index {i}). "
+                    "The short side is crowded; watch for a reversal on good news.")
             else:
-                notes.append(f"Vị thế quỹ lớn ở vùng giữa (COT Index {i}), chưa cực đoan.")
+                add(f"Vị thế quỹ lớn ở vùng giữa (COT Index {i}), chưa cực đoan.",
+                    f"Large funds are mid-range (COT Index {i}), not extreme.")
             if c["change"]:
-                way = "tăng" if c["change"] > 0 else "giảm"
-                notes.append(f"Tuần qua vị thế ròng {way} {abs(c['change']):,} hợp đồng.".replace(",", "."))
-        moved = lambda sign: [f"{m['short']} {'tăng' if m['change'] > 0 else 'giảm'}"
-                              for m in macro if m["impact"].get(key) == sign]
+                way, way_en = ("tăng", "rose") if c["change"] > 0 else ("giảm", "fell")
+                add(f"Tuần qua vị thế ròng {way} {abs(c['change']):,} hợp đồng.".replace(",", "."),
+                    f"Last week the net position {way_en} by {abs(c['change']):,} contracts.")
+        moved = lambda sign: [m for m in macro if m["impact"].get(key) == sign]
+        word = lambda m: f"{m['short']} {'tăng' if m['change'] > 0 else 'giảm'}"
+        word_en = lambda m: f"{m.get('short_en', m['short'])} {'up' if m['change'] > 0 else 'down'}"
         support, pressure = moved(1), moved(-1)
         score = len(support) - len(pressure)
         if support:
-            notes.append("Vĩ mô 1 tháng qua hỗ trợ: " + ", ".join(support) + ".")
+            add("Vĩ mô 1 tháng qua hỗ trợ: " + ", ".join(map(word, support)) + ".",
+                "Macro over the past month is supportive: " + ", ".join(map(word_en, support)) + ".")
         if pressure:
-            notes.append("Vĩ mô 1 tháng qua gây áp lực: " + ", ".join(pressure) + ".")
+            add("Vĩ mô 1 tháng qua gây áp lực: " + ", ".join(map(word, pressure)) + ".",
+                "Macro over the past month is a headwind: " + ", ".join(map(word_en, pressure)) + ".")
         if not support and not pressure:
-            notes.append("Các chỉ số vĩ mô chính gần như đi ngang trong 1 tháng qua.")
+            add("Các chỉ số vĩ mô chính gần như đi ngang trong 1 tháng qua.",
+                "The main macro indicators were roughly flat over the past month.")
         if key == "CL" and eia:
             crude = eia["rows"][0]
-            way = "giảm" if crude["change"] < 0 else "tăng"
-            notes.append(f"Tồn kho dầu thô thương mại tuần gần nhất {way} {abs(crude['change']):.1f} triệu thùng"
-                         + (" (thường được đọc là cầu mạnh)." if crude["change"] < 0 else " (thường được đọc là cầu yếu)."))
+            draw = crude["change"] < 0
+            add(f"Tồn kho dầu thô thương mại tuần gần nhất {'giảm' if draw else 'tăng'} {abs(crude['change']):.1f} triệu thùng"
+                + (" (thường được đọc là cầu mạnh)." if draw else " (thường được đọc là cầu yếu)."),
+                f"Commercial crude inventories {'fell' if draw else 'rose'} {abs(crude['change']):.1f} million barrels last week"
+                + (" (usually read as strong demand)." if draw else " (usually read as weak demand)."))
         if key == "GC" and gld and abs(gld["m1"]) >= 0.5:
-            way = "mua ròng" if gld["m1"] > 0 else "bán ròng"
+            buy = gld["m1"] > 0
             vn = lambda v: f"{v:,.1f}".replace(",", " ").replace(".", ",").replace(" ", ".")  # 1.044,4
-            notes.append(f"Quỹ vàng SPDR (GLD) 1 tháng qua {way} {vn(abs(gld['m1']))} tấn, đang giữ {vn(gld['tonnes'])} tấn.")
-        out[key] = {"bias": (score > 0) - (score < 0), "notes": notes}
+            add(f"Quỹ vàng SPDR (GLD) 1 tháng qua {'mua ròng' if buy else 'bán ròng'} {vn(abs(gld['m1']))} tấn, "
+                f"đang giữ {vn(gld['tonnes'])} tấn.",
+                f"The SPDR gold fund (GLD) was a net {'buyer' if buy else 'seller'} of {abs(gld['m1']):,.1f} tonnes "
+                f"over the past month and holds {gld['tonnes']:,.1f} tonnes.")
+        out[key] = {"bias": (score > 0) - (score < 0), "notes": notes, "notes_en": notes_en}
     return out
 
 

@@ -1,6 +1,6 @@
 // Small SVG chart kit for the Wyckdelta market section (draft). No dependencies.
 export const NS = "http://www.w3.org/2000/svg";
-export const nf = (n, d = 2) => new Intl.NumberFormat("vi-VN", { minimumFractionDigits: d, maximumFractionDigits: d }).format(n);
+export const nf = (n, d = 2) => new Intl.NumberFormat(window.WD_I18N?.locale || "vi-VN", { minimumFractionDigits: d, maximumFractionDigits: d }).format(n);
 export const sg = (n, d = 2) => (n > 0 ? "+" : n < 0 ? "−" : "") + nf(Math.abs(n), d);
 export const dm = iso => iso.slice(8, 10) + "/" + iso.slice(5, 7);
 export function svg(w, h) { const s = document.createElementNS(NS, "svg"); s.setAttribute("viewBox", `0 0 ${w} ${h}`); return s; }
@@ -152,5 +152,5 @@ export function curveChart(box, labels, series, { h = 230 } = {}) {
   series[0].v.forEach((v, i) => add(s, "circle", { cx: x(i), cy: y(v), r: 3, fill: "var(--gold)" }));
   crosshair(box, s, W, H, T, B, L, R, labels.length, i => [x(i), y(series[0].v[i]),
     // change vs older curves is shown neutral: a higher yield is neither good nor bad by itself
-    `<b>${labels[i]}</b><br>` + series.map((se, k) => `${se.name}: <b>${nf(se.v[i])}%</b>` + (k ? ` <span class="muted">(hôm nay ${sg(series[0].v[i] - se.v[i])})</span>` : "")).join("<br>")]);
+    `<b>${labels[i]}</b><br>` + series.map((se, k) => `${se.name}: <b>${nf(se.v[i])}%</b>` + (k ? ` <span class="muted">(${window.WD_I18N?.en ? "today" : "hôm nay"} ${sg(series[0].v[i] - se.v[i])})</span>` : "")).join("<br>")]);
 }

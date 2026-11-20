@@ -17,6 +17,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="manifest" href="manifest.webmanifest">
+<script src="i18n.js?v=1"></script>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" href="img/favicon-16.svg" type="image/svg+xml">
 <link rel="icon" href="img/favicon-32.png" sizes="32x32" type="image/png">
@@ -631,6 +632,24 @@ body.drawer { overflow: hidden; }
   .hero h1 { font-size: 24px; }
 }
 @media (max-width: 560px) { .mk .t .n { display: none; } }
+/* VI | EN switch (site/i18n.js) */
+.langsw { display: inline-flex; height: 44px; padding: 3px; gap: 2px; border: 1px solid var(--line2); border-radius: 10px; background: var(--panel); flex: none; }
+.langsw button { min-width: 40px; border: 0; border-radius: 7px; background: none; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+.langsw button[aria-pressed="true"] { background: var(--panel2); color: var(--text); box-shadow: 0 0 0 1px var(--line2); }
+@media (max-width: 899px) { .tools .langsw { display: none; } }
+.side-lang { margin-bottom: 12px; width: 100%; } .side-lang button { flex: 1; }
+@media (min-width: 1100px) { body.mini .side-lang { display: none; } }
+/* price ticker (licensed embed; spot gold, index CFDs, WTI, EUR/USD) */
+.ticker-wrap { margin-bottom: 10px; }
+.ticker { min-height: 46px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); overflow: hidden; }
+.ticker .tradingview-widget-copyright { display: none; }
+/* the embed page declares no color-scheme: give the iframe the same one, or the browser paints it opaque white */
+.ticker iframe { color-scheme: normal; }
+.ticker-src { display: block; margin-top: 4px; font-size: 11.5px; color: var(--faint); text-decoration: none; text-align: right; }
+@media (hover: hover) and (pointer: fine) { .ticker-src:hover { text-decoration: underline; } }
+.tile .val .pct { font-size: 14px; font-weight: 700; margin-left: 6px; }
+.tile .spk { margin-top: 4px; }
+.pulse { grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); }
 </style>
 </head>
 <body>
@@ -645,6 +664,7 @@ body.drawer { overflow: hidden; }
     <button type="submit" aria-label="Tìm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
   </form>
   <div class="tools">
+    <div class="langsw" data-lang-switch role="group" aria-label="Ngôn ngữ / Language"><button type="button" data-l="VI">VI</button><button type="button" data-l="EN">EN</button></div>
     <button class="iconbtn" id="theme" type="button" aria-label="Đổi giao diện sáng / tối" title="Đổi giao diện sáng / tối">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18" /><path d="M12 3a9 9 0 0 1 0 18" fill="currentColor"/></svg>
     </button>
@@ -675,6 +695,7 @@ body.drawer { overflow: hidden; }
     <a href="huong-dan.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg><span>Cài đặt app</span></a>
   </nav>
   <div class="side-foot">
+    <div class="langsw side-lang" data-lang-switch role="group" aria-label="Ngôn ngữ / Language"><button type="button" data-l="VI">VI</button><button type="button" data-l="EN">EN</button></div>
     <a class="btn gold" href="https://m.me/61596278051545?ref=wyckdelta_web" target="_blank" rel="noopener">Inbox để nhận link dùng thử</a>
     <p>Công cụ phân tích dữ liệu, không phải lời khuyên đầu tư.</p>
   </div>
@@ -685,12 +706,16 @@ body.drawer { overflow: hidden; }
   <a href="#calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Lịch tin</a>
   <a href="#crypto"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 8h4a2 2 0 0 1 0 4h-4m0 0h4.5a2 2 0 0 1 0 4H9.5V8"/></svg>Crypto</a>
   <a href="#news"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>Tin tức</a>
-  <button type="button" id="tab-more" aria-controls="side"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>Thêm</button>
+  <button type="button" id="tab-more" aria-controls="side"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>Menu</button>
 </nav>
 
 
 <div class="shell">
 <div class="filterbar" id="filterbar" role="group" aria-label="Lọc theo thị trường"></div>
+<div class="wrap ticker-wrap">
+  <div class="ticker" id="ticker" data-i18n-skip translate="no"></div>
+  <a class="ticker-src" href="https://www.tradingview.com/" target="_blank" rel="noopener nofollow">Giá vàng giao ngay và chỉ số: TradingView, trễ theo quy định của sàn</a>
+</div>
 <div class="wrap pulse-wrap"><div class="pulse" id="pulse"></div></div>
 
 <section class="hero">
@@ -1005,12 +1030,13 @@ body.drawer { overflow: hidden; }
 </div>
 
 <script type="module">
-import { add, fresh, tipFor, divergingBars, levelLine, miniArea, miniLine, halfGauge, curveChart } from "./charts.js";
+import { add, fresh, tipFor, divergingBars, levelLine, miniArea, miniLine, halfGauge, curveChart } from "./charts.js?v=2";  // bump when charts.js changes (Pages caches 10 min)
+const I18N = window.WD_I18N || { en: false, locale: "vi-VN", t: v => v }, LOC = I18N.locale;
 const VN = "Asia/Ho_Chi_Minh";
 const ASSETS = { GC: "Vàng", ES: "S&P 500", NQ: "Nasdaq 100", CL: "Dầu WTI", BTC: "Bitcoin", ETH: "Ether" };
 const TOPICS = { rel: "Liên quan", GC: "GC · Vàng", ES: "ES · S&P", NQ: "NQ · Nasdaq", CL: "CL · Dầu", CRYPTO: "Crypto", FED: "Fed", MACRO: "Vĩ mô", official: "Nguồn chính thức", all: "Mọi tin" };
 const LANGS = { all: "Tất cả", vi: "Tiếng Việt", en: "English" };
-const IMPACTS = { High: "Cao", Medium: "Trung bình", Low: "Thấp" };
+const IMPACTS = { High: I18N.t("Cao", "High"), Medium: I18N.t("Trung bình", "Medium"), Low: I18N.t("Thấp", "Low") };
 const CCYS = { all: "Mọi tiền tệ", USD: "USD" };
 const PAGE = 16, REFRESH_MS = 5 * 60 * 1000;
 
@@ -1026,15 +1052,15 @@ function el(tag, props = {}, ...kids) {
 }
 const $ = id => document.getElementById(id);
 function safeUrl(u) { try { const x = new URL(u); return /^https?:$/.test(x.protocol) ? x.href : "#"; } catch { return "#"; } }
-const nf = new Intl.NumberFormat("vi-VN");
-const fmtN = (n, d = 0) => new Intl.NumberFormat("vi-VN", { minimumFractionDigits: d, maximumFractionDigits: d }).format(n);
+const nf = new Intl.NumberFormat(LOC);
+const fmtN = (n, d = 0) => new Intl.NumberFormat(LOC, { minimumFractionDigits: d, maximumFractionDigits: d }).format(n);
 const signed = (n, d = 0) => (n > 0 ? "+" : n < 0 ? "−" : "") + fmtN(Math.abs(n), d);
 const cls = n => n > 0 ? "up" : n < 0 ? "down" : "muted";
-const vnTime = d => d.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit", timeZone: VN });
+const vnTime = d => d.toLocaleTimeString(LOC, { hour: "2-digit", minute: "2-digit", timeZone: VN });
 // vi-VN prints "25-10" without a year; normalise to "25/10"
 const vnDate = (d, o = { day: "2-digit", month: "2-digit", year: "numeric" }) =>
-  d.toLocaleDateString("vi-VN", { ...o, timeZone: VN }).replace(/(\d{2})-(\d{2})/, "$1/$2");
-const rtf = new Intl.RelativeTimeFormat("vi", { numeric: "auto" });
+  d.toLocaleDateString(LOC, { ...o, timeZone: VN }).replace(/(\d{2})-(\d{2})/, "$1/$2");
+const rtf = new Intl.RelativeTimeFormat(I18N.en ? "en" : "vi", { numeric: "auto" });
 function ago(iso) {
   if (!iso) return "";
   const s = (new Date(iso) - Date.now()) / 1000;
@@ -1045,6 +1071,7 @@ function ago(iso) {
 }
 function until(d) {
   const m = Math.max(0, Math.round((d - Date.now()) / 60000)), days = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), mm = m % 60;
+  if (I18N.en) return "in " + (days ? `${days}d ${h}h` : h ? `${h}h ${mm}m` : `${mm}m`);
   return "còn " + (days ? `${days} ngày ${h} giờ` : h ? `${h} giờ ${mm} phút` : `${mm} phút`);
 }
 function chipGroup(box, options, isOn, onClick) {
@@ -1059,6 +1086,15 @@ function tile(href, label, value, sub, extra = "") {
 }
 function renderPulse() {
   const out = [];
+  for (const c of (market?.crypto?.coins || []).filter(c => c.sym === "BTC" || c.sym === "ETH")) {
+    const t = tile("#crypto", `${c.sym} · ${c.name}`,
+      el("div", { className: "val num" }, "$" + fmtN(c.price, c.price < 100 ? 2 : 0),
+        el("span", { className: "pct num " + cls(c.ch24), textContent: (c.ch24 > 0 ? "+" : c.ch24 < 0 ? "−" : "") + fmtN(Math.abs(c.ch24 ?? 0), 2) + "%" })),
+      "24 giờ · CoinGecko");
+    const sp = el("div", { className: "chart spk" }); t.append(sp);
+    if (c.spark?.length) miniLine(sp, c.spark, { h: 28, color: c.ch7 >= 0 ? "var(--green)" : "var(--red)", fill: false });
+    out.push(t);
+  }
   const now = Date.now();
   const next = cal?.events.map(e => ({ ...e, d: new Date(e.time) }))
     .filter(e => e.impact === "High" && e.country === "USD" && e.d > now).sort((a, b) => a.d - b.d)[0];
@@ -1077,7 +1113,7 @@ function renderPulse() {
     `hợp đồng ròng · COT Index ${gc.index26} (${zone(gc.index26)})`));
   const crude = market?.eia?.rows?.[0];
   if (crude) out.push(tile("#eia", "Tồn kho dầu thô Mỹ",
-    el("div", { className: "val num " + cls(-crude.change), textContent: signed(crude.change, 1) + " tr thùng" }),
+    el("div", { className: "val num " + cls(-crude.change), textContent: signed(crude.change, 1) + I18N.t(" tr thùng", " M bbl") }),
     `trong tuần · ${crude.change > 0 ? "thường đọc là cầu yếu" : crude.change < 0 ? "thường đọc là cầu mạnh" : "đi ngang"}`));
   $("pulse").replaceChildren(...out);
 }
@@ -1140,12 +1176,12 @@ function renderDetail() {
   $("asset-panel").replaceChildren(
     el("div", { className: "blk" },
       el("h4", { textContent: `${k} · ${SHORTNAME[k]}: chi tiết vị thế` }),
-      el("div", { className: "sub num" }, `Mua ${nf.format(a.long)} (${signed(a.long_change)}) · Bán ${nf.format(a.short)} (${signed(a.short_change)})`),
+      el("div", { className: "sub num" }, `${I18N.t("Mua", "Long")} ${nf.format(a.long)} (${signed(a.long_change)}) · ${I18N.t("Bán", "Short")} ${nf.format(a.short)} (${signed(a.short_change)})`),
       el("div", { className: "sub num" }, `Vị thế ròng bằng ${fmtN(a.net_pct_oi, 1)}% hợp đồng mở`),
       gauge("COT Index 26 tuần", a.index26), gauge("COT Index 3 năm", a.index156)),
     el("div", { className: "blk" },
       el("h4", {}, "Kịch bản để quan sát ", el("span", { className: "tone " + c, textContent: label })),
-      s ? el("ul", { className: "bul" }, s.notes.map(n => el("li", { textContent: n }))) : el("p", { className: "muted", textContent: "Chưa có kịch bản." })),
+      s ? el("ul", { className: "bul" }, ((I18N.en && s.notes_en) || s.notes).map(n => el("li", { textContent: n }))) : el("p", { className: "muted", textContent: "Chưa có kịch bản." })),
     el("div", { className: "blk" },
       el("h4", { textContent: `Vĩ mô tác động lên ${SHORTNAME[k]}` }),
       impacts.length ? el("ul", { className: "imps" }, impacts) : el("p", { className: "muted", textContent: "Không có yếu tố vĩ mô nổi bật cho mã này." }),
@@ -1167,13 +1203,13 @@ function renderWeek() {
   const back = { Mon: 0, Tue: 1, Wed: 2, Thu: 3, Fri: 4, Sat: 5, Sun: 6 }[p.weekday] ?? 0;
   const t0 = Date.parse(`${p.year}-${p.month}-${p.day}T00:00:00+07:00`) - back * 864e5, t1 = t0 + 5 * 864e5;
   const x = t => L + (t - t0) / (t1 - t0) * (W - L - R), lane = { High: T + 22, Medium: T + 62 };
-  const g = add(s, "g", { class: "axis" }), names = ["T2", "T3", "T4", "T5", "T6"];
+  const g = add(s, "g", { class: "axis" }), names = I18N.en ? ["Mon", "Tue", "Wed", "Thu", "Fri"] : ["T2", "T3", "T4", "T5", "T6"];
   for (let i = 0; i <= 5; i++) {
     const tx = x(t0 + i * 864e5); add(g, "line", { x1: tx, x2: tx, y1: T - 8, y2: H - B + 4, stroke: "var(--grid)" });
     if (i < 5) add(g, "text", { x: tx + (x(t0 + 864e5) - x(t0)) / 2, y: H - 10, "text-anchor": "middle" },
       `${names[i]} ${vnDate(new Date(t0 + i * 864e5 + 6 * 36e5), { day: "2-digit", month: "2-digit" })}`);
   }
-  add(g, "text", { x: L + 2, y: lane.High - 12 }, "Đỏ"); if (imps.length > 1) add(g, "text", { x: L + 2, y: lane.Medium - 12 }, "Cam");
+  add(g, "text", { x: L + 2, y: lane.High - 12 }, I18N.t("Đỏ", "High")); if (imps.length > 1) add(g, "text", { x: L + 2, y: lane.Medium - 12 }, I18N.t("Cam", "Medium"));
   const now = Date.now(), tip = tipFor(box), nextE = evs.find(e => e.d > now);
   if (now > t0 && now < t1) {
     add(s, "line", { x1: x(now), x2: x(now), y1: T - 10, y2: H - B + 4, stroke: "#f5b301", "stroke-width": 2 });
@@ -1194,7 +1230,7 @@ function renderWeek() {
     el("div", { className: "w" }, el("span", { className: "dot " + e.impact }),
       vnDate(e.d, { weekday: "long" }) + " " + vnTime(e.d), i ? null : el("span", { className: "cd", textContent: until(e.d) })),
     el("b", { textContent: viTitle(e.title) }),
-    el("span", { className: "o", textContent: e.title + (e.forecast ? ` · Dự báo ${e.forecast} · Trước ${e.previous || "–"}` : "") })))
+    el("span", { className: "o", textContent: [I18N.en ? "" : e.title, e.forecast ? `Dự báo ${e.forecast} · Trước ${e.previous || "–"}` : ""].filter(Boolean).join(" · ") })))
     : [el("div", { className: "empty", textContent: "Không còn tin nào phù hợp trong tuần này." })]));
 }
 
@@ -1210,7 +1246,8 @@ function renderCurve() {
     el("div", { className: "stat" }, el("div", { className: "k", textContent: "Chênh 10 năm − 2 năm" }), el("div", { className: "v num" }, signed(sp, 2), el("small", { className: "muted", textContent: " điểm %" }))),
     el("div", { className: "stat" }, el("div", { className: "k", textContent: "Chênh 10 năm − 3 tháng" }), el("div", { className: "v num" }, signed(sp3, 2),
       el("small", { className: "muted", textContent: sp3 < 0 ? " đảo ngược" : " dốc lên" }))));
-  curveChart($("curve"), c.labels, c.series.map(se => ({ name: se.name, v: se.v })));
+  // tenor labels are written T (tháng) / N (năm); English: M / Y
+  curveChart($("curve"), I18N.en ? c.labels.map(l => l.replace(/T$/, "M").replace(/N$/, "Y")) : c.labels, c.series.map(se => ({ name: se.name, v: se.v })));
 }
 
 // ---------- Positioning map ----------
@@ -1248,7 +1285,7 @@ function renderFlows() {
   chipGroup($("flow-asset"), Object.fromEntries(keys.map(k => [k, `${k} · ${SHORTNAME[k]}`])), k => k === state.flow, k => { state.flow = k; save(); renderFlows(); });
   const a = f.assets[state.flow], wk = d => "Tuần " + vnDate(new Date(d + "T12:00:00Z"));
   const stat = (k, v, chg) => el("div", { className: "stat" }, el("div", { className: "k", textContent: k }),
-    el("div", { className: "v num " + cls(v) }, signed(v), el("small", { className: "num " + cls(chg), textContent: " " + signed(chg) + " tuần" })));
+    el("div", { className: "v num " + cls(v) }, signed(v), el("small", { className: "num " + cls(chg), textContent: " " + signed(chg) + I18N.t(" tuần", " w/w") })));
   $("flow-stats").replaceChildren(stat("Quỹ đầu cơ", a.mm, a.mm_change), stat("Nhà sản xuất, thương nhân", a.prod, a.prod_change), stat("Ngân hàng (swap)", a.swap, a.swap_change));
   const h = a.history, chg = h.slice(1).map((r, i) => ({ v: r.mm - h[i].mm, label: wk(r.d), short: vnDate(new Date(r.d + "T12:00:00Z"), { day: "2-digit", month: "2-digit" }) })).slice(-26);
   divergingBars($("flow-change"), chg, { unit: "hợp đồng", digits: 0, h: 190 });
@@ -1263,8 +1300,11 @@ function renderEia() {
   $("eia-badge").textContent = `Tuần đến ${vnDate(new Date(eia.week + "T12:00:00Z"))}`; $("eia-badge").className = "badge ok";
   const c = eia.rows[0];
   $("eia-sum").replaceChildren(el("p", { className: "summary " + cls(-c.change) },
-    el("b", { className: "num", textContent: `Dầu thô ${c.change > 0 ? "tăng" : c.change < 0 ? "giảm" : "đi ngang"} ${fmtN(Math.abs(c.change), 1)} triệu thùng` }),
-    c.change ? ` · thường được đọc là cầu ${c.change > 0 ? "yếu" : "mạnh"}` : ""));
+    el("b", { className: "num", textContent: I18N.en
+      ? `Crude ${c.change > 0 ? "up" : c.change < 0 ? "down" : "flat"} ${fmtN(Math.abs(c.change), 1)} million barrels`
+      : `Dầu thô ${c.change > 0 ? "tăng" : c.change < 0 ? "giảm" : "đi ngang"} ${fmtN(Math.abs(c.change), 1)} triệu thùng` }),
+    !c.change ? "" : I18N.en ? ` · usually read as ${c.change > 0 ? "weak" : "strong"} demand`
+      : ` · thường được đọc là cầu ${c.change > 0 ? "yếu" : "mạnh"}`));
   const box = $("eia-chart"), rows = eia.rows, rowH = 52, H = 6 + rows.length * rowH, [s, W] = fresh(box, H);
   const L = 4, R = 4, cx = L + (W - L - R) / 2, m = Math.max(...rows.map(r => Math.abs(r.change))) * 1.4 || 1, sc = v => v / m * (W - L - R) / 2;
   add(s, "line", { x1: cx, x2: cx, y1: 26, y2: H - 2, stroke: "var(--zero)" });
@@ -1274,7 +1314,7 @@ function renderEia() {
     add(s, "text", { x: L, y: top + 15, fill: "var(--text)", "font-size": 13, "font-weight": i ? 500 : 700 }, r.name);
     add(s, "text", { x: W - R, y: top + 15, fill: "var(--faint)", "font-size": 11.5, "text-anchor": "end" }, fmtN(r.value, 1));
     add(s, "rect", { x: x0, y: by, width: Math.max(2, w), height: 16, rx: 4, fill: r.change < 0 ? "var(--green)" : "var(--red)", opacity: .9 });
-    add(s, "text", { class: "lbl", x: r.change < 0 ? x0 - 6 : x0 + w + 6, y: by + 12, "text-anchor": r.change < 0 ? "end" : "start" }, signed(r.change, 1) + " tr");
+    add(s, "text", { class: "lbl", x: r.change < 0 ? x0 - 6 : x0 + w + 6, y: by + 12, "text-anchor": r.change < 0 ? "end" : "start" }, signed(r.change, 1) + I18N.t(" tr", " M"));
     const hit = add(s, "rect", { x: 0, y: top, width: W, height: rowH, fill: "transparent" });
     hit.addEventListener("pointerenter", () => tip.show(cx / W * box.clientWidth, by / H * box.clientHeight,
       `${r.name}<br>Hiện tại <b>${fmtN(r.value, 1)}</b> triệu thùng<br>Tuần <b>${signed(r.change, 1)}</b> · năm trước ${fmtN(r.year_ago, 1)}`));
@@ -1358,7 +1398,7 @@ function renderCrypto() {
     el("div", { className: "fg-text" },
       el("div", { className: "k", textContent: "Chỉ số Sợ hãi & Tham lam" }),
       el("div", { className: "fg-v" }, el("b", { className: "num", textContent: f.value }), el("span", { style: `color:${z.color}`, textContent: " " + f.label })),
-      el("div", { className: "k", textContent: `30 ngày: thấp ${Math.min(...f.history)} · cao ${Math.max(...f.history)}` }),
+      el("div", { className: "k", textContent: I18N.en ? `30 days: low ${Math.min(...f.history)} · high ${Math.max(...f.history)}` : `30 ngày: thấp ${Math.min(...f.history)} · cao ${Math.max(...f.history)}` }),
       trend));
   queueMicrotask(() => { halfGauge(g, f.value, FNG_ZONES, { h: 112 }); if (f.history?.length > 1) miniLine(trend, f.history, { h: 36, color: z.color }); });
 }
@@ -1392,15 +1432,15 @@ function renderNews() {
     el("div", { className: "nlist" }, list.map(it => {
       const d = it.time ? new Date(it.time) : null, recent = d && Date.now() - d < 36e5;
       return el("article", { className: "nitem" + (it.official ? " off" : "") },
-        el("time", { className: "tm num", textContent: !d ? "" : recent ? Math.max(1, Math.round((Date.now() - d) / 6e4)) + " phút" : vnTime(d),
-          title: d ? d.toLocaleString("vi-VN", { timeZone: VN }) : "" }),
+        el("time", { className: "tm num", textContent: !d ? "" : recent ? Math.max(1, Math.round((Date.now() - d) / 6e4)) + I18N.t(" phút", " min") : vnTime(d),
+          title: d ? d.toLocaleString(LOC, { timeZone: VN }) : "" }),
         el("div", { className: "nb" },
-          el("a", { className: "nt", href: safeUrl(it.link), target: "_blank", rel: "noopener noreferrer", textContent: it.title }),
-          el("div", { className: "nm" }, el("span", { className: "src", textContent: it.source }),
+          el("a", { className: "nt", href: safeUrl(it.link), target: "_blank", rel: "noopener noreferrer", textContent: it.title, translate: false }),
+          el("div", { className: "nm" }, el("span", { className: "src", textContent: it.source, translate: false }),
             it.official ? el("span", { className: "offb", textContent: "Chính thức" }) : null,
             it.topics.map(t => el("span", { className: "tag", textContent: TAG_VI[t] || t })))));
     })))),
-    items.length > shown ? el("button", { type: "button", className: "btn more", textContent: `Xem thêm ${Math.min(PAGE, items.length - shown)} tin`,
+    items.length > shown ? el("button", { type: "button", className: "btn more", textContent: I18N.en ? `Show ${Math.min(PAGE, items.length - shown)} more` : `Xem thêm ${Math.min(PAGE, items.length - shown)} tin`,
       onclick: () => { shown += PAGE; renderNews(); } }) : null);
 }
 
@@ -1436,6 +1476,7 @@ const VI_EVENTS = {
 };
 const PERIOD = { "m/m": "tháng", "q/q": "quý", "y/y": "năm" };
 function viTitle(t) {
+  if (I18N.en) return t;  // English page: the release name as published
   let m;
   if ((m = t.match(/^Fed Chair(?:man)? (.+) Speaks$/))) return `Chủ tịch Fed ${m[1]} phát biểu`;
   if ((m = t.match(/^FOMC Member (.+) Speaks$/))) return `Thành viên FOMC ${m[1]} phát biểu`;
@@ -1489,7 +1530,7 @@ function renderCal() {
 function renderSources() {
   const rows = [];
   if (market?.errors) for (const [k] of Object.entries(market.errors)) rows.push(`● ${k}: lỗi lần lấy gần nhất, đang hiện bản cũ`);
-  if (news) for (const s of news.sources) rows.push(`${s.ok ? "●" : "○"} ${s.source}: ${s.ok ? s.count + " tin" : "lỗi"}`);
+  if (news) for (const s of news.sources) rows.push(`${s.ok ? "●" : "○"} ${s.source}: ${s.ok ? s.count + I18N.t(" tin", " items") : I18N.t("lỗi", "error")}`);
   $("sources").replaceChildren(...rows.map(t => el("div", { textContent: t })));
 }
 async function getJson(name) {
@@ -1517,6 +1558,28 @@ $("theme").onclick = () => {
   try { localStorage.setItem("gt-theme", light ? "light" : "dark"); } catch {}
 };
 $("q").oninput = () => { shown = PAGE; renderNews(); };
+
+// Price ticker: licensed embed (spot gold, S&P 500 / Nasdaq 100 CFDs, WTI, EUR/USD), delayed per exchange rules
+function renderTicker() {
+  const box = $("ticker"), light = document.documentElement.dataset.theme === "light";
+  const w = el("div", { className: "tradingview-widget-container" }, el("div", { className: "tradingview-widget-container__widget" }));
+  const sc = el("script", { src: "https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js", async: true });
+  sc.textContent = JSON.stringify({
+    symbols: [
+      { proName: "OANDA:XAUUSD", title: I18N.t("Vàng giao ngay", "Gold spot") },
+      { proName: "FOREXCOM:SPXUSD", title: "S&P 500" },
+      { proName: "FOREXCOM:NSXUSD", title: "Nasdaq 100" },
+      { proName: "TVC:USOIL", title: I18N.t("Dầu WTI", "WTI crude") },
+      { proName: "FX_IDC:EURUSD", title: "EUR/USD" },
+    ],
+    showSymbolLogo: true, isTransparent: true, displayMode: "adaptive",
+    colorTheme: light ? "light" : "dark", locale: I18N.en ? "en" : "vi_VN",
+  });
+  w.append(sc);
+  box.replaceChildren(w);
+}
+renderTicker();
+new MutationObserver(renderTicker).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
 // ---------- App shell: sidebar, filter chips, top search, folded source notes ----------
 const wide = matchMedia("(min-width: 1100px)");
