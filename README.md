@@ -35,8 +35,8 @@ scripts/common.py             Hàm dùng chung
 scripts/fetch_news.py         Tin tức + lịch kinh tế  -> site/data/news.json, calendar.json
 scripts/fetch_market.py       COT, EIA, vĩ mô, quỹ GLD, kịch bản -> site/data/market.json
 site/index.html               Trang web (không cần build)
-site/huong-dan.html           Hướng dẫn cài đặt cho khách (iPhone / Android / Windows / Mac), không ghi địa chỉ máy chủ
-site/img/huong-dan/           Ảnh app Windows lấy từ Tuong-Chart apps/gammatape_viewer/tests/shots (Gmail mẫu)
+site/huong-dan.html           Hướng dẫn cài đặt + đăng nhập cho khách (iPhone / Android / Windows / Mac); ghi địa chỉ máy chủ wyckdelta.tail65e625.ts.net (chủ yêu cầu 2026-11-20; chỉ mở được qua Tailscale với link mời)
+site/img/huong-dan/           Ảnh app Windows lấy từ Tuong-Chart apps/gammatape_viewer/tests/shots (Gmail mẫu); dang-nhap*, sau-dang-nhap, tai-khoan chụp từ ui_harness (tài khoản khách thử, không phải server thật)
 site/charts.js                Bộ vẽ biểu đồ SVG tự viết (cột hai chiều, đường, đường cong, sparkline), không thư viện ngoài
 site/CNAME                    Ghi tên miền riêng (wyckdelta.com). Trang đăng bằng Actions nên GitHub bỏ qua file này: tên miền đặt ở Settings → Pages
 site/img/                     Ảnh chụp Wyckdelta (WebP, đã cắt bỏ thanh công cụ / danh sách theo dõi), logo, favicon, og.jpg 1200x630
