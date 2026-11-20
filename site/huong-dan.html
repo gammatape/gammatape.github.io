@@ -341,11 +341,11 @@ footer p { margin: 6px 0; }
   <ol class="s d-android">
     <li>Bấm <span class="k">Cài đặt</span>, rồi mở app <b>Tailscale</b>.</li>
     <li>Bấm <span class="k">Get Started</span>.</li>
-    <li>Máy hỏi <i>“Yêu cầu kết nối”</i> (VPN) → bấm <span class="k">OK</span>.</li>
-    <li>Bấm <span class="k">Sign in with Google</span> → chọn <b>Gmail cá nhân</b> của bạn.</li>
+    <li>Màn hình “Welcome to Tailscale” hiện ra → bấm <span class="k">Connect</span>. Máy hỏi <i>“Yêu cầu kết nối”</i> (VPN) → bấm <span class="k">OK</span>. Máy hỏi quyền thông báo → bấm <span class="k">Cho phép</span>.</li>
+    <li>Bấm <span class="k">Log in</span> → <span class="k">Sign in with Google</span> → chọn <b>Gmail cá nhân</b> của bạn.</li>
   </ol>
   <ol class="s d-mac">
-    <li><b>Mac:</b> tải bản cho macOS rồi mở file, làm theo màn hình (máy hỏi cho phép cấu hình VPN thì bấm <span class="k">Cho phép</span>).<br>
+    <li><b>Mac</b> (cần macOS 13 trở lên): tải bản cho macOS (file .pkg), mở file để cài, rồi mở app Tailscale.<br>      Lần đầu mở, macOS chặn “phần mở rộng hệ thống” của Tailscale: vào <b>Cài đặt hệ thống</b> (System Settings) → <b>Cài đặt chung</b> (General) → <b>Login Items &amp; Extensions</b> → <b>Network Extensions</b> → bấm ⓘ → bật <b>Tailscale Network Extension</b> (macOS 14 trở xuống: <b>Quyền riêng tư &amp; bảo mật</b> (Privacy &amp; Security) → <span class="k">Allow</span> / <span class="k">Cho phép</span>), nhập mật khẩu máy. Máy hỏi thêm cấu hình VPN → bấm <span class="k">Cho phép</span>.<br>      <span class="small">Không làm được bước này thì cài Tailscale từ <b>Mac App Store</b> (cần Apple ID): bản đó chỉ hỏi cấu hình VPN. Không cài cả hai bản cùng lúc.</span><br>
       <span class="small"><b>Máy Windows không cài được app Wyckdelta</b> (máy công ty): bấm <span class="k">Download</span> bản Windows, mở file vừa tải, bấm <span class="k">Install</span>.</span></li>
     <li>Tìm biểu tượng Tailscale: Mac ở <b>thanh menu trên cùng</b>; Windows ở <b>góc phải dưới, cạnh đồng hồ</b> (không thấy thì bấm mũi tên <b>^</b>).</li>
     <li>Bấm vào biểu tượng (Windows: chuột phải) → <span class="k">Log in</span>.</li>
@@ -356,7 +356,7 @@ footer p { margin: 6px 0; }
     <div class="fig">
       <div class="phone dim"><div class="bar"></div>
         <div class="dlg"><p class="d-iphone">“Tailscale” muốn thêm cấu hình VPN</p><p class="d-android">Yêu cầu kết nối<br>Tailscale muốn thiết lập kết nối VPN</p>
-          <div><span class="d-iphone">Không</span><span class="d-android">Huỷ</span><span class="hl"><span class="d-iphone" style="padding:0">Cho phép</span><span class="d-android" style="padding:0;border:0">OK</span></span></div></div>
+          <div><span class="d-iphone">Không</span><span class="d-android">Hủy</span><span class="hl"><span class="d-iphone" style="padding:0">Cho phép</span><span class="d-android" style="padding:0;border:0">OK</span></span></div></div>
       </div>
       <div class="cap">Máy hỏi thì bấm nút khoanh đỏ</div>
     </div>
@@ -377,7 +377,7 @@ footer p { margin: 6px 0; }
     </div>
   </div>
 
-  <div class="box done"><b class="t">✔ Xong Bước 1 khi:</b> <span class="d-iphone d-android">app Tailscale có <b>công tắc màu xanh</b> và chữ <b>Connected</b>.</span><span class="d-mac">bấm vào biểu tượng Tailscale thấy chữ <b>Connected</b>.</span></div>
+  <div class="box done"><b class="t">✔ Xong Bước 1 khi:</b> <span class="d-iphone">app Tailscale có <b>công tắc màu xanh lá</b> và chữ <b>Connected</b>.</span><span class="d-android">app Tailscale có <b>công tắc đang bật</b> (màu xanh dương) và chữ <b>Connected</b>.</span><span class="d-mac">bấm vào biểu tượng Tailscale thấy chữ <b>Connected</b>.</span></div>
   <div class="box warn"><b>Nhớ Gmail bạn vừa chọn.</b> Bước 2 phải dùng đúng Gmail đó.</div>
 </section>
 
@@ -387,13 +387,13 @@ footer p { margin: 6px 0; }
   <ol class="s">
     <li>Mở tin nhắn, bấm vào <b>link mời</b> Wyckdelta đã gửi.<br><span class="small">Link bắt đầu bằng <b>login.tailscale.com</b></span></li>
     <li>Nếu trang hỏi đăng nhập: bấm <span class="k">Sign in with Google</span>, chọn <b>đúng Gmail ở Bước 1</b>.</li>
-    <li>Bấm nút <span class="k">Accept</span> (nghĩa là “Đồng ý”).</li>
+    <li>Bấm nút <span class="k">Accept</span> (có thể ghi <b>Accept invite</b>; nghĩa là “Nhận lời mời”).</li>
   </ol>
   <div class="figs">
     <div class="fig">
       <div class="phone"><div class="bar"><span>9:41</span></div><div class="addr">🔒 login.tailscale.com</div>
         <div class="scr" style="text-align:center"><b>Bạn được mời dùng máy</b><div style="font-weight:700;margin-top:4px">wyckdelta</div>
-          <div class="ibtn hl">Accept</div><div class="ibtn ghost">Decline</div></div>
+          <div class="ibtn hl">Accept</div></div>
       </div>
       <div class="cap">Bấm <b>Accept</b></div>
     </div>
@@ -406,7 +406,7 @@ footer p { margin: 6px 0; }
       <div class="cap">Kết quả: có thêm dòng máy chủ</div>
     </div>
   </div>
-  <div class="box done"><b class="t">✔ Xong Bước 2 khi:</b> mở lại Tailscale, thấy thêm dòng <b>wyckdelta</b> có chấm xanh. Đó là máy chủ Wyckdelta; bấm vào dòng này sẽ thấy địa chỉ dùng ở Bước 3.</div>
+  <div class="box done"><b class="t">✔ Xong Bước 2 khi:</b> mở lại Tailscale, <span class="d-iphone d-android">thấy thêm dòng <b>wyckdelta</b> có chấm xanh. Đó là máy chủ Wyckdelta; bấm vào dòng này sẽ thấy địa chỉ dùng ở Bước 3.</span><span class="d-mac">trong mục <b>Network Devices</b> có máy <b>wyckdelta</b>. Đó là máy chủ Wyckdelta; sang Bước 3 để mở địa chỉ.</span></div>
   <div class="box warn"><b>Link mở ra bên trong Messenger / Zalo?</b> Trình duyệt bên trong app nhắn tin không cho đăng nhập Google. Bấm <span class="k">⋯</span> → <b>Mở bằng <span class="d-iphone">Safari</span><span class="d-android d-win d-mac">Chrome</span></b> (hoặc giữ ngón tay trên link → <b>Sao chép</b> → dán vào <span class="d-iphone">Safari</span><span class="d-android d-win d-mac">trình duyệt</span>).</div>
   <div class="box warn">Link mời <b>chỉ dùng được 1 lần, cho 1 người</b>, và hết hạn sau <b>30 ngày</b> nếu chưa dùng. Trang báo link hết hạn hoặc đã dùng → nhắn Wyckdelta xin link mới.</div>
 </section>
@@ -476,16 +476,16 @@ footer p { margin: 6px 0; }
     </div>
     <div class="ok" role="status" aria-live="polite">Đã sao chép. Dán vào thanh địa chỉ<span class="d-iphone"> Safari</span><span class="d-android"> Chrome</span><span class="d-mac d-win"> trình duyệt</span> rồi bấm Đi / Enter.</div>
   </div>
-  <div class="d-iphone" style="margin-top:14px">
+  <div class="d-iphone d-android" style="margin-top:14px">
     <b>Hoặc lấy địa chỉ ngay trong app Tailscale:</b>
     <ol class="s">
       <li>Mở app <b>Tailscale</b>. Trong danh sách máy, bấm vào dòng <b>wyckdelta</b> (có chấm xanh).</li>
-      <li>Màn hình chi tiết hiện ra như ảnh dưới. Bấm nút <b>sao chép</b> (khoanh đỏ) ở dòng <b>wyckdelta.tail65e625.ts.net</b> · MagicDNS.</li>
-      <li>Mở <b>Safari</b>, bấm vào thanh địa chỉ, gõ <b>https://</b> rồi dán (giữ ngón tay → <span class="k">Dán</span>) ngay sau đó, bấm <span class="k">Đi</span>.<br>
-        <span class="small">Phải có <b>https://</b> ở đầu: chỉ dán mỗi tên máy thì Safari có thể không mở được.</span></li>
+      <li>Màn hình chi tiết hiện ra như ảnh dưới. <span class="d-iphone">Bấm nút <b>sao chép</b> (khoanh đỏ) ở dòng</span><span class="d-android">Bấm vào dòng</span> <b>wyckdelta.tail65e625.ts.net</b> · MagicDNS <span class="d-android">(mục <b>Tailscale addresses</b>) để sao chép</span>.</li>
+      <li>Mở <b class="d-iphone">Safari</b><b class="d-android">Chrome</b>, bấm vào thanh địa chỉ, gõ <b>https://</b> rồi dán (giữ ngón tay → <span class="k">Dán</span>) ngay sau đó, bấm <span class="k">Đi</span>.<br>
+        <span class="small">Phải có <b>https://</b> ở đầu: chỉ dán mỗi tên máy thì trình duyệt có thể không mở được.</span></li>
     </ol>
     <figure class="shot" style="max-width:420px"><img src="img/huong-dan/ts-may-wyckdelta.webp" width="780" height="334" loading="lazy" alt="App Tailscale trên iPhone, màn hình chi tiết máy wyckdelta đang Connected, dòng wyckdelta.tail65e625.ts.net MagicDNS với nút sao chép được khoanh đỏ"></figure>
-    <div class="cap">App Tailscale → bấm <b>wyckdelta</b> → nút sao chép địa chỉ</div>
+    <div class="cap">App Tailscale → bấm <b>wyckdelta</b> → nút sao chép địa chỉ<span class="d-android"> (ảnh chụp trên iPhone, Android có màn hình tương tự)</span></div>
   </div>
 
   <p class="small">Mở bằng <span class="d-iphone"><b>Safari</b> (để sau này đưa được ra màn hình chính)</span><span class="d-android"><b>Chrome</b></span><span class="d-mac"><b>Chrome</b>, <b>Edge</b> hoặc <b>Safari</b></span><span class="d-win"><b>Chrome</b> hoặc <b>Edge</b></span>, không mở bên trong Messenger / Zalo. Thanh địa chỉ có biểu tượng ổ khoá 🔒 và tên <b>wyckdelta.tail65e625.ts.net</b> là đúng trang. Địa chỉ cũ (trước 20/11/2026) đã ngừng dùng: xoá dấu trang hoặc biểu tượng cũ, mở lại bằng địa chỉ mới.</p>
@@ -628,7 +628,7 @@ footer p { margin: 6px 0; }
   <div class="faq"><b>Đang bật một app VPN khác</b>
     <span>Máy chỉ chạy được <b>một VPN một lúc</b>. Tắt VPN kia, mở Tailscale bật lại cho xanh. <span class="d-iphone">Trên iPhone, sau khi dùng VPN khác, Tailscale có thể không tự bật lại: mở app Tailscale và bật bằng tay.</span></span></div>
   <div class="faq d-android"><b>Tailscale trên Android cứ tự tắt</b>
-    <span>Vào Cài đặt điện thoại → Ứng dụng → Tailscale → Pin → chọn <b>Không hạn chế</b>. Nếu đã bật “Luôn bật VPN / Chặn kết nối không qua VPN” cho app khác thì tắt đi.</span></div>
+    <span>Vào Cài đặt điện thoại → Ứng dụng → Tailscale → Pin → chọn <b>Không hạn chế</b> (tên mục có thể hơi khác tùy hãng máy). Nếu đã bật “Luôn bật VPN / Chặn kết nối không qua VPN” cho app khác thì tắt đi.</span></div>
   <div class="faq d-iphone d-android d-mac"><b>Không thấy dòng <i>wyckdelta</i> trong Tailscale</b>
     <span>Bạn chưa bấm Accept, hoặc bấm link mời bằng Gmail khác với Gmail đang đăng nhập Tailscale. Nhắn Wyckdelta xin link mới và làm lại Bước 2 bằng đúng Gmail đó.</span></div>
   <div class="faq"><b>Link mời báo đã dùng hoặc hết hạn</b>
