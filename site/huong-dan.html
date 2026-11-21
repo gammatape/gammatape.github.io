@@ -191,6 +191,18 @@ table.m td:first-child { font-weight: 700; width: 34%; }
 .tray .menu div { padding: 6px 8px; border-radius: 5px; }
 .tray .tb { display: flex; justify-content: flex-end; align-items: center; gap: 10px; }
 .tray .ic { width: 22px; height: 22px; border-radius: 5px; background: #fff; color: #111; font-weight: 800; text-align: center; line-height: 22px; font-size: 11px; }
+.tray .ic.tsdots { font-size: 15px; letter-spacing: -1px; }
+/* Tailscale admin console mock (the "Machines / Add your first device" page guests mistake for the end of sign-in) */
+.tsweb { position: relative; background: #fff; color: #1f1f1f; border: 1px solid #d5d5d5; border-radius: 8px; padding: 10px 12px 14px; text-align: left; font-size: 12px; line-height: 1.4; }
+.tsweb .tsnav { display: flex; gap: 10px; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 6px; margin-bottom: 8px; color: #666; }
+.tsweb .tsnav b { color: #1f1f1f; margin-right: 6px; }
+.tsweb h4 { margin: 0; font-size: 16px; }
+.tsweb p { margin: 2px 0 8px; color: #666; }
+.tsweb .tscard { border: 1px solid #e5e5e5; border-radius: 6px; padding: 8px 10px; background: #fafafa; }
+.tsweb .tscard b { font-size: 13px; }
+.tsweb .tsbtn { display: inline-block; background: #4b70cc; color: #fff; border-radius: 4px; padding: 3px 10px; font-weight: 700; }
+.tsweb .nope { position: absolute; right: 10px; top: 34px; width: 30px; height: 30px; line-height: 30px; text-align: center; border-radius: 50%; background: #dc2626; color: #fff; font-weight: 800; font-size: 16px; }
+h3.sub { margin: 26px 0 6px; font-size: 18px; padding-top: 14px; border-top: 1px dashed var(--line2); scroll-margin-top: 80px; }
 /* Windows SmartScreen mock */
 .ss { background: #0067b8; color: #fff; border-radius: 6px; padding: 14px 16px 12px; font-size: 13px; line-height: 1.4; min-height: 172px; position: relative; text-align: left; }
 .ss h4 { margin: 0 0 8px; font-size: 17px; font-weight: 400; }
@@ -201,6 +213,11 @@ table.m td:first-child { font-weight: 700; width: 34%; }
 .ss .hl { border-radius: 4px; outline-color: #ffd54f; }
 .figs.wide .fig { max-width: 330px; min-width: 240px; }
 .fig .cap::after { content: " · hình minh hoạ"; opacity: .75; }   /* drawn figures, told apart from real screenshots */
+html[lang="en"] .fig .cap::after { content: " · illustration"; }   /* CSS text is out of reach of i18n.js */
+.shots .shot { position: relative; }   /* numbered pins on side-by-side screenshots */
+.ring { position: absolute; width: 17%; aspect-ratio: 1; transform: translate(-50%, -50%); border: 3px solid #ef4444; border-radius: 50%; box-shadow: 0 0 0 3px rgba(239,68,68,.3); }
+.en-only { display: none; }
+html[lang="en"] .en-only { display: block; }   /* English-only notes (data-i18n-skip): the Windows app has no English */
 
 /* The address card: the one thing a guest must open, with copy / open buttons */
 .addrcard { margin: 12px 0 4px; background: var(--panel2); border: 1px solid var(--line2); border-radius: 12px; padding: 12px 14px; }
@@ -321,6 +338,8 @@ footer p { margin: 6px 0; }
     <li class="d-iphone d-android d-mac"><a href="#buoc-2">Bước 2 · Bấm link mời</a></li>
     <li class="d-win"><a href="#win-1">Bước 1 · Tải và mở app Wyckdelta</a></li>
     <li class="d-win"><a href="#win-2">Bước 2 · Bấm nút xanh trong app</a></li>
+    <li class="d-win"><a href="#win-trang-machines">Kẹt ở trang “Machines” của Tailscale</a></li>
+    <li class="d-win"><a href="#win-ket">Tailscale tắt hoặc không chạy</a></li>
     <li><a href="#buoc-3">Bước 3 · Tạo tài khoản, đăng nhập</a></li>
     <li><a href="#sau-dang-nhap">Sau khi đăng nhập</a></li>
     <li><a href="#tai-khoan">Tài khoản: đổi mật khẩu, đăng xuất</a></li>
@@ -376,13 +395,8 @@ footer p { margin: 6px 0; }
       <div class="cap">Kết quả: công tắc xanh</div>
     </div>
   </div>
-  <div class="figs d-mac">
-    <div class="fig" style="max-width:260px">
-      <div class="tray"><div class="menu"><div class="hl"><b>Log in…</b></div><div>About…</div><div>Exit</div></div>
-        <div class="tb"><span>^</span><span class="ic hl">⋮⋮</span><span>🔊</span><span>9:41</span></div></div>
-      <div class="cap">Máy Windows: biểu tượng Tailscale cạnh đồng hồ → Log in (Mac: biểu tượng trên thanh menu)</div>
-    </div>
-  </div>
+  <figure class="shot d-mac" style="max-width:340px;position:relative"><img src="img/huong-dan/ts-tray.webp" width="680" height="408" loading="lazy" alt="Khay biểu tượng mở ra sau khi bấm mũi tên ^ cạnh đồng hồ Windows; biểu tượng Tailscale 9 chấm ở hàng đầu được khoanh đỏ"><span class="ring" style="left:49.4%;top:21.6%"></span></figure>
+  <div class="cap d-mac">Máy Windows: bấm ^ cạnh đồng hồ → chuột phải ô <b>9 chấm</b> (vòng đỏ) → Log in. Mac: biểu tượng Tailscale trên thanh menu trên cùng.</div>
 
   <div class="box done"><b class="t">✔ Xong Bước 1 khi:</b> <span class="d-iphone">app Tailscale có <b>công tắc màu xanh lá</b> và chữ <b>Connected</b>.</span><span class="d-android">app Tailscale có <b>công tắc đang bật</b> (màu xanh dương) và chữ <b>Connected</b>.</span><span class="d-mac">bấm vào biểu tượng Tailscale thấy chữ <b>Connected</b>.</span></div>
   <div class="box warn"><b>Nhớ Gmail bạn vừa chọn.</b> Bước 2 phải dùng đúng Gmail đó.</div>
@@ -421,7 +435,7 @@ footer p { margin: 6px 0; }
 <!-- =================== Windows app: BƯỚC 1 =================== -->
 <section class="step d-win" id="win-1">
   <h2><i class="n">1</i><span><small>BƯỚC 1</small>Tải và mở app Wyckdelta</span></h2>
-  <a class="big" href="download/Wyckdelta.zip" download>Tải app Wyckdelta cho Windows<small>Wyckdelta.zip · 15 MB · Windows 10 / 11</small></a>
+  <a class="big" href="download/Wyckdelta.zip" download>Tải app Wyckdelta cho Windows<small>Wyckdelta.zip · 18 MB · Windows 10 / 11</small></a>
   <ol class="s">
     <li>Bấm nút vàng ở trên. File <b>Wyckdelta.zip</b> nằm trong thư mục <b>Tải xuống</b> (Downloads). Trình duyệt hỏi có giữ file không thì bấm <span class="k">Giữ lại</span> (Keep).</li>
     <li>Bấm <b>chuột phải</b> vào file <b>Wyckdelta.zip</b> → <span class="k">Giải nén tất cả…</span> (Extract All) → <span class="k">Giải nén</span>.</li>
@@ -445,28 +459,127 @@ footer p { margin: 6px 0; }
   </div>
   <div class="box note">Khung xanh này chỉ hiện <b>lần đầu</b>. Windows hiện nó vì app chưa mua chứng chỉ ký số, không phải vì có virus.</div>
   <div class="box done"><b class="t">✔ Xong Bước 1 khi:</b> thấy cửa sổ <b>Kết nối Wyckdelta</b>, và trên màn hình (Desktop) có thêm biểu tượng <b>Wyckdelta</b>.</div>
-  <figure class="shot"><img src="img/huong-dan/win-1-chua-cai.webp" width="632" height="578" loading="lazy" alt="Cửa sổ Kết nối Wyckdelta lúc mới mở, bước 1 Cài Tailscale"></figure>
+  <figure class="shot"><img src="img/huong-dan/win-1-chua-cai.webp" width="760" height="698" loading="lazy" alt="Cửa sổ Kết nối Wyckdelta lúc mới mở, bước 1 Cài Tailscale"></figure>
   <div class="cap">Cửa sổ Kết nối Wyckdelta lúc mới mở</div>
 </section>
 
 <!-- =================== Windows app: BƯỚC 2 =================== -->
 <section class="step d-win" id="win-2">
   <h2><i class="n">2</i><span><small>BƯỚC 2</small>Bấm nút xanh trong app</span></h2>
-  <p>App tự kiểm tra máy bạn và chỉ hiện <b>đúng việc cần làm</b>. Làm xong việc nào, app tự đánh dấu ✓ và sang việc tiếp theo.</p>
-  <table class="m">
-    <tr><td>Cài Tailscale</td><td>Bấm <span class="k b">Cài Tailscale</span> → Windows hỏi thì bấm <span class="k">Yes / Có</span> → tích ô đồng ý → <span class="k">Install</span>.</td></tr>
-    <tr><td>Bật và đăng nhập Tailscale</td><td>Bấm <span class="k b">Đăng nhập Tailscale</span> → trình duyệt mở ra → <span class="k">Sign in with Google</span> → chọn <b>Gmail cá nhân</b> → <span class="k">Connect</span>.</td></tr>
-    <tr><td>Nhận lời mời của chủ</td><td>Sao chép link mời trong tin nhắn → dán vào ô trong app (Ctrl+V) → bấm <span class="k b">Mở link mời</span> → trên trang mở ra bấm <span class="k">Accept</span>.</td></tr>
-    <tr><td>Kết nối tới Wyckdelta</td><td>App tự kiểm tra đường tới máy chủ. Báo máy chủ tạm tắt thì cứ để app mở, app tự vào lại. Báo lỗi thì tắt VPN khác (nếu có) rồi thử lại.</td></tr>
-  </table>
-  <div class="shots">
-    <div><figure class="shot"><img src="img/huong-dan/win-2-cho-dang-nhap.webp" width="632" height="592" loading="lazy" alt="App chờ đăng nhập Tailscale bằng Gmail"></figure><div class="cap">Đăng nhập Tailscale bằng Gmail</div></div>
-    <div><figure class="shot"><img src="img/huong-dan/win-3-link-moi.webp" width="632" height="706" loading="lazy" alt="App có ô dán link mời và nút Mở link mời"></figure><div class="cap">Dán link mời rồi bấm Mở link mời</div></div>
+  <p>Cửa sổ <b>Kết nối Wyckdelta</b> có 4 dòng. App tự kiểm tra máy bạn và chỉ mở <b>đúng dòng cần làm</b>; làm xong dòng nào, app tự đánh dấu ✓ xanh và mở dòng tiếp theo. Bạn chỉ cần làm theo 4 phần 2a → 2d dưới đây và <b>để cửa sổ app mở</b> trong lúc làm. Lỡ tắt thì bấm đúp biểu tượng <b>Wyckdelta</b> trên màn hình, app tự nhận ra bạn đã làm tới đâu.</p>
+  <div class="box note en-only" data-i18n-skip>The Wyckdelta app window is in Vietnamese. Button names used below: <b>Cài Tailscale</b> = Install Tailscale · <b>Mở lại cửa sổ cài</b> = Reopen installer · <b>Đăng nhập Tailscale</b> = Sign in to Tailscale · <b>Mở lại trang đăng nhập</b> = Reopen sign-in page · <b>Dán link mời vào đây</b> = Paste the invite link here · <b>Mở link mời</b> = Open invite link · <b>Bật Tailscale</b> = Turn on Tailscale · <b>Mở Tailscale</b> = Open Tailscale · <b>Thử lại</b> = Try again · <b>Mở Wyckdelta</b> = Open Wyckdelta · <b>Sao chép thông tin gửi chủ</b> = Copy info for the owner. The window title <b>Kết nối Wyckdelta</b> means “Connect Wyckdelta”.</div>
+
+  <h3 id="win-2a" class="sub">2a · Cài Tailscale</h3>
+  <div class="anno">
+    <figure class="shot"><img src="img/huong-dan/win-2a-cai.webp" width="760" height="763" loading="lazy" alt="Dòng 1 Cài Tailscale đang mở: cửa sổ cài Tailscale đã mở, hướng dẫn bấm Yes / Có, tích ô đồng ý, bấm Install, nút Mở lại cửa sổ cài"></figure>
+    <ol class="pins">
+      <li><i>1</i>Bấm nút xanh <span class="k b">Cài Tailscale</span> (dòng 1, như ảnh cuối Bước 1). App tự tải Tailscale (miễn phí), mở cửa sổ cài và chuyển sang như ảnh bên.</li>
+      <li><i>2</i>Windows hỏi <b>“Bạn có muốn cho phép ứng dụng này thực hiện thay đổi…?”</b> (có thể hiện trước hoặc sau khi bấm Install) → bấm <span class="k">Yes / Có</span>.</li>
+      <li><i>3</i>Trong cửa sổ cài Tailscale: tích ô đồng ý điều khoản → bấm <span class="k">Install</span> → đợi thanh chạy xong → bấm <span class="k">Close</span>.</li>
+      <li><i>4</i>Quay lại cửa sổ <b>Kết nối Wyckdelta</b>. Dòng 1 có dấu ✓ là xong.</li>
+    </ol>
   </div>
-  <div class="box warn">Mở link mời bằng <b>đúng Gmail</b> đã đăng nhập Tailscale (app ghi Gmail đó ngay trên ô dán link). Đừng dùng email công ty.</div>
+  <div class="box note">Cài xong, Tailscale có thể <b>tự mở thêm một cửa sổ chào mừng</b> của riêng nó. Không cần làm theo cửa sổ đó: đóng lại (dấu ✕), quay về app Wyckdelta. Lỡ đóng cửa sổ cài thì bấm <span class="k">Mở lại cửa sổ cài</span> trong app.</div>
+
+  <h3 id="win-2b" class="sub">2b · Đăng nhập Tailscale bằng Gmail</h3>
+  <p>Phần này hay làm khách kẹt nhất. Đọc hết 4 bước con trước khi bấm.</p>
+  <div class="anno">
+    <figure class="shot">
+      <img src="img/huong-dan/win-2b-dang-nhap.webp" width="760" height="713" loading="lazy" alt="Dòng 2 Bật và đăng nhập Tailscale: Tailscale chưa đăng nhập, nút xanh Đăng nhập Tailscale được đánh số 1">
+      <span class="pin" style="left:9%;top:49.4%">1</span>
+    </figure>
+    <ol class="pins">
+      <li><i>1</i>Bấm nút xanh <span class="k b">Đăng nhập Tailscale</span>. Trình duyệt mặc định của máy (Chrome, Edge…) tự mở trang đăng nhập của Tailscale.</li>
+    </ol>
+  </div>
+  <div class="anno">
+    <figure class="shot">
+      <img src="img/huong-dan/ts-sign-in.webp" width="760" height="1038" loading="lazy" alt="Trang đăng nhập Tailscale trên trình duyệt: ô Enter your email, nút Sign in, chữ OR, các nút Sign in with Google, Microsoft, GitHub, Apple, passkey; nút Sign in with Google được đánh số 2">
+      <span class="pin" style="left:16%;top:37.2%">2</span>
+    </figure>
+    <ol class="pins" start="2">
+      <li><i>2</i>Trên trang <b>tailscale</b> trong trình duyệt, bấm <span class="k">Sign in with Google</span>, rồi chọn <b>Gmail cá nhân</b> của bạn. Nhớ Gmail này: link mời ở phần 2c phải mở bằng đúng Gmail đó.</li>
+      <li><i>3</i><b>Lần đầu dùng Tailscale</b>, trang sẽ hỏi thêm vài câu để tạo tài khoản Tailscale (ví dụ chọn <b>Personal use</b>, dùng cá nhân). Cứ chọn rồi bấm tiếp, miễn phí, không cần thẻ.</li>
+      <li><i>4</i>Trang hỏi có cho máy tính này vào mạng không thì bấm <span class="k">Connect</span>. Quay lại app: dòng 2 có dấu ✓ và ghi Gmail của bạn là xong.</li>
+    </ol>
+  </div>
+
+  <div class="box warn" id="win-trang-machines"><b>Trình duyệt hiện trang “Machines” / “Add your first device” mà app vẫn quay mãi ở dòng 2?</b><br>
+    Đây là chỗ khách hay kẹt nhất. Trang đó là <b>trang quản trị</b> của Tailscale: tài khoản Tailscale đã tạo xong, nhưng <b>máy tính của bạn chưa được nối vào</b>. Ở trang đó không có gì cần bấm (đừng bấm <b>Add device</b>, đừng tải thêm gì). Làm như sau:
+    <ol class="s">
+      <li>Quay về cửa sổ <b>Kết nối Wyckdelta</b>, bấm <span class="k">Mở lại trang đăng nhập</span> (ảnh dưới, số 1).</li>
+      <li>Trình duyệt mở lại trang Tailscale. Lần này Gmail đã đăng nhập sẵn nên trang chỉ hỏi nối máy: bấm <span class="k">Connect</span>.</li>
+      <li>Đợi vài giây, dòng 2 trong app có dấu ✓.</li>
+    </ol>
+    Đã bấm Accept link mời trên trang đó rồi thì không cần link mới: khi máy nối xong, app tự đánh dấu cả dòng 3.
+  </div>
+  <div class="figs wide">
+    <div class="fig">
+      <div class="tsweb"><div class="tsnav"><b>tailscale</b><span>Machines</span><span>Apps</span><span>Users</span></div>
+        <h4>Machines</h4><p>Manage the devices connected to your tailnet.</p>
+        <div class="tscard"><b>Add your first device</b><p>How to connect devices to your secure, private network</p><span class="tsbtn">Add first device</span></div>
+        <span class="nope">✕</span></div>
+      <div class="cap">Trang quản trị Tailscale: <b>chưa xong</b>, quay về app</div>
+    </div>
+  </div>
+  <div class="anno">
+    <figure class="shot">
+      <img src="img/huong-dan/win-2b-mo-lai.webp" width="760" height="829" loading="lazy" alt="Dòng 2 đang chờ: Trình duyệt đã mở trang đăng nhập Tailscale, ba bước Sign in with Google, Connect, quay lại app; dòng nhắc vàng về trang Machines; nút Mở lại trang đăng nhập được đánh số 1">
+      <span class="pin" style="left:9%;top:67.1%">1</span>
+    </figure>
+    <ol class="pins">
+      <li><i>1</i><span class="k">Mở lại trang đăng nhập</span>: bấm khi lỡ đóng tab trình duyệt, khi trình duyệt hiện trang Machines, hoặc khi đợi quá 1 phút mà dòng 2 chưa có ✓.</li>
+    </ol>
+  </div>
+  <div class="box note">Link đăng nhập Tailscale dùng được 7 ngày, bấm lại nút này vẫn mở đúng link đó. Trang Tailscale báo lỗi hoặc link hết hạn: <b>khởi động lại máy tính</b>, mở lại Wyckdelta rồi bấm <span class="k b">Đăng nhập Tailscale</span>, Tailscale sẽ tạo link mới.</div>
+
+  <h3 id="win-2c" class="sub">2c · Nhận lời mời của chủ</h3>
+  <div class="anno">
+    <figure class="shot">
+      <img src="img/huong-dan/win-2c-link-moi.webp" width="760" height="854" loading="lazy" alt="Dòng 3 Nhận lời mời của chủ: ô Dán link mời vào đây được đánh số 1, nút xanh Mở link mời được đánh số 2, dòng nhắc chọn đúng Gmail">
+      <span class="pin" style="left:9%;top:58.9%">1</span>
+      <span class="pin" style="left:91%;top:53.5%">2</span>
+    </figure>
+    <ol class="pins">
+      <li><i>1</i>Mở tin nhắn Wyckdelta gửi (Messenger / Zalo), bấm <b>chuột phải</b> vào link mời (bắt đầu bằng <b>https://login.tailscale.com</b>) → <b>Sao chép liên kết</b> (Copy link). Bấm vào ô <b>Dán link mời vào đây</b> → <b>Ctrl+V</b>.</li>
+      <li><i>2</i>Bấm <span class="k b">Mở link mời</span>. Trên trang Tailscale mở ra, bấm <span class="k">Accept</span>.</li>
+    </ol>
+  </div>
+  <div class="box warn">Trang hỏi đăng nhập thì chọn <b>đúng Gmail</b> app ghi trong dòng vàng (Gmail của dòng 2). Đừng dùng email công ty. Link mời chỉ dùng được 1 lần.</div>
+
+  <h3 id="win-2d" class="sub">2d · Kết nối tới Wyckdelta</h3>
+  <div class="anno">
+    <figure class="shot">
+      <img src="img/huong-dan/win-2d-san-sang.webp" width="760" height="729" loading="lazy" alt="Cả 4 dòng có dấu tích xanh, dòng 4 ghi Kết nối tốt (bảo mật HTTPS), nút lớn Mở Wyckdelta được đánh số 1">
+      <span class="pin" style="left:7%;top:72.5%">1</span>
+    </figure>
+    <ol class="pins">
+      <li><i>1</i>App tự kiểm tra đường tới máy chủ. Đủ 4 dấu ✓, app <b>tự mở trang Wyckdelta sau khoảng 1 giây</b>. Không tự mở thì bấm nút lớn <span class="k b">Mở Wyckdelta</span>. Sang Bước 3 để tạo tài khoản.</li>
+    </ol>
+  </div>
+  <div class="box warn"><b>Dòng 4 báo đỏ “Đã thấy máy chủ nhưng chưa vào được”?</b> Làm lần lượt như app ghi: tắt rồi bật lại Tailscale (chuột phải biểu tượng Tailscale cạnh đồng hồ → bấm dòng <b>Tailscale</b> trên cùng để tắt, bấm lần nữa để bật lại, thấy <a href="#win-ket">✓ Connected</a>), tắt VPN khác nếu có, rồi bấm <span class="k b">Thử lại</span>. Vẫn không được thì bấm <span class="k">Sao chép thông tin gửi chủ</span> và gửi cho Wyckdelta.</div>
   <div class="box done"><b class="t">✔ Xong Bước 2 khi:</b> cả 4 dòng có dấu ✓ xanh và hiện nút lớn <b>Mở Wyckdelta</b>.</div>
-  <figure class="shot" style="max-width:420px"><img src="img/huong-dan/win-5-san-sang.webp" width="632" height="581" loading="lazy" alt="Cả 4 bước có dấu tích xanh và nút Mở Wyckdelta"></figure>
-  <div class="cap">Đủ 4 dấu ✓: app mở trang Wyckdelta (Bước 3)</div>
+
+  <h3 id="win-ket" class="sub">Dòng 2 báo Tailscale tắt hoặc chưa chạy</h3>
+  <div class="shots">
+    <div><figure class="shot"><img src="img/huong-dan/win-2-dang-tat.webp" width="760" height="595" loading="lazy" alt="Dòng 2 báo Tailscale đang tắt, nút xanh Bật Tailscale"><span class="pin" style="left:9%;top:54.3%">1</span></figure>
+      <div class="cap">“Tailscale đang <b>tắt</b>”: bấm <b>Bật Tailscale</b></div></div>
+    <div><figure class="shot"><img src="img/huong-dan/win-2-chua-chay.webp" width="760" height="684" loading="lazy" alt="Dòng 2 có dấu chấm than vàng: Tailscale đã cài nhưng chưa chạy, nút xanh Mở Tailscale"><span class="pin" style="left:9%;top:47.2%">1</span></figure>
+      <div class="cap">“Tailscale đã cài nhưng <b>chưa chạy</b>”: bấm <b>Mở Tailscale</b></div></div>
+  </div>
+  <ol class="s">
+    <li>Bấm nút xanh trong app (số 1 trên ảnh), đợi 30 giây.</li>
+    <li>Vẫn vậy: <b>khởi động lại máy tính</b> (Start → Nguồn → Khởi động lại), rồi mở lại <b>Wyckdelta</b> bằng biểu tượng trên màn hình.</li>
+    <li>Máy có app VPN khác (Cloudflare WARP, FortiClient, VPN công ty…) hoặc phần mềm diệt virus chặn mạng: tắt VPN đó, rồi thử lại. Máy chỉ chạy được một VPN một lúc.</li>
+    <li>Cách tự làm bằng tay: bấm mũi tên <span class="k">^</span> cạnh đồng hồ góc phải dưới → bấm <b>chuột phải</b> vào biểu tượng Tailscale (ô <b>9 chấm</b>, ảnh trái) → menu Tailscale hiện ra (ảnh phải). Chưa đăng nhập thì bấm <span class="k">Log in</span>; đang tắt thì bấm dòng trên cùng <b>Tailscale</b> cho có dấu ✓ và chữ <b>Connected</b>.</li>
+  </ol>
+  <div class="shots">
+    <div><figure class="shot"><img src="img/huong-dan/ts-tray.webp" width="680" height="408" loading="lazy" alt="Khay biểu tượng mở ra sau khi bấm mũi tên ^ cạnh đồng hồ Windows; biểu tượng Tailscale 9 chấm ở hàng đầu được khoanh đỏ"><span class="ring" style="left:49.4%;top:21.6%"></span></figure>
+      <div class="cap">Bấm <b>^</b> cạnh đồng hồ: biểu tượng Tailscale là ô <b>9 chấm</b> (vòng đỏ)</div></div>
+    <div><figure class="shot"><img src="img/huong-dan/ts-menu.webp" width="1140" height="744" loading="lazy" alt="Menu Tailscale trên Windows khi đã xong: dòng trên cùng có dấu tích, chữ Tailscale và Connected được đánh số 1; dưới là Gmail, This device, Network devices, Exit nodes, Preferences, About, Exit"><span class="pin" style="left:32%;top:10%">1</span></figure>
+      <div class="cap">Menu Tailscale khi đã xong: dòng đầu có <b>✓ Tailscale · Connected</b> (số 1) và Gmail của bạn</div></div>
+  </div>
+  <div class="box note">Đã làm hết vẫn kẹt: bấm <span class="k">Sao chép thông tin gửi chủ</span> ở dưới cùng cửa sổ app, dán vào tin nhắn gửi Wyckdelta, kèm ảnh chụp cả màn hình (phím <b>Windows + Shift + S</b>).</div>
 </section>
 
 <!-- =================== iPhone / Android / Mac: BƯỚC 3 =================== -->
@@ -682,6 +795,10 @@ footer p { margin: 6px 0; }
   <h2><i class="n q">?</i><span><small>NẾU KHÔNG VÀO ĐƯỢC</small>Lỗi hay gặp</span></h2>
   <div class="faq d-win"><b>Không có nút “Vẫn chạy”, hoặc phần mềm diệt virus xoá Wyckdelta.exe</b>
     <span>Máy công ty thường chặn app lạ. Nếu máy vẫn cho cài Tailscale: bấm tab <a href="?d=mac#buoc-1" data-go="mac">Mac / máy khác</a> ở trên, cài Tailscale bản Windows rồi mở Wyckdelta bằng Chrome hoặc Edge. Nếu máy chặn cả Tailscale: dùng điện thoại hoặc máy cá nhân.</span></div>
+  <div class="faq d-win"><b>App quay mãi ở dòng 2, trình duyệt hiện trang “Machines” / “Add your first device”</b>
+    <span>Tài khoản Tailscale đã tạo nhưng máy tính chưa nối. Trong app bấm <span class="k">Mở lại trang đăng nhập</span> → trên trang mở ra bấm <span class="k">Connect</span>. Xem <a href="#win-trang-machines">ảnh hướng dẫn</a>.</span></div>
+  <div class="faq d-win"><b>“Máy không chạy được Tailscale”, không thấy biểu tượng Tailscale</b>
+    <span>Khởi động lại máy rồi mở lại Wyckdelta; tắt VPN khác (Cloudflare WARP, FortiClient…). Biểu tượng Tailscale nằm sau mũi tên ^ cạnh đồng hồ. Xem <a href="#win-ket">các bước</a>.</span></div>
   <div class="faq d-win"><b>Bước “Nhận lời mời” mãi không có dấu ✓</b>
     <span>Bạn chưa bấm Accept, hoặc mở link mời bằng Gmail khác với Gmail của Tailscale. Nhắn Wyckdelta xin link mới, mở bằng đúng Gmail. Link chỉ dùng được 1 lần.</span></div>
   <div class="faq d-win"><b>App báo “Máy chủ Wyckdelta đang tạm tắt”</b>
