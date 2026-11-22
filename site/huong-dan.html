@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Cài đặt Wyckdelta · Hướng dẫn từng bước</title>
-<meta name="description" content="Hướng dẫn cài đặt và đăng nhập Wyckdelta trên iPhone, Android, Windows và Mac: 3 bước, khoảng 5 phút, chỉ làm một lần.">
+<title>Cài đặt Wyckdelta Chart · Hướng dẫn từng bước</title>
+<meta name="description" content="Hướng dẫn cài đặt và đăng nhập Wyckdelta Chart trên iPhone, Android, Windows và Mac: 3 bước, khoảng 5 phút, chỉ làm một lần.">
 <meta name="theme-color" content="#0b0f17">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://wyckdelta.com/huong-dan.html">
 <link rel="canonical" href="https://wyckdelta.com/huong-dan.html">
 <meta property="og:site_name" content="Wyckdelta">
-<meta property="og:title" content="Cài đặt Wyckdelta · Hướng dẫn từng bước">
+<meta property="og:title" content="Cài đặt Wyckdelta Chart · Hướng dẫn từng bước">
 <meta property="og:description" content="iPhone, Android, Windows, Mac: 3 bước, khoảng 5 phút, chỉ làm một lần.">
 <meta property="og:image" content="https://wyckdelta.com/img/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -263,10 +263,21 @@ footer { color: var(--faint); font-size: 12.5px; padding-top: 24px; padding-bott
 footer p { margin: 6px 0; }
 
 @media print {
-  .topbar, .picker, .final .actions { display: none !important; }
+  .topbar, .site-note, .picker, .final .actions { display: none !important; }
   body { background: #fff; color: #111; }
   .step { break-inside: avoid; }
 }
+/* Site notice strip: separates wyckdelta.com (info/guide) from Wyckdelta Chart (the chart app) */
+.site-note { background: var(--panel); border-bottom: 1px solid var(--line); font-size: 13px; line-height: 1.45; color: var(--muted); }
+.site-note .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 14px; padding-top: 8px; padding-bottom: 8px; }
+.site-note p { margin: 0; flex: 1 1 320px; min-width: 0; overflow-wrap: anywhere; }
+.site-note b { color: var(--text); font-weight: 700; }
+.site-note .sn-links { display: flex; flex-wrap: wrap; gap: 6px; flex: none; }
+.site-note a { display: inline-flex; align-items: center; min-height: 30px; padding: 3px 10px; border-radius: 7px;
+  border: 1px solid var(--line2); background: var(--panel2); color: var(--text); font-weight: 700; font-size: 12.5px; text-decoration: none; white-space: nowrap; }
+.site-note a.pri { border-color: color-mix(in srgb, var(--gold) 55%, var(--line2)); color: var(--gold); background: var(--gold-soft); }
+@media (hover: hover) and (pointer: fine) { .site-note a:hover { border-color: var(--muted); } }
+@media (max-width: 560px) { .site-note { font-size: 12.5px; } .site-note .wrap { padding-top: 7px; padding-bottom: 7px; gap: 6px; } .site-note a { min-height: 32px; } }
 /* VI | EN switch (site/i18n.js) */
 .langsw { display: inline-flex; height: 44px; padding: 3px; gap: 2px; border: 1px solid var(--line2); border-radius: 10px; background: var(--panel); flex: none; }
 .langsw button { min-width: 40px; border: 0; border-radius: 7px; background: none; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
@@ -290,11 +301,20 @@ footer p { margin: 6px 0; }
   </div>
 </header>
 
+<div class="site-note" role="note">
+  <div class="wrap">
+    <p>wyckdelta.com là trang giới thiệu và hướng dẫn. Biểu đồ nằm trong <b>Wyckdelta Chart</b>: app Windows, hoặc https://wyckdelta.tail65e625.ts.net trên điện thoại / Mac (cần Tailscale).</p>
+    <div class="sn-links">
+      <a class="pri" href="https://wyckdelta.tail65e625.ts.net" target="_blank" rel="noopener">Mở Wyckdelta Chart</a>
+    </div>
+  </div>
+</div>
+
 <main class="wrap">
 
 <section class="intro">
   <span class="eyebrow"><i></i>Hướng dẫn cài đặt</span>
-  <h1>Vào Wyckdelta trong 3 bước</h1>
+  <h1>Vào Wyckdelta Chart trong 3 bước</h1>
   <p class="lead">Cài Tailscale, nhận lời mời, rồi tự tạo tài khoản tại <b>wyckdelta.tail65e625.ts.net</b>. Khoảng 5 phút, chỉ làm một lần. Chọn thiết bị bạn đang dùng, trang sẽ chỉ hiện đúng các bước cho thiết bị đó.</p>
 </section>
 
@@ -312,12 +332,12 @@ footer p { margin: 6px 0; }
 <div class="road d-iphone d-android d-mac">
   <div><i class="n">1</i>Cài app Tailscale</div>
   <div><i class="n">2</i>Bấm link mời</div>
-  <div><i class="n">3</i>Mở Wyckdelta, tạo tài khoản</div>
+  <div><i class="n">3</i>Mở Wyckdelta Chart, tạo tài khoản</div>
 </div>
 <div class="road d-win">
-  <div><i class="n">1</i>Tải và mở app Wyckdelta</div>
+  <div><i class="n">1</i>Tải và mở app Wyckdelta Chart</div>
   <div><i class="n">2</i>Bấm nút xanh trong app</div>
-  <div><i class="n">3</i>Tạo tài khoản Wyckdelta</div>
+  <div><i class="n">3</i>Tạo tài khoản Wyckdelta Chart</div>
 </div>
 <div class="have">
   <b class="h">Trước khi bắt đầu, bạn cần có (link mời: Wyckdelta gửi qua tin nhắn khi bạn inbox xin dùng thử):</b>
@@ -326,17 +346,17 @@ footer p { margin: 6px 0; }
     <li><b>1 link mời</b> Tailscale (dùng ở Bước 2)</li>
     <li>Một <b>Gmail cá nhân</b> để đăng nhập Tailscale (không dùng email công ty)</li>
   </ul>
-  <p class="small" style="margin:8px 0 0">Không cần ai gửi tên đăng nhập hay mật khẩu: bạn <b>tự tạo tài khoản Wyckdelta</b> ở <a href="#buoc-3">Bước 3</a>.</p>
-  <p class="small" style="margin:8px 0 0">Địa chỉ Wyckdelta luôn là <b>wyckdelta.tail65e625.ts.net</b> (có nút sao chép ở <a href="#buoc-3">Bước 3</a>).</p>
+  <p class="small" style="margin:8px 0 0">Không cần ai gửi tên đăng nhập hay mật khẩu: bạn <b>tự tạo tài khoản Wyckdelta Chart</b> ở <a href="#buoc-3">Bước 3</a>.</p>
+  <p class="small" style="margin:8px 0 0">Địa chỉ Wyckdelta Chart luôn là <b>wyckdelta.tail65e625.ts.net</b> (có nút sao chép ở <a href="#buoc-3">Bước 3</a>).</p>
 </div>
-<p class="meta">Tailscale là app miễn phí, giống “chìa khoá” để máy bạn vào được Wyckdelta một cách riêng tư. Không cần thẻ, không mất tiền.</p>
+<p class="meta">Tailscale là app miễn phí, giống “chìa khoá” để máy bạn vào được Wyckdelta Chart một cách riêng tư. Không cần thẻ, không mất tiền.</p>
 
 <nav class="toc" aria-label="Mục lục">
   <b>Trong trang này</b>
   <ol>
     <li class="d-iphone d-android d-mac"><a href="#buoc-1">Bước 1 · Cài Tailscale</a></li>
     <li class="d-iphone d-android d-mac"><a href="#buoc-2">Bước 2 · Bấm link mời</a></li>
-    <li class="d-win"><a href="#win-1">Bước 1 · Tải và mở app Wyckdelta</a></li>
+    <li class="d-win"><a href="#win-1">Bước 1 · Tải và mở app Wyckdelta Chart</a></li>
     <li class="d-win"><a href="#win-2">Bước 2 · Bấm nút xanh trong app</a></li>
     <li class="d-win"><a href="#win-trang-machines">Kẹt ở trang “Machines” của Tailscale</a></li>
     <li class="d-win"><a href="#win-ket">Tailscale tắt hoặc không chạy</a></li>
@@ -372,7 +392,7 @@ footer p { margin: 6px 0; }
   </ol>
   <ol class="s d-mac">
     <li><b>Mac</b> (cần macOS 13 trở lên): tải bản cho macOS (file .pkg), mở file để cài, rồi mở app Tailscale.<br>      Lần đầu mở, macOS chặn “phần mở rộng hệ thống” của Tailscale: vào <b>Cài đặt hệ thống</b> (System Settings) → <b>Cài đặt chung</b> (General) → <b>Login Items &amp; Extensions</b> → <b>Network Extensions</b> → bấm ⓘ → bật <b>Tailscale Network Extension</b> (macOS 14 trở xuống: <b>Quyền riêng tư &amp; bảo mật</b> (Privacy &amp; Security) → <span class="k">Allow</span> / <span class="k">Cho phép</span>), nhập mật khẩu máy. Máy hỏi thêm cấu hình VPN → bấm <span class="k">Cho phép</span>.<br>      <span class="small">Không làm được bước này thì cài Tailscale từ <b>Mac App Store</b> (cần Apple ID): bản đó chỉ hỏi cấu hình VPN. Không cài cả hai bản cùng lúc.</span><br>
-      <span class="small"><b>Máy Windows không cài được app Wyckdelta</b> (máy công ty): bấm <span class="k">Download</span> bản Windows, mở file vừa tải, bấm <span class="k">Install</span>.</span></li>
+      <span class="small"><b>Máy Windows không cài được app Wyckdelta Chart</b> (máy công ty): bấm <span class="k">Download</span> bản Windows, mở file vừa tải, bấm <span class="k">Install</span>.</span></li>
     <li>Tìm biểu tượng Tailscale: Mac ở <b>thanh menu trên cùng</b>; Windows ở <b>góc phải dưới, cạnh đồng hồ</b> (không thấy thì bấm mũi tên <b>^</b>).</li>
     <li>Bấm vào biểu tượng (Windows: chuột phải) → <span class="k">Log in</span>.</li>
     <li>Trình duyệt mở ra → <span class="k">Sign in with Google</span> → chọn <b>Gmail cá nhân</b> → <span class="k">Connect</span>.</li>
@@ -427,15 +447,15 @@ footer p { margin: 6px 0; }
       <div class="cap">Kết quả: có thêm dòng máy chủ</div>
     </div>
   </div>
-  <div class="box done"><b class="t">✔ Xong Bước 2 khi:</b> mở lại Tailscale, <span class="d-iphone d-android">thấy thêm dòng <b>wyckdelta</b> có chấm xanh. Đó là máy chủ Wyckdelta; bấm vào dòng này sẽ thấy địa chỉ dùng ở Bước 3.</span><span class="d-mac">trong mục <b>Network Devices</b> có máy <b>wyckdelta</b>. Đó là máy chủ Wyckdelta; sang Bước 3 để mở địa chỉ.</span></div>
+  <div class="box done"><b class="t">✔ Xong Bước 2 khi:</b> mở lại Tailscale, <span class="d-iphone d-android">thấy thêm dòng <b>wyckdelta</b> có chấm xanh. Đó là máy chủ Wyckdelta Chart; bấm vào dòng này sẽ thấy địa chỉ dùng ở Bước 3.</span><span class="d-mac">trong mục <b>Network Devices</b> có máy <b>wyckdelta</b>. Đó là máy chủ Wyckdelta Chart; sang Bước 3 để mở địa chỉ.</span></div>
   <div class="box warn"><b>Link mở ra bên trong Messenger / Zalo?</b> Trình duyệt bên trong app nhắn tin không cho đăng nhập Google. Bấm <span class="k">⋯</span> → <b>Mở bằng <span class="d-iphone">Safari</span><span class="d-android d-win d-mac">Chrome</span></b> (hoặc giữ ngón tay trên link → <b>Sao chép</b> → dán vào <span class="d-iphone">Safari</span><span class="d-android d-win d-mac">trình duyệt</span>).</div>
   <div class="box warn">Link mời <b>chỉ dùng được 1 lần, cho 1 người</b>, và hết hạn sau <b>30 ngày</b> nếu chưa dùng. Trang báo link hết hạn hoặc đã dùng → nhắn Wyckdelta xin link mới.</div>
 </section>
 
 <!-- =================== Windows app: BƯỚC 1 =================== -->
 <section class="step d-win" id="win-1">
-  <h2><i class="n">1</i><span><small>BƯỚC 1</small>Tải và mở app Wyckdelta</span></h2>
-  <a class="big" href="download/Wyckdelta.zip" download>Tải app Wyckdelta cho Windows<small>Wyckdelta.zip · 18 MB · Windows 10 / 11</small></a>
+  <h2><i class="n">1</i><span><small>BƯỚC 1</small>Tải và mở app Wyckdelta Chart</span></h2>
+  <a class="big" href="download/Wyckdelta.zip" download>Tải app Wyckdelta Chart cho Windows<small>Wyckdelta.zip · 18 MB · Windows 10 / 11</small></a>
   <ol class="s">
     <li>Bấm nút vàng ở trên. File <b>Wyckdelta.zip</b> nằm trong thư mục <b>Tải xuống</b> (Downloads). Trình duyệt hỏi có giữ file không thì bấm <span class="k">Giữ lại</span> (Keep).</li>
     <li>Bấm <b>chuột phải</b> vào file <b>Wyckdelta.zip</b> → <span class="k">Giải nén tất cả…</span> (Extract All) → <span class="k">Giải nén</span>.</li>
@@ -458,34 +478,34 @@ footer p { margin: 6px 0; }
     </div>
   </div>
   <div class="box note">Khung xanh này chỉ hiện <b>lần đầu</b>. Windows hiện nó vì app chưa mua chứng chỉ ký số, không phải vì có virus.</div>
-  <div class="box done"><b class="t">✔ Xong Bước 1 khi:</b> thấy cửa sổ <b>Kết nối Wyckdelta</b>, và trên màn hình (Desktop) có thêm biểu tượng <b>Wyckdelta</b>.</div>
-  <figure class="shot"><img src="img/huong-dan/win-1-chua-cai.webp" width="760" height="704" loading="lazy" alt="Cửa sổ Kết nối Wyckdelta lúc mới mở, bước 1 Cài Tailscale"></figure>
-  <div class="cap">Cửa sổ Kết nối Wyckdelta lúc mới mở</div>
+  <div class="box done"><b class="t">✔ Xong Bước 1 khi:</b> thấy cửa sổ <b>Kết nối Wyckdelta Chart</b>, và trên màn hình (Desktop) có thêm biểu tượng <b>Wyckdelta Chart</b>.</div>
+  <figure class="shot"><img src="img/huong-dan/win-1-chua-cai.webp" width="760" height="701" loading="lazy" alt="Cửa sổ Kết nối Wyckdelta Chart lúc mới mở, bước 1 Cài Tailscale"></figure>
+  <div class="cap">Cửa sổ Kết nối Wyckdelta Chart lúc mới mở</div>
 </section>
 
 <!-- =================== Windows app: BƯỚC 2 =================== -->
 <section class="step d-win" id="win-2">
   <h2><i class="n">2</i><span><small>BƯỚC 2</small>Bấm nút xanh trong app</span></h2>
-  <p>Cửa sổ <b>Kết nối Wyckdelta</b> có 4 dòng. App tự kiểm tra máy bạn và chỉ mở <b>đúng dòng cần làm</b>; làm xong dòng nào, app tự đánh dấu ✓ xanh và mở dòng tiếp theo. Bạn chỉ cần làm theo 4 phần 2a → 2d dưới đây và <b>để cửa sổ app mở</b> trong lúc làm. Lỡ tắt thì bấm đúp biểu tượng <b>Wyckdelta</b> trên màn hình, app tự nhận ra bạn đã làm tới đâu.</p>
-  <div class="box note en-only" data-i18n-skip>The Wyckdelta app has a <b>VI | EN</b> switch at the top right of its window: click <b>EN</b> to see it in English (version 1.3.3 and later). The pictures below show the Vietnamese screen; its button names are: <b>Cài Tailscale</b> = Install Tailscale · <b>Mở lại cửa sổ cài</b> = Reopen installer · <b>Đăng nhập Tailscale</b> = Sign in to Tailscale · <b>Mở lại trang đăng nhập</b> = Reopen sign-in page · <b>Dán link mời vào đây</b> = Paste the invite link here · <b>Mở link mời</b> = Open invite link · <b>Bật Tailscale</b> = Turn on Tailscale · <b>Mở Tailscale</b> = Open Tailscale · <b>Thử lại</b> = Try again · <b>Mở Wyckdelta</b> = Open Wyckdelta · <b>Sao chép thông tin gửi chủ</b> = Copy info for the owner. The window title <b>Kết nối Wyckdelta</b> means “Connect Wyckdelta”.</div>
+  <p>Cửa sổ <b>Kết nối Wyckdelta Chart</b> có 4 dòng. App tự kiểm tra máy bạn và chỉ mở <b>đúng dòng cần làm</b>; làm xong dòng nào, app tự đánh dấu ✓ xanh và mở dòng tiếp theo. Bạn chỉ cần làm theo 4 phần 2a → 2d dưới đây và <b>để cửa sổ app mở</b> trong lúc làm. Lỡ tắt thì bấm đúp biểu tượng <b>Wyckdelta Chart</b> trên màn hình, app tự nhận ra bạn đã làm tới đâu.</p>
+  <div class="box note en-only" data-i18n-skip>The Wyckdelta Chart app has a <b>VI | EN</b> switch at the top right of its window: click <b>EN</b> to see it in English (version 1.3.3 and later). The pictures below show the Vietnamese screen; its button names are: <b>Cài Tailscale</b> = Install Tailscale · <b>Mở lại cửa sổ cài</b> = Reopen installer · <b>Đăng nhập Tailscale</b> = Sign in to Tailscale · <b>Mở lại trang đăng nhập</b> = Reopen sign-in page · <b>Dán link mời vào đây</b> = Paste the invite link here · <b>Mở link mời</b> = Open invite link · <b>Bật Tailscale</b> = Turn on Tailscale · <b>Mở Tailscale</b> = Open Tailscale · <b>Thử lại</b> = Try again · <b>Mở Wyckdelta Chart</b> = Open Wyckdelta Chart · <b>Sao chép thông tin gửi chủ</b> = Copy info for the owner. The window title <b>Kết nối Wyckdelta Chart</b> means “Connect Wyckdelta Chart”.</div>
 
   <h3 id="win-2a" class="sub">2a · Cài Tailscale</h3>
   <div class="anno">
-    <figure class="shot"><img src="img/huong-dan/win-2a-cai.webp" width="760" height="769" loading="lazy" alt="Dòng 1 Cài Tailscale đang mở: cửa sổ cài Tailscale đã mở, hướng dẫn bấm Yes / Có, tích ô đồng ý, bấm Install, nút Mở lại cửa sổ cài"></figure>
+    <figure class="shot"><img src="img/huong-dan/win-2a-cai.webp" width="760" height="766" loading="lazy" alt="Dòng 1 Cài Tailscale đang mở: cửa sổ cài Tailscale đã mở, hướng dẫn bấm Yes / Có, tích ô đồng ý, bấm Install, nút Mở lại cửa sổ cài"></figure>
     <ol class="pins">
       <li><i>1</i>Bấm nút xanh <span class="k b">Cài Tailscale</span> (dòng 1, như ảnh cuối Bước 1). App tự tải Tailscale (miễn phí), mở cửa sổ cài và chuyển sang như ảnh bên.</li>
       <li><i>2</i>Windows hỏi <b>“Bạn có muốn cho phép ứng dụng này thực hiện thay đổi…?”</b> (có thể hiện trước hoặc sau khi bấm Install) → bấm <span class="k">Yes / Có</span>.</li>
       <li><i>3</i>Trong cửa sổ cài Tailscale: tích ô đồng ý điều khoản → bấm <span class="k">Install</span> → đợi thanh chạy xong → bấm <span class="k">Close</span>.</li>
-      <li><i>4</i>Quay lại cửa sổ <b>Kết nối Wyckdelta</b>. Dòng 1 có dấu ✓ là xong.</li>
+      <li><i>4</i>Quay lại cửa sổ <b>Kết nối Wyckdelta Chart</b>. Dòng 1 có dấu ✓ là xong.</li>
     </ol>
   </div>
-  <div class="box note">Cài xong, Tailscale có thể <b>tự mở thêm một cửa sổ chào mừng</b> của riêng nó. Không cần làm theo cửa sổ đó: đóng lại (dấu ✕), quay về app Wyckdelta. Lỡ đóng cửa sổ cài thì bấm <span class="k">Mở lại cửa sổ cài</span> trong app.</div>
+  <div class="box note">Cài xong, Tailscale có thể <b>tự mở thêm một cửa sổ chào mừng</b> của riêng nó. Không cần làm theo cửa sổ đó: đóng lại (dấu ✕), quay về app Wyckdelta Chart. Lỡ đóng cửa sổ cài thì bấm <span class="k">Mở lại cửa sổ cài</span> trong app.</div>
 
   <h3 id="win-2b" class="sub">2b · Đăng nhập Tailscale bằng Gmail</h3>
   <p>Phần này hay làm khách kẹt nhất. Đọc hết 4 bước con trước khi bấm.</p>
   <div class="anno">
     <figure class="shot">
-      <img src="img/huong-dan/win-2b-dang-nhap.webp" width="760" height="719" loading="lazy" alt="Dòng 2 Bật và đăng nhập Tailscale: Tailscale chưa đăng nhập, nút xanh Đăng nhập Tailscale được đánh số 1">
+      <img src="img/huong-dan/win-2b-dang-nhap.webp" width="760" height="716" loading="lazy" alt="Dòng 2 Bật và đăng nhập Tailscale: Tailscale chưa đăng nhập, nút xanh Đăng nhập Tailscale được đánh số 1">
       <span class="pin" style="left:9%;top:49.8%">1</span>
     </figure>
     <ol class="pins">
@@ -507,7 +527,7 @@ footer p { margin: 6px 0; }
   <div class="box warn" id="win-trang-machines"><b>Trình duyệt hiện trang “Machines” / “Add your first device” mà app vẫn quay mãi ở dòng 2?</b><br>
     Đây là chỗ khách hay kẹt nhất. Trang đó là <b>trang quản trị</b> của Tailscale: tài khoản Tailscale đã tạo xong, nhưng <b>máy tính của bạn chưa được nối vào</b>. Ở trang đó không có gì cần bấm (đừng bấm <b>Add device</b>, đừng tải thêm gì). Làm như sau:
     <ol class="s">
-      <li>Quay về cửa sổ <b>Kết nối Wyckdelta</b>, bấm <span class="k">Mở lại trang đăng nhập</span> (ảnh dưới, số 1).</li>
+      <li>Quay về cửa sổ <b>Kết nối Wyckdelta Chart</b>, bấm <span class="k">Mở lại trang đăng nhập</span> (ảnh dưới, số 1).</li>
       <li>Trình duyệt mở lại trang Tailscale. Lần này Gmail đã đăng nhập sẵn nên trang chỉ hỏi nối máy: bấm <span class="k">Connect</span>.</li>
       <li>Đợi vài giây, dòng 2 trong app có dấu ✓.</li>
     </ol>
@@ -524,19 +544,19 @@ footer p { margin: 6px 0; }
   </div>
   <div class="anno">
     <figure class="shot">
-      <img src="img/huong-dan/win-2b-mo-lai.webp" width="760" height="834" loading="lazy" alt="Dòng 2 đang chờ: Trình duyệt đã mở trang đăng nhập Tailscale, ba bước Sign in with Google, Connect, quay lại app; dòng nhắc vàng về trang Machines; nút Mở lại trang đăng nhập được đánh số 1">
+      <img src="img/huong-dan/win-2b-mo-lai.webp" width="760" height="831" loading="lazy" alt="Dòng 2 đang chờ: Trình duyệt đã mở trang đăng nhập Tailscale, ba bước Sign in with Google, Connect, quay lại app; dòng nhắc vàng về trang Machines; nút Mở lại trang đăng nhập được đánh số 1">
       <span class="pin" style="left:9%;top:67.3%">1</span>
     </figure>
     <ol class="pins">
       <li><i>1</i><span class="k">Mở lại trang đăng nhập</span>: bấm khi lỡ đóng tab trình duyệt, khi trình duyệt hiện trang Machines, hoặc khi đợi quá 1 phút mà dòng 2 chưa có ✓.</li>
     </ol>
   </div>
-  <div class="box note">Link đăng nhập Tailscale dùng được 7 ngày, bấm lại nút này vẫn mở đúng link đó. Trang Tailscale báo lỗi hoặc link hết hạn: <b>khởi động lại máy tính</b>, mở lại Wyckdelta rồi bấm <span class="k b">Đăng nhập Tailscale</span>, Tailscale sẽ tạo link mới.</div>
+  <div class="box note">Link đăng nhập Tailscale dùng được 7 ngày, bấm lại nút này vẫn mở đúng link đó. Trang Tailscale báo lỗi hoặc link hết hạn: <b>khởi động lại máy tính</b>, mở lại Wyckdelta Chart rồi bấm <span class="k b">Đăng nhập Tailscale</span>, Tailscale sẽ tạo link mới.</div>
 
   <h3 id="win-2c" class="sub">2c · Nhận lời mời của chủ</h3>
   <div class="anno">
     <figure class="shot">
-      <img src="img/huong-dan/win-2c-link-moi.webp" width="760" height="860" loading="lazy" alt="Dòng 3 Nhận lời mời của chủ: ô Dán link mời vào đây được đánh số 1, nút xanh Mở link mời được đánh số 2, dòng nhắc chọn đúng Gmail">
+      <img src="img/huong-dan/win-2c-link-moi.webp" width="760" height="856" loading="lazy" alt="Dòng 3 Nhận lời mời của chủ: ô Dán link mời vào đây được đánh số 1, nút xanh Mở link mời được đánh số 2, dòng nhắc chọn đúng Gmail">
       <span class="pin" style="left:9%;top:59.2%">1</span>
       <span class="pin" style="left:91%;top:53.8%">2</span>
     </figure>
@@ -547,29 +567,29 @@ footer p { margin: 6px 0; }
   </div>
   <div class="box warn">Trang hỏi đăng nhập thì chọn <b>đúng Gmail</b> app ghi trong dòng vàng (Gmail của dòng 2). Đừng dùng email công ty. Link mời chỉ dùng được 1 lần.</div>
 
-  <h3 id="win-2d" class="sub">2d · Kết nối tới Wyckdelta</h3>
+  <h3 id="win-2d" class="sub">2d · Kết nối tới Wyckdelta Chart</h3>
   <div class="anno">
     <figure class="shot">
-      <img src="img/huong-dan/win-2d-san-sang.webp" width="760" height="734" loading="lazy" alt="Cả 4 dòng có dấu tích xanh, dòng 4 ghi Kết nối tốt (bảo mật HTTPS), nút lớn Mở Wyckdelta được đánh số 1">
+      <img src="img/huong-dan/win-2d-san-sang.webp" width="760" height="731" loading="lazy" alt="Cả 4 dòng có dấu tích xanh, dòng 4 ghi Kết nối tốt (bảo mật HTTPS), nút lớn Mở Wyckdelta Chart được đánh số 1">
       <span class="pin" style="left:7%;top:72.7%">1</span>
     </figure>
     <ol class="pins">
-      <li><i>1</i>App tự kiểm tra đường tới máy chủ. Đủ 4 dấu ✓, app <b>tự mở trang Wyckdelta sau khoảng 1 giây</b>. Không tự mở thì bấm nút lớn <span class="k b">Mở Wyckdelta</span>. Sang Bước 3 để tạo tài khoản.</li>
+      <li><i>1</i>App tự kiểm tra đường tới máy chủ. Đủ 4 dấu ✓, app <b>tự mở trang Wyckdelta Chart sau khoảng 1 giây</b>. Không tự mở thì bấm nút lớn <span class="k b">Mở Wyckdelta Chart</span>. Sang Bước 3 để tạo tài khoản.</li>
     </ol>
   </div>
   <div class="box warn"><b>Dòng 4 báo đỏ “Đã thấy máy chủ nhưng chưa vào được”?</b> Làm lần lượt như app ghi: tắt rồi bật lại Tailscale (chuột phải biểu tượng Tailscale cạnh đồng hồ → bấm dòng <b>Tailscale</b> trên cùng để tắt, bấm lần nữa để bật lại, thấy <a href="#win-ket">✓ Connected</a>), tắt VPN khác nếu có, rồi bấm <span class="k b">Thử lại</span>. Vẫn không được thì bấm <span class="k">Sao chép thông tin gửi chủ</span> và gửi cho Wyckdelta.</div>
-  <div class="box done"><b class="t">✔ Xong Bước 2 khi:</b> cả 4 dòng có dấu ✓ xanh và hiện nút lớn <b>Mở Wyckdelta</b>.</div>
+  <div class="box done"><b class="t">✔ Xong Bước 2 khi:</b> cả 4 dòng có dấu ✓ xanh và hiện nút lớn <b>Mở Wyckdelta Chart</b>.</div>
 
   <h3 id="win-ket" class="sub">Dòng 2 báo Tailscale tắt hoặc chưa chạy</h3>
   <div class="shots">
     <div><figure class="shot"><img src="img/huong-dan/win-2-dang-tat.webp" width="760" height="600" loading="lazy" alt="Dòng 2 báo Tailscale đang tắt, nút xanh Bật Tailscale"><span class="pin" style="left:9%;top:54.7%">1</span></figure>
       <div class="cap">“Tailscale đang <b>tắt</b>”: bấm <b>Bật Tailscale</b></div></div>
-    <div><figure class="shot"><img src="img/huong-dan/win-2-chua-chay.webp" width="760" height="689" loading="lazy" alt="Dòng 2 có dấu chấm than vàng: Tailscale đã cài nhưng chưa chạy, nút xanh Mở Tailscale"><span class="pin" style="left:9%;top:47.6%">1</span></figure>
+    <div><figure class="shot"><img src="img/huong-dan/win-2-chua-chay.webp" width="760" height="687" loading="lazy" alt="Dòng 2 có dấu chấm than vàng: Tailscale đã cài nhưng chưa chạy, nút xanh Mở Tailscale"><span class="pin" style="left:9%;top:47.6%">1</span></figure>
       <div class="cap">“Tailscale đã cài nhưng <b>chưa chạy</b>”: bấm <b>Mở Tailscale</b></div></div>
   </div>
   <ol class="s">
     <li>Bấm nút xanh trong app (số 1 trên ảnh), đợi 30 giây.</li>
-    <li>Vẫn vậy: <b>khởi động lại máy tính</b> (Start → Nguồn → Khởi động lại), rồi mở lại <b>Wyckdelta</b> bằng biểu tượng trên màn hình.</li>
+    <li>Vẫn vậy: <b>khởi động lại máy tính</b> (Start → Nguồn → Khởi động lại), rồi mở lại <b>Wyckdelta Chart</b> bằng biểu tượng trên màn hình.</li>
     <li>Máy có app VPN khác (Cloudflare WARP, FortiClient, VPN công ty…) hoặc phần mềm diệt virus chặn mạng: tắt VPN đó, rồi thử lại. Máy chỉ chạy được một VPN một lúc.</li>
     <li>Cách tự làm bằng tay: bấm mũi tên <span class="k">^</span> cạnh đồng hồ góc phải dưới → bấm <b>chuột phải</b> vào biểu tượng Tailscale (ô <b>9 chấm</b>, ảnh trái) → menu Tailscale hiện ra (ảnh phải). Chưa đăng nhập thì bấm <span class="k">Log in</span>; đang tắt thì bấm dòng trên cùng <b>Tailscale</b> cho có dấu ✓ và chữ <b>Connected</b>.</li>
   </ol>
@@ -584,16 +604,16 @@ footer p { margin: 6px 0; }
 
 <!-- =================== iPhone / Android / Mac: BƯỚC 3 =================== -->
 <section class="step" id="buoc-3">
-  <h2><i class="n">3</i><span><small>BƯỚC 3</small>Mở Wyckdelta, tạo tài khoản</span></h2>
+  <h2><i class="n">3</i><span><small>BƯỚC 3</small>Mở Wyckdelta Chart, tạo tài khoản</span></h2>
 
-  <p class="d-win">App Wyckdelta tự mở trang Wyckdelta khi đủ 4 dấu ✓ (hoặc bấm <span class="k b">Mở Wyckdelta</span>). Trang trong app giống hệt trang trên trình duyệt bên dưới.</p>
+  <p class="d-win">App Wyckdelta Chart tự mở trang Wyckdelta Chart khi đủ 4 dấu ✓ (hoặc bấm <span class="k b">Mở Wyckdelta Chart</span>). Trang trong app giống hệt trang trên trình duyệt bên dưới.</p>
   <p class="d-iphone d-android d-mac"><b>Trước tiên:</b> mở app Tailscale, kiểm tra đang <b>bật</b> (công tắc xanh / Connected). Địa chỉ dưới đây <b>chỉ mở được khi Tailscale đang bật</b>.</p>
 
   <div class="addrcard" id="addr">
-    <div class="lbl">Địa chỉ Wyckdelta (gõ đúng như sau, hoặc bấm nút)</div>
+    <div class="lbl">Địa chỉ Wyckdelta Chart (gõ đúng như sau, hoặc bấm nút)</div>
     <code>https://wyckdelta.tail65e625.ts.net</code>
     <div class="acts">
-      <a class="btn gold" href="https://wyckdelta.tail65e625.ts.net/" target="_blank" rel="noopener">Mở Wyckdelta</a>
+      <a class="btn gold" href="https://wyckdelta.tail65e625.ts.net/" target="_blank" rel="noopener">Mở Wyckdelta Chart</a>
       <button class="btn" type="button" id="copyAddr">Sao chép địa chỉ</button>
     </div>
     <div class="ok" role="status" aria-live="polite">Đã sao chép. Dán vào thanh địa chỉ<span class="d-iphone"> Safari</span><span class="d-android"> Chrome</span><span class="d-mac d-win"> trình duyệt</span> rồi bấm Đi / Enter.</div>
@@ -617,7 +637,7 @@ footer p { margin: 6px 0; }
   <div class="box warn"><b>Trang chỉ hiện Đăng nhập, không có khung Tạo tài khoản?</b> Trang chưa nhận ra Tailscale của bạn: bật Tailscale (xanh), mở đúng <b>https://wyckdelta.tail65e625.ts.net</b> (có https://, không dùng địa chỉ dạng số 100.x). Vẫn vậy thì inbox Wyckdelta.</div>
   <div class="anno">
     <figure class="shot">
-      <img src="img/huong-dan/dang-ky.webp" width="780" height="1328" loading="lazy" alt="Trang Tạo tài khoản Wyckdelta: dòng xanh Bạn vào bằng Tailscale kèm Gmail và số ngày dùng thử, ô Tên đăng nhập, Tên hiển thị, Mật khẩu, Nhập lại mật khẩu, nút xanh Tạo tài khoản và vào chart">
+      <img src="img/huong-dan/dang-ky.webp" width="780" height="1328" loading="lazy" alt="Trang Tạo tài khoản Wyckdelta Chart: dòng xanh Bạn vào bằng Tailscale kèm Gmail và số ngày dùng thử, ô Tên đăng nhập, Tên hiển thị, Mật khẩu, Nhập lại mật khẩu, nút xanh Tạo tài khoản và vào chart">
       <span class="pin" style="left:6%;top:23.6%">1</span>
       <span class="pin" style="left:6%;top:35.7%">2</span>
       <span class="pin" style="left:6%;top:46.7%">3</span>
@@ -626,7 +646,7 @@ footer p { margin: 6px 0; }
       <span class="pin" style="left:6%;top:77.6%">6</span>
     </figure>
     <ol class="pins">
-      <li><i>1</i><b>Dòng xanh</b> <q>Bạn vào bằng Tailscale … · dùng thử 30 ngày</q>: Gmail bạn dùng cho Tailscale và số ngày dùng thử. Mỗi Gmail Tailscale chỉ tạo được <b>1 tài khoản</b> Wyckdelta.</li>
+      <li><i>1</i><b>Dòng xanh</b> <q>Bạn vào bằng Tailscale … · dùng thử 30 ngày</q>: Gmail bạn dùng cho Tailscale và số ngày dùng thử. Mỗi Gmail Tailscale chỉ tạo được <b>1 tài khoản</b> Wyckdelta Chart.</li>
       <li><i>2</i><b>Tên đăng nhập</b>: tự đặt, 2 – 32 ký tự, chỉ gồm <b>chữ thường a-z, số 0-9, dấu chấm, gạch dưới, gạch ngang</b> (không dấu, không dấu cách). Đây không phải Gmail. Ghi lại để lần sau đăng nhập.</li>
       <li><i>3</i><b>Tên hiển thị</b>: tên bạn muốn hiện trong app, gõ có dấu được. Bỏ trống thì dùng tên đăng nhập.</li>
       <li><i>4</i><b>Mật khẩu</b>: tự đặt, <b>ít nhất 8 ký tự</b>, phân biệt hoa / thường.</li>
@@ -640,7 +660,7 @@ footer p { margin: 6px 0; }
   <p>Mỗi thiết bị giữ đăng nhập 30 ngày. Khi trang hỏi lại, hoặc khi dùng thiết bị khác, nhập tên đăng nhập và mật khẩu <b>bạn đã tạo</b>. Đã có tài khoản mà trang vẫn hiện khung Tạo tài khoản thì bấm <span class="k">Đăng nhập</span> ở cuối khung.</p>
   <div class="anno">
     <figure class="shot">
-      <img src="img/huong-dan/dang-nhap.webp" width="780" height="953" loading="lazy" alt="Trang đăng nhập Wyckdelta: logo, tiêu đề Đăng nhập, ô Tên đăng nhập, ô Mật khẩu, nút Đăng nhập màu xanh, nút chọn ngôn ngữ ở góc phải trên">
+      <img src="img/huong-dan/dang-nhap.webp" width="780" height="953" loading="lazy" alt="Trang đăng nhập Wyckdelta Chart: logo, tiêu đề Đăng nhập, ô Tên đăng nhập, ô Mật khẩu, nút Đăng nhập màu xanh, nút chọn ngôn ngữ ở góc phải trên">
       <span class="pin" style="left:66%;top:7%">1</span>
       <span class="pin" style="left:6%;top:45.8%">2</span>
       <span class="pin" style="left:6%;top:61.2%">3</span>
@@ -657,7 +677,7 @@ footer p { margin: 6px 0; }
   <h3 style="margin:20px 0 4px;font-size:18px">Gmail Tailscale này đã có tài khoản</h3>
   <div class="anno">
     <figure class="shot">
-      <img src="img/huong-dan/dang-ky-da-co.webp" width="780" height="1116" loading="lazy" alt="Trang đăng nhập Wyckdelta với dòng đỏ: Tailscale đã có tài khoản, đăng nhập bằng tài khoản đó; ô Tên đăng nhập đã điền sẵn, ô Mật khẩu, nút Đăng nhập">
+      <img src="img/huong-dan/dang-ky-da-co.webp" width="780" height="1116" loading="lazy" alt="Trang đăng nhập Wyckdelta Chart với dòng đỏ: Tailscale đã có tài khoản, đăng nhập bằng tài khoản đó; ô Tên đăng nhập đã điền sẵn, ô Mật khẩu, nút Đăng nhập">
       <span class="pin" style="left:6%;top:39.1%">1</span>
       <span class="pin" style="left:6%;top:55.1%">2</span>
       <span class="pin" style="left:6%;top:68.2%">3</span>
@@ -680,13 +700,13 @@ footer p { margin: 6px 0; }
       <thead><tr><th>Dòng chữ đỏ</th><th>Nghĩa là gì, làm gì</th></tr></thead>
       <tbody>
         <tr><td colspan="2"><b>Khi tạo tài khoản</b></td></tr>
-        <tr><td><q>chỉ tạo được tài khoản qua lời mời Tailscale, khi Wyckdelta mở đăng ký</q></td><td>Trang không nhận ra Tailscale của bạn. Bật Tailscale (xanh), mở đúng <b>https://wyckdelta.tail65e625.ts.net</b> (có https://, không dùng địa chỉ dạng số 100.x). Vẫn báo thì inbox Wyckdelta.</td></tr>
+        <tr><td><q>chỉ tạo được tài khoản qua lời mời Tailscale, khi Wyckdelta Chart mở đăng ký</q></td><td>Trang không nhận ra Tailscale của bạn. Bật Tailscale (xanh), mở đúng <b>https://wyckdelta.tail65e625.ts.net</b> (có https://, không dùng địa chỉ dạng số 100.x). Vẫn báo thì inbox Wyckdelta.</td></tr>
         <tr><td><q>tên đăng nhập đã có</q></td><td>Người khác đã dùng tên này: chọn tên khác.</td></tr>
         <tr><td><q>tên đăng nhập: 2-32 ký tự a-z 0-9 _ . -</q></td><td>Tên có dấu tiếng Việt, dấu cách ở giữa, ký tự khác (vd. @ của Gmail), hoặc ngắn hơn 2 / dài hơn 32 ký tự. Chỉ dùng chữ không dấu, số, dấu chấm, gạch dưới, gạch ngang.</td></tr>
         <tr><td><q>mật khẩu ít nhất 8 ký tự</q></td><td>Đặt mật khẩu dài hơn.</td></tr>
         <tr><td><q>Hai mật khẩu không giống nhau</q></td><td>Ô Nhập lại mật khẩu khác ô Mật khẩu: gõ lại cả hai.</td></tr>
         <tr><td><q>Tailscale này đã có tài khoản …: đăng nhập bằng tài khoản đó</q></td><td>Mỗi Gmail Tailscale chỉ 1 tài khoản. Đăng nhập bằng tài khoản đã có (xem ảnh ở trên).</td></tr>
-        <tr><td><q>tài khoản Tailscale này đã bị xoá khỏi Wyckdelta, inbox Wyckdelta</q></td><td>Inbox Wyckdelta.</td></tr>
+        <tr><td><q>tài khoản Tailscale này đã bị xoá khỏi Wyckdelta Chart, inbox Wyckdelta</q></td><td>Inbox Wyckdelta.</td></tr>
         <tr><td><q>quá nhiều lượt đăng ký, thử lại sau</q></td><td>Đợi một lúc rồi bấm lại.</td></tr>
         <tr><td><q>quá nhiều yêu cầu đăng nhập, thử lại sau 1 phút</q></td><td>Bấm quá nhiều lần trong 1 phút. Đợi 1 phút rồi bấm lại.</td></tr>
         <tr><td colspan="2"><b>Khi đăng nhập</b></td></tr>
@@ -705,7 +725,7 @@ footer p { margin: 6px 0; }
 <section class="step" id="sau-dang-nhap">
   <h2><i class="n alt">✓</i><span><small>SAU KHI ĐĂNG NHẬP</small>Bạn sẽ thấy gì</span></h2>
   <div class="anno">
-    <figure class="shot tall d-iphone d-android"><img src="img/huong-dan/sau-dang-nhap.webp" width="780" height="1688" loading="lazy" alt="Màn hình Wyckdelta sau khi đăng nhập trên điện thoại: biểu đồ nến vàng GC 1 phút, khối lượng, dòng giá mua bán, thanh dưới có mã GCZ6, khung 1m, nút vẽ, chỉ báo và menu"></figure>
+    <figure class="shot tall d-iphone d-android"><img src="img/huong-dan/sau-dang-nhap.webp" width="780" height="1688" loading="lazy" alt="Màn hình Wyckdelta Chart sau khi đăng nhập trên điện thoại: biểu đồ nến vàng GC 1 phút, khối lượng, dòng giá mua bán, thanh dưới có mã GCZ6, khung 1m, nút vẽ, chỉ báo và menu"></figure>
     <div>
       <p>Biểu đồ hiện ngay. <span class="d-iphone d-android">Thanh dưới cùng có:</span><span class="d-mac d-win">Bản máy tính chia làm 4 vùng:</span></p>
       <table class="m d-mac d-win">
@@ -722,7 +742,7 @@ footer p { margin: 6px 0; }
         <tr><td>•••</td><td>Loại biểu đồ (Nến, Footprint, Heatmap, GEX…), cảnh báo, danh sách theo dõi, <b>Cài đặt</b> (trong đó có ngôn ngữ, múi giờ) và <a href="#tai-khoan">Tài khoản</a>.</td></tr>
       </table>
       <div class="box note"><b>Phiên đăng nhập giữ 30 ngày kể từ lúc đăng nhập</b> trên thiết bị đó: trong thời gian này mở ra là vào thẳng biểu đồ. Hết 30 ngày, khi đổi mật khẩu, hoặc khi tài khoản dùng thử hết hạn thì phải đăng nhập lại. <span class="d-iphone">Biểu tượng trên màn hình chính có thể hỏi đăng nhập thêm một lần, dù Safari đã đăng nhập.</span> Mỗi thiết bị (điện thoại, máy tính) đăng nhập riêng một lần; bố cục, chỉ báo và hình vẽ của bạn tự đồng bộ giữa các thiết bị.</div>
-      <div class="box note"><b>Những lần sau</b> chỉ cần 2 việc: <span class="d-iphone d-android d-mac">bật Tailscale (công tắc xanh) → mở Wyckdelta.</span><span class="d-win">bấm đúp biểu tượng <b>Wyckdelta</b> trên màn hình. Tailscale tự bật cùng Windows; nếu nó đang tắt, app hiện nút <b>Bật Tailscale</b>.</span></div>
+      <div class="box note"><b>Những lần sau</b> chỉ cần 2 việc: <span class="d-iphone d-android d-mac">bật Tailscale (công tắc xanh) → mở Wyckdelta Chart.</span><span class="d-win">bấm đúp biểu tượng <b>Wyckdelta Chart</b> trên màn hình. Tailscale tự bật cùng Windows; nếu nó đang tắt, app hiện nút <b>Bật Tailscale</b>.</span></div>
     </div>
   </div>
 </section>
@@ -746,18 +766,18 @@ footer p { margin: 6px 0; }
 
 <!-- =================== iPhone / Android: màn hình chính =================== -->
 <section class="step d-iphone d-android" id="man-hinh-chinh">
-  <h2><i class="n alt">+</i><span><small>NÊN LÀM · 1 PHÚT</small>Đưa Wyckdelta ra màn hình chính</span></h2>
+  <h2><i class="n alt">+</i><span><small>NÊN LÀM · 1 PHÚT</small>Đưa Wyckdelta Chart ra màn hình chính</span></h2>
   <p>Để lần sau bấm một cái là mở, chạy toàn màn hình như app, và nhận được <b>thông báo giá</b>.</p>
   <ol class="s d-iphone">
-    <li>Đang mở Wyckdelta trong <b>Safari</b>, bấm nút <b>Chia sẻ</b> <span class="k">⬆︎</span> (ô vuông có mũi tên lên).</li>
+    <li>Đang mở Wyckdelta Chart trong <b>Safari</b>, bấm nút <b>Chia sẻ</b> <span class="k">⬆︎</span> (ô vuông có mũi tên lên).</li>
     <li>Kéo xuống, bấm <span class="k">Thêm vào MH chính</span> → <span class="k">Thêm</span>.</li>
-    <li>Từ nay mở bằng biểu tượng <b>Wyckdelta</b> trên màn hình chính.</li>
+    <li>Từ nay mở bằng biểu tượng <b>Wyckdelta Chart</b> trên màn hình chính.</li>
     <li>Khi máy hỏi cho phép thông báo → bấm <span class="k">Cho phép</span>.</li>
   </ol>
   <ol class="s d-android">
-    <li>Đang mở Wyckdelta trong <b>Chrome</b>, bấm dấu <span class="k">⋮</span> ở góc phải trên.</li>
+    <li>Đang mở Wyckdelta Chart trong <b>Chrome</b>, bấm dấu <span class="k">⋮</span> ở góc phải trên.</li>
     <li>Bấm <span class="k">Thêm vào màn hình chính</span> (hoặc <b>Cài đặt ứng dụng</b>).</li>
-    <li>Từ nay mở bằng biểu tượng <b>Wyckdelta</b> trên màn hình chính.</li>
+    <li>Từ nay mở bằng biểu tượng <b>Wyckdelta Chart</b> trên màn hình chính.</li>
     <li>Khi máy hỏi cho phép thông báo → bấm <span class="k">Cho phép</span>.</li>
   </ol>
   <div class="figs">
@@ -773,8 +793,8 @@ footer p { margin: 6px 0; }
     </div>
     <div class="fig">
       <div class="phone"><div class="home"><div><div class="ap"></div><span>Ảnh</span></div><div><div class="ap"></div><span>Tin nhắn</span></div><div><div class="ap"></div><span>Tailscale</span></div>
-        <div><img class="hl" src="img/logo.png" alt=""><span>Wyckdelta</span></div></div></div>
-      <div class="cap">Kết quả: có biểu tượng Wyckdelta</div>
+        <div><img class="hl" src="img/logo.png" alt=""><span>Wyckdelta Chart</span></div></div></div>
+      <div class="cap">Kết quả: có biểu tượng Wyckdelta Chart</div>
     </div>
   </div>
 </section>
@@ -782,9 +802,9 @@ footer p { margin: 6px 0; }
 <section class="step d-win" id="win-menu">
   <h2><i class="n q">☰</i><span><small>MENU TRÊN CÙNG CỬA SỔ</small>Các nút có sẵn trong app</span></h2>
   <table class="m">
-    <tr><td>Wyckdelta → Tải lại trang</td><td>Biểu đồ đứng hình hoặc lỗi hiển thị.</td></tr>
-    <tr><td>Wyckdelta → Kiểm tra kết nối</td><td>Quay lại màn hình kiểm tra 4 bước.</td></tr>
-    <tr><td>Wyckdelta → Mở bằng trình duyệt</td><td>Mở Wyckdelta bằng Chrome / Edge thay vì app.</td></tr>
+    <tr><td>Wyckdelta Chart → Tải lại trang</td><td>Biểu đồ đứng hình hoặc lỗi hiển thị.</td></tr>
+    <tr><td>Wyckdelta Chart → Kiểm tra kết nối</td><td>Quay lại màn hình kiểm tra 4 bước.</td></tr>
+    <tr><td>Wyckdelta Chart → Mở bằng trình duyệt</td><td>Mở Wyckdelta Chart bằng Chrome / Edge thay vì app.</td></tr>
     <tr><td>Trợ giúp → Hướng dẫn sử dụng</td><td>Mở lại tài liệu hướng dẫn.</td></tr>
     <tr><td>Trợ giúp → Sao chép thông tin gửi chủ</td><td>Sao chép tình trạng máy bạn để dán vào tin nhắn gửi Wyckdelta.</td></tr>
   </table>
@@ -794,14 +814,14 @@ footer p { margin: 6px 0; }
 <section class="step" id="loi">
   <h2><i class="n q">?</i><span><small>NẾU KHÔNG VÀO ĐƯỢC</small>Lỗi hay gặp</span></h2>
   <div class="faq d-win"><b>Không có nút “Vẫn chạy”, hoặc phần mềm diệt virus xoá Wyckdelta.exe</b>
-    <span>Máy công ty thường chặn app lạ. Nếu máy vẫn cho cài Tailscale: bấm tab <a href="?d=mac#buoc-1" data-go="mac">Mac / máy khác</a> ở trên, cài Tailscale bản Windows rồi mở Wyckdelta bằng Chrome hoặc Edge. Nếu máy chặn cả Tailscale: dùng điện thoại hoặc máy cá nhân.</span></div>
+    <span>Máy công ty thường chặn app lạ. Nếu máy vẫn cho cài Tailscale: bấm tab <a href="?d=mac#buoc-1" data-go="mac">Mac / máy khác</a> ở trên, cài Tailscale bản Windows rồi mở Wyckdelta Chart bằng Chrome hoặc Edge. Nếu máy chặn cả Tailscale: dùng điện thoại hoặc máy cá nhân.</span></div>
   <div class="faq d-win"><b>App quay mãi ở dòng 2, trình duyệt hiện trang “Machines” / “Add your first device”</b>
     <span>Tài khoản Tailscale đã tạo nhưng máy tính chưa nối. Trong app bấm <span class="k">Mở lại trang đăng nhập</span> → trên trang mở ra bấm <span class="k">Connect</span>. Xem <a href="#win-trang-machines">ảnh hướng dẫn</a>.</span></div>
   <div class="faq d-win"><b>“Máy không chạy được Tailscale”, không thấy biểu tượng Tailscale</b>
-    <span>Khởi động lại máy rồi mở lại Wyckdelta; tắt VPN khác (Cloudflare WARP, FortiClient…). Biểu tượng Tailscale nằm sau mũi tên ^ cạnh đồng hồ. Xem <a href="#win-ket">các bước</a>.</span></div>
+    <span>Khởi động lại máy rồi mở lại Wyckdelta Chart; tắt VPN khác (Cloudflare WARP, FortiClient…). Biểu tượng Tailscale nằm sau mũi tên ^ cạnh đồng hồ. Xem <a href="#win-ket">các bước</a>.</span></div>
   <div class="faq d-win"><b>Bước “Nhận lời mời” mãi không có dấu ✓</b>
     <span>Bạn chưa bấm Accept, hoặc mở link mời bằng Gmail khác với Gmail của Tailscale. Nhắn Wyckdelta xin link mới, mở bằng đúng Gmail. Link chỉ dùng được 1 lần.</span></div>
-  <div class="faq d-win"><b>App báo “Máy chủ Wyckdelta đang tạm tắt”</b>
+  <div class="faq d-win"><b>App báo “Máy chủ Wyckdelta Chart đang tạm tắt”</b>
     <span>Không phải lỗi của bạn. Cứ để app mở, app tự vào lại khi máy chủ bật.</span></div>
   <div class="faq"><b>Trang quay mãi, trang trắng, hoặc báo “không tìm thấy máy chủ” / “không thể kết nối”</b>
     <span>Gần như luôn là do Tailscale đang tắt. Mở app Tailscale, bật cho xanh (Connected), rồi tải lại trang. Kiểm tra địa chỉ gõ <b>đủ</b>: <b>https://wyckdelta.tail65e625.ts.net</b> (thiếu phần sau chữ “wyckdelta” sẽ không mở được).</span></div>
@@ -825,24 +845,26 @@ footer p { margin: 6px 0; }
 <!-- =================== Hỏi đáp =================== -->
 <section class="step" id="hoi-dap">
   <h2><i class="n q">i</i><span><small>CÂU HỎI THƯỜNG GẶP</small>Hỏi đáp</span></h2>
+  <div class="faq"><b>Wyckdelta Chart có phải EA / bot tự giao dịch không?</b>
+    <span>Không. Wyckdelta Chart là phần mềm biểu đồ: footprint, heatmap sổ lệnh, lệnh lớn, iceberg và các mức GEX. Không đặt lệnh thay bạn, không có EA hay bot để tải. Bạn tự đọc biểu đồ và tự quyết định.</span></div>
   <div class="faq"><b>Vì sao phải cài Tailscale?</b>
-    <span>Wyckdelta không mở công khai trên Internet. Tailscale tạo một đường riêng, mã hoá, giữa máy bạn và máy chủ Wyckdelta, nên chỉ người được mời mới vào được.</span></div>
+    <span>Wyckdelta Chart không mở công khai trên Internet. Tailscale tạo một đường riêng, mã hoá, giữa máy bạn và máy chủ Wyckdelta Chart, nên chỉ người được mời mới vào được.</span></div>
   <div class="faq"><b>Tailscale có xem được dữ liệu của tôi không? Có làm chậm mạng không?</b>
-    <span>Tailscale chỉ dùng cho đường tới Wyckdelta; web, mạng xã hội và các app khác của bạn vẫn đi như bình thường. Kết nối được mã hoá đầu cuối.</span></div>
+    <span>Tailscale chỉ dùng cho đường tới Wyckdelta Chart; web, mạng xã hội và các app khác của bạn vẫn đi như bình thường. Kết nối được mã hoá đầu cuối.</span></div>
   <div class="faq"><b>Có mất phí gì không?</b>
-    <span>Tailscale miễn phí cho cá nhân, không cần thẻ. Tài khoản Wyckdelta dùng thử miễn phí, hiện là 30 ngày (số ngày hiện ở dòng xanh khi tạo tài khoản).</span></div>
+    <span>Tailscale miễn phí cho cá nhân, không cần thẻ. Tài khoản Wyckdelta Chart dùng thử miễn phí, hiện là 30 ngày (số ngày hiện ở dòng xanh khi tạo tài khoản).</span></div>
   <div class="faq"><b>Dùng trên nhiều máy được không?</b>
-    <span>Được. Cài Tailscale trên máy thứ hai và đăng nhập bằng <b>đúng Gmail</b> đã nhận link mời, máy đó tự thấy máy chủ Wyckdelta, không cần link mới. Sau đó mở <b>https://wyckdelta.tail65e625.ts.net</b> và đăng nhập bằng tài khoản đã tạo (không tạo thêm tài khoản); bố cục và hình vẽ của bạn đi theo tài khoản.</span></div>
+    <span>Được. Cài Tailscale trên máy thứ hai và đăng nhập bằng <b>đúng Gmail</b> đã nhận link mời, máy đó tự thấy máy chủ Wyckdelta Chart, không cần link mới. Sau đó mở <b>https://wyckdelta.tail65e625.ts.net</b> và đăng nhập bằng tài khoản đã tạo (không tạo thêm tài khoản); bố cục và hình vẽ của bạn đi theo tài khoản.</span></div>
   <div class="faq"><b>Tạo thêm tài khoản thứ hai được không?</b>
-    <span>Không. Mỗi Gmail Tailscale chỉ tạo được 1 tài khoản Wyckdelta. Cần thêm ngày dùng thì inbox Wyckdelta để gia hạn.</span></div>
-  <div class="faq"><b>Tại sao phải đăng nhập hai lần (Tailscale rồi Wyckdelta)?</b>
-    <span>Gmail đăng nhập Tailscale là để mở đường vào máy chủ. Tên + mật khẩu Wyckdelta là tài khoản của bạn trong app (bố cục, cảnh báo giá, hạn dùng thử). Hai việc này độc lập.</span></div>
-  <div class="faq"><b>Quên mật khẩu Wyckdelta?</b>
+    <span>Không. Mỗi Gmail Tailscale chỉ tạo được 1 tài khoản Wyckdelta Chart. Cần thêm ngày dùng thì inbox Wyckdelta để gia hạn.</span></div>
+  <div class="faq"><b>Tại sao phải đăng nhập hai lần (Tailscale rồi Wyckdelta Chart)?</b>
+    <span>Gmail đăng nhập Tailscale là để mở đường vào máy chủ. Tên + mật khẩu Wyckdelta Chart là tài khoản của bạn trong app (bố cục, cảnh báo giá, hạn dùng thử). Hai việc này độc lập.</span></div>
+  <div class="faq"><b>Quên mật khẩu Wyckdelta Chart?</b>
     <span>Nhắn Wyckdelta để đặt lại mật khẩu, rồi vào <a href="#tai-khoan">Tài khoản → Đổi mật khẩu</a> để đặt mật khẩu của riêng bạn.</span></div>
   <div class="faq"><b>Không xem nữa thì tắt thế nào?</b>
     <span>Tắt công tắc trong app Tailscale (hoặc gỡ app). Lần sau muốn xem chỉ cần bật lại.</span></div>
-  <div class="faq"><b>Wyckdelta có đặt lệnh hay giữ tiền của tôi không?</b>
-    <span>Không. Wyckdelta chỉ để xem biểu đồ và dữ liệu, không có nút mua / bán, không kết nối tài khoản giao dịch của bạn.</span></div>
+  <div class="faq"><b>Wyckdelta Chart có đặt lệnh hay giữ tiền của tôi không?</b>
+    <span>Không. Wyckdelta Chart chỉ để xem biểu đồ và dữ liệu, không có nút mua / bán, không kết nối tài khoản giao dịch của bạn.</span></div>
 </section>
 
 <section class="final" aria-labelledby="final-h">
@@ -857,7 +879,7 @@ footer p { margin: 6px 0; }
 </main>
 
 <footer class="wrap">
-  <p>Wyckdelta chỉ để xem dữ liệu và phân tích, không phải lời khuyên đầu tư. Giao dịch phái sinh và tài sản số có rủi ro cao.</p>
+  <p>Wyckdelta Chart chỉ để xem dữ liệu và phân tích, không phải lời khuyên đầu tư. Giao dịch phái sinh và tài sản số có rủi ro cao.</p>
   <p>Tài khoản của riêng bạn, vui lòng không chia sẻ mật khẩu. Tailscale, App Store, Google Play, Windows là tên của các chủ sở hữu tương ứng.</p>
 </footer>
 

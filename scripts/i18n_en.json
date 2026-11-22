@@ -933,5 +933,17 @@
  "② Bấm": "② Click",
  "✔ Xong Bước 1 khi:": "✔ Step 1 is done when:",
  "✔ Xong Bước 2 khi:": "✔ Step 2 is done when:",
- "✔ Xong Bước 3 khi:": "✔ Step 3 is done when:"
+ "✔ Xong Bước 3 khi:": "✔ Step 3 is done when:",
+ "Bán": "Short",
+ "Chart Vàng trên Wyckdelta Chart: heatmap sổ lệnh, bong bóng lệnh lớn, nhãn iceberg ICE và các mức GEX": "Gold chart on Wyckdelta Chart: order book heatmap, large-order bubbles, ICE iceberg labels and GEX levels",
+ "Cài đặt Wyckdelta Chart · Hướng dẫn từng bước": "Wyckdelta Chart setup · Step-by-step guide",
+ "Cả 4 dòng có dấu tích xanh, dòng 4 ghi Kết nối tốt (bảo mật HTTPS), nút lớn Mở Wyckdelta Chart được đánh số 1": "All 4 rows have a green tick, row 4 says the connection is good (secure HTTPS), the big Open Wyckdelta Chart button is marked 1",
+ "Cửa sổ Kết nối Wyckdelta Chart lúc mới mở, bước 1 Cài Tailscale": "The Connect Wyckdelta Chart window when first opened, step 1 Install Tailscale",
+ "Hướng dẫn cài đặt và đăng nhập Wyckdelta Chart trên iPhone, Android, Windows và Mac: 3 bước, khoảng 5 phút, chỉ làm một lần.": "How to install and sign in to Wyckdelta Chart on iPhone, Android, Windows and Mac: 3 steps, about 5 minutes, done only once.",
+ "Màn hình Wyckdelta Chart sau khi đăng nhập trên điện thoại: biểu đồ nến vàng GC 1 phút, khối lượng, dòng giá mua bán, thanh dưới có mã GCZ6, khung 1m, nút vẽ, chỉ báo và menu": "The Wyckdelta Chart screen after signing in on a phone: GC gold 1-minute candlestick chart, volume, buy / sell price flow, and a bottom bar with the symbol GCZ6, the 1m timeframe, and the draw, indicator and menu buttons",
+ "Trang Tạo tài khoản Wyckdelta Chart: dòng xanh Bạn vào bằng Tailscale kèm Gmail và số ngày dùng thử, ô Tên đăng nhập, Tên hiển thị, Mật khẩu, Nhập lại mật khẩu, nút xanh Tạo tài khoản và vào chart": "Wyckdelta Chart Create an account page: green line showing the Tailscale Gmail and trial days, Username, Display name, Password and Re-enter password boxes, blue Create account and open the chart button",
+ "Trang đăng nhập Wyckdelta Chart với dòng đỏ: Tailscale đã có tài khoản, đăng nhập bằng tài khoản đó; ô Tên đăng nhập đã điền sẵn, ô Mật khẩu, nút Đăng nhập": "Wyckdelta Chart sign-in page with a red line: this Tailscale login already has an account, sign in with it; Username filled in, Password box, Sign in button",
+ "Trang đăng nhập Wyckdelta Chart: logo, tiêu đề Đăng nhập, ô Tên đăng nhập, ô Mật khẩu, nút Đăng nhập màu xanh, nút chọn ngôn ngữ ở góc phải trên": "The Wyckdelta Chart sign-in page: logo, Sign in heading, Username field, Password field, blue Sign in button, and the language button in the top right corner",
+ "Wyckdelta Chart · Order flow + GEX trên một biểu đồ": "Wyckdelta Chart · Order flow + GEX on one chart",
+ "Wyckdelta Chart: footprint, heatmap sổ lệnh, iceberg và các mức GEX trên một biểu đồ cho Vàng, ES, NQ, crypto. Kèm nhịp thị trường miễn phí: COT, tồn kho dầu, vĩ mô, lịch kinh tế, tin tức.": "Wyckdelta Chart: footprint, order book heatmap, iceberg and GEX levels on one chart for Gold, ES, NQ, crypto. Plus a free market pulse: COT, oil inventories, macro, economic calendar, news."
 }
