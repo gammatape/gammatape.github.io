@@ -1,4 +1,4 @@
 {
- "payload": "{\"app\":\"wyckdelta-windows\",\"version\":\"1.3.4\",\"url\":\"https://wyckdelta.com/download/Wyckdelta.exe\",\"sha256\":\"abea45f988facabe745144c01f4aa5e91be480ad5cc230ee2cf49de8fce5c197\",\"size\":17896888}",
- "sig": "RAcaU5L1kSZshqhkcMWIqGHdtGPip2IZqpn5SA2+l2XV9S1IBVqckMg+jEKbq+V/etT2PVYSFWZdhqYrW3j8BQ=="
+ "payload": "{\"app\":\"wyckdelta-windows\",\"version\":\"1.3.5\",\"url\":\"https://wyckdelta.com/download/Wyckdelta.exe\",\"sha256\":\"cfd91187f797bdcdc30cf4f35dbe1f8a825b43acdd7fe31026ec82c94175b21b\",\"size\":17897163}",
+ "sig": "VEfBHcg7bTjTnYWW9dZ2398+fT59YeHKws8M89ZBME1qWCloCvZ9WRTK+5ue9oq5XEU2F8LHBOXZ7Y1auiDNDQ=="
 }
