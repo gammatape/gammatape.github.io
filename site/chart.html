@@ -46,7 +46,7 @@ a { color: inherit; }
 .logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 19px; letter-spacing: -.3px; }
 .logo img { width: 30px; height: 30px; }
 .langsw { display: inline-flex; border: 1px solid var(--line2); border-radius: 10px; overflow: hidden; }
-.langsw button { min-width: 40px; min-height: 40px; border: 0; background: transparent; color: var(--muted); font: 700 13px/1 inherit; cursor: pointer; }
+.langsw button { min-width: 40px; min-height: 40px; border: 0; background: transparent; color: var(--muted); font-family: inherit; font-size: 13px; font-weight: 700; line-height: 1; cursor: pointer; }
 .langsw button[aria-pressed="true"], .langsw button.on { background: var(--panel2); color: var(--text); }
 main.wrap { padding-top: 28px; padding-bottom: 48px; }
 h1 { font-size: 28px; line-height: 1.2; letter-spacing: -.4px; margin: 0 0 8px; }
@@ -58,12 +58,17 @@ h1 { font-size: 28px; line-height: 1.2; letter-spacing: -.4px; margin: 0 0 8px; 
 .case.first { border-color: color-mix(in srgb, var(--gold) 45%, var(--line)); }
 .acts { display: flex; flex-wrap: wrap; gap: 8px; }
 .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 9px 16px; border-radius: 10px;
-  border: 1px solid var(--line2); background: var(--panel2); color: var(--text); font: 600 15px/1.2 inherit; text-decoration: none; cursor: pointer; }
+  border: 1px solid var(--line2); background: var(--panel2); color: var(--text); font-family: inherit; font-size: 15px; font-weight: 600;
+  line-height: 1.2; text-decoration: none; cursor: pointer; }
 .btn.gold { background: #f5b301; border-color: #f5b301; color: var(--on-gold); }
 @media (hover: hover) and (pointer: fine) { .btn:hover { border-color: var(--muted); } .btn.gold:hover { background: #ffc21a; border-color: #ffc21a; } }
 .addr { font-family: ui-monospace, Consolas, monospace; font-size: 14px; overflow-wrap: anywhere; color: var(--text); }
 .foot { color: var(--muted); font-size: 13px; margin-top: 24px; }
 [hidden] { display: none !important; }
+.auto { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 14px 16px; margin: 0 0 16px; border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--gold) 45%, var(--line)); background: var(--gold-soft); }
+.auto p { margin: 0; flex: 1 1 220px; font-weight: 600; }
+.auto .acts { flex: none; }
 @media (max-width: 480px) { h1 { font-size: 24px; } .acts .btn { flex: 1 1 100%; } }
 </style>
 </head>
@@ -79,12 +84,21 @@ h1 { font-size: 28px; line-height: 1.2; letter-spacing: -.4px; margin: 0 0 8px; 
   <h1>Mở Wyckdelta Chart</h1>
   <p class="lead">Biểu đồ order flow + GEX của Wyckdelta. Chọn đúng trường hợp của bạn.</p>
 
+  <div class="auto" id="auto" role="status" hidden>
+    <p>Đang mở Wyckdelta Chart sau 2 giây…</p>
+    <div class="acts">
+      <button class="btn" type="button" id="auto-cancel">Huỷ</button>
+      <button class="btn" type="button" id="auto-off">Không tự mở nữa</button>
+    </div>
+  </div>
+  <p class="auto" id="auto-stopped" role="status" hidden>Đã dừng. Lần sau trang sẽ không tự mở biểu đồ nữa.</p>
+
   <div class="cases">
     <section class="case first">
       <h2>Đã có tài khoản</h2>
       <p>Bật Tailscale (công tắc xanh) rồi bấm nút dưới. Máy Windows: mở app Wyckdelta Chart trên màn hình Desktop.</p>
       <div class="acts">
-        <a class="btn gold" href="https://wyckdelta.tail65e625.ts.net/">Mở Wyckdelta Chart</a>
+        <a class="btn gold" href="https://wyckdelta.tail65e625.ts.net/" id="open">Mở Wyckdelta Chart</a>
       </div>
       <p class="addr" style="margin:10px 0 0">https://wyckdelta.tail65e625.ts.net</p>
     </section>
@@ -110,6 +124,30 @@ h1 { font-size: 28px; line-height: 1.2; letter-spacing: -.4px; margin: 0 0 8px; 
 
 <!-- No reachability probe: the chart server sends Cross-Origin-Resource-Policy: same-origin (any cross-site fetch or
      image is refused) and Chrome may ask for local-network permission; a plain link (top-level navigation) has neither. -->
+<script>
+// Returning visitors (like TradingView's /chart/ opening the last layout): once someone clicked "Open Wyckdelta Chart"
+// here, the next visit opens it after 2 s, with Cancel and "stop opening by itself". Per-browser memory only
+// (localStorage); without it the page simply shows the three cases. location.replace keeps this page out of the back
+// history, so Back from a chart that does not load does not bounce here again.
+(function () {
+  var KEY = "wd-chart-auto", CHART = "https://wyckdelta.tail65e625.ts.net/", timer = null;
+  var $ = function (id) { return document.getElementById(id); };
+  function get() { try { return localStorage.getItem(KEY) === "1"; } catch (e) { return false; } }
+  function set(on) { try { if (on) localStorage.setItem(KEY, "1"); else localStorage.removeItem(KEY); } catch (e) {} }
+  function stop() { if (timer) { clearTimeout(timer); timer = null; } $("auto").hidden = true; }
+  $("open").addEventListener("click", function () { set(true); });
+  $("auto-cancel").addEventListener("click", stop);
+  $("auto-off").addEventListener("click", function () { set(false); stop(); $("auto-stopped").hidden = false; });
+  function start() {
+    if (!get() || /[?&]stay=1\b/.test(location.search)) return;
+    $("auto").hidden = false;
+    timer = setTimeout(function () { location.replace(CHART); }, 2000);
+  }
+  // back/forward cache: a page restored from history must not jump away again by itself
+  window.addEventListener("pageshow", function (e) { if (e.persisted) stop(); });
+  start();
+})();
+</script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "5df5afcbbd9046bf8af0256168f49f57"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

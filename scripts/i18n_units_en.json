@@ -533,5 +533,9 @@
  "{0}Đã có tài khoản{/0}{1}Mở Wyckdelta Chart{/1}": "{0}Have an account{/0}{1}Open Wyckdelta Chart{/1}",
  "Đã có tài khoản": "Have an account",
  "Biểu đồ order flow + GEX của Wyckdelta. Chọn đúng trường hợp của bạn.": "Wyckdelta's order flow + GEX charts. Pick the case that fits you.",
- "Bật Tailscale (công tắc xanh) rồi bấm nút dưới. Máy Windows: mở app Wyckdelta Chart trên màn hình Desktop.": "Turn Tailscale on (green switch), then click the button below. On Windows: open the Wyckdelta Chart app on your desktop."
+ "Bật Tailscale (công tắc xanh) rồi bấm nút dưới. Máy Windows: mở app Wyckdelta Chart trên màn hình Desktop.": "Turn Tailscale on (green switch), then click the button below. On Windows: open the Wyckdelta Chart app on your desktop.",
+ "Huỷ": "Cancel",
+ "Không tự mở nữa": "Stop opening by itself",
+ "Đang mở Wyckdelta Chart sau 2 giây…": "Opening Wyckdelta Chart in 2 seconds…",
+ "Đã dừng. Lần sau trang sẽ không tự mở biểu đồ nữa.": "Stopped. Next time this page will not open the chart by itself."
 }
