@@ -486,6 +486,15 @@ footer details { margin-top: 8px; }
 
 /* ---- Crypto, macro rows with trend, news by time (2026-11-15) ---- */
 @media (min-width: 900px) { .four { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* COT card on a one- / two-market page: the tiles share the whole row instead of leaving 2/3 or 1/3 of it empty */
+.four[data-n="1"] { grid-template-columns: minmax(0, 1fr); }
+.four[data-n="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* quote + chart at the top of a one-market page (TradingView Symbol Overview embed fills its box) */
+.tv-quote { height: 420px; }
+.tv-quote .tradingview-widget-container, .tv-quote iframe { width: 100%; height: 100%; }
+.tv-quote iframe { color-scheme: normal; }
+@media (max-width: 899px) { .tv-quote { height: 340px; } }
+.quote .note { margin: 10px 0 0; }
 .coins { display: grid; gap: 10px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 @media (max-width: 600px) { .coins { grid-template-columns: 1fr; } }
 .coin { background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; padding: 12px; min-width: 0; }

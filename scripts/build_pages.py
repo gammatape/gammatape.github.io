@@ -326,10 +326,30 @@ def P(path, cat, title, h1, desc, body, *, intro="", kicker="", data=True, ticke
                 ticker=ticker, pulse=pulse, note=note, hero=hero, fold=fold, assets=assets, news=news, final=final)
 
 
+# Quote + chart at the top of a one-market page, as every large finance portal does. TradingView Symbol Overview embed
+# (licensed, free data only: https://www.tradingview.com/widget-docs/markets/ lists OANDA / FOREX.com CFDs and Binance,
+# not CME), so the page shows spot / CFD prices and says they are not the CME futures. Symbols: app.js QUOTE_SYMS.
+QUOTE_SRC = {
+    "GC": "Vàng giao ngay XAU/USD (OANDA)",
+    "ES NQ": "CFD chỉ số S&P 500 và Nasdaq 100 (FOREX.com)",
+    "CL": "Dầu WTI (TVC:USOIL, cùng mã với dải giá trên cùng)",
+    "BTC ETH": "Giá giao ngay BTC/USDT và ETH/USDT trên Binance",
+}
+
+
+def quote_card(assets):
+    return (f'<section class="card full quote" id="quote">\n'
+            f'  <div class="card-head"><h3>Giá và biểu đồ</h3><span class="badge">TradingView</span></div>\n'
+            f'  <div class="tv-quote" id="tv-quote" data-i18n-skip translate="no"></div>\n'
+            f'  <p class="note">{QUOTE_SRC[assets]}, qua widget TradingView. Đây là giá tham khảo, không phải giá '
+            f'hợp đồng tương lai CME mà báo cáo COT bên dưới dùng; hai giá lệch nhau theo chênh lệch cơ sở (basis).</p>\n'
+            f'</section>')
+
+
 def asset_page(path, title, h1, intro, assets, news, extra):
     rel = [("Vị thế quỹ lớn", "/vi-the/cot/", "Cả 6 mã"), ("Lịch tin tuần", "/vi-mo/lich-tin/", "Tin USD giờ VN"),
            ("Tin tức", news_url(news), "Tin của mã này")]
-    return P(path, "thi-truong", title, h1, intro, grid(*extra) + WATCH[assets] + related(*rel),
+    return P(path, "thi-truong", title, h1, intro, grid(quote_card(assets), *extra) + WATCH[assets] + related(*rel),
              intro=intro, kicker="Thị trường", assets=assets, news=news, ticker=True)
 
 

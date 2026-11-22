@@ -103,10 +103,11 @@ function selectAsset(k, focus) { state.asset = k; save(); renderFour(); if (focu
 function renderFour() {
   if (!$("four")) return;
   const cot = market?.cot, sc = market?.scenarios;
-  if (!cot) { $("four").replaceChildren(el("div", { className: "empty", textContent: "Chưa có dữ liệu COT." })); return; }
+  if (!cot) { $("four").dataset.n = 1; $("four").replaceChildren(el("div", { className: "empty", textContent: "Chưa có dữ liệu COT." })); return; }
   $("cot-badge").textContent = `COT ngày ${vnDate(new Date(cot.report_date + "T12:00:00Z"))}`; $("cot-badge").className = "badge ok";
   const keys = Object.keys(ASSETS).filter(k => cot.assets[k] && (!PAGE_ASSETS || PAGE_ASSETS.includes(k)));
   if (!keys.includes(state.asset)) state.asset = keys[0];
+  $("four").dataset.n = keys.length;   // one / two markets: the tiles share the whole row
   $("four").replaceChildren(...keys.map((k, i) => {
     const a = cot.assets[k], [c, label] = BIAS(sc?.[k]?.bias ?? 0), on = k === state.asset;
     const card = el("button", { type: "button", role: "tab", id: "tab-" + k, className: "mk", ariaSelected: String(on), tabIndex: on ? 0 : -1,
@@ -570,8 +571,33 @@ function renderTicker() {
   w.append(sc);
   box.replaceChildren(w);
 }
-renderTicker();
-new MutationObserver(renderTicker).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+// Quote + chart on a one-market page: TradingView Symbol Overview (licensed embed, free data: OANDA / FOREX.com CFDs,
+// Binance; https://www.tradingview.com/widget-docs/markets/). Config keys as in the widget's own preview.
+const QUOTE_SYMS = {
+  GC: [[I18N.t("Vàng giao ngay", "Gold spot"), "OANDA:XAUUSD|1D"]],
+  "ES NQ": [["S&P 500", "FOREXCOM:SPXUSD|1D"], ["Nasdaq 100", "FOREXCOM:NSXUSD|1D"]],
+  CL: [[I18N.t("Dầu WTI", "WTI crude"), "TVC:USOIL|1D"]],   // same symbol as the ticker, so the page shows one WTI price
+  "BTC ETH": [["Bitcoin", "BINANCE:BTCUSDT|1D"], ["Ether", "BINANCE:ETHUSDT|1D"]],
+};
+function renderQuote() {
+  const box = $("tv-quote"), syms = QUOTE_SYMS[BODY.assets];
+  if (!box || !syms) return;
+  const light = document.documentElement.dataset.theme === "light";
+  const w = el("div", { className: "tradingview-widget-container" }, el("div", { className: "tradingview-widget-container__widget" }));
+  const sc = el("script", { src: "https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js", async: true });
+  sc.textContent = JSON.stringify({
+    symbols: syms, chartOnly: false, width: "100%", height: "100%", autosize: true,
+    colorTheme: light ? "light" : "dark", isTransparent: true, backgroundColor: "rgba(0, 0, 0, 0)",
+    locale: I18N.en ? "en" : "vi_VN", chartType: "area", lineWidth: 2, showVolume: false, showMA: false,
+    hideDateRanges: false, hideMarketStatus: false, hideSymbolLogo: false, scalePosition: "right", scaleMode: "Normal",
+    fontSize: "10", headerFontSize: "medium", noTimeScale: false, valuesTracking: "1", changeMode: "price-and-percent",
+    dateRanges: ["1d|1", "1m|30", "3m|60", "12m|1D", "60m|1W", "all|1M"],
+  });
+  w.append(sc);
+  box.replaceChildren(w);
+}
+renderTicker(); renderQuote();
+new MutationObserver(() => { renderTicker(); renderQuote(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
 // ---------- App shell: section rail with flyouts (PC), drawer with folding sections (phone) ----------
 const wide = matchMedia("(min-width: 1100px)");
