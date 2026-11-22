@@ -8,7 +8,7 @@
 (() => {
 'use strict';
 const KEY = 'wd-lang';
-const DICT_V = 'e944df8c9f';  // i18n_en.js version, written by scripts/i18n_build.py
+const DICT_V = '1ab7166e24';  // i18n_en.js version, written by scripts/i18n_build.py
 function readLang() {
   try {
     const q = new URLSearchParams(location.search).get('lang');
@@ -47,7 +47,7 @@ if (LANG !== 'EN') return;
 // The dictionary is loaded only for English readers; i18n_en.js calls WD_I18N.setup() once it has run.
 let ready = false;
 API.setup = () => { if (!ready && window.WD_I18N_EN) { ready = true; setup(); } };
-if (window.WD_I18N_EN) API.setup(); else document.write('<script src="i18n_en.js?v=' + DICT_V + '"><\/script>');
+if (window.WD_I18N_EN) API.setup(); else document.write('<script src="/i18n_en.js?v=' + DICT_V + '"><\/script>');
 
 function setup() {
 const DICT = new Map();

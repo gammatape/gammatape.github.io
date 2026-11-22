@@ -3,684 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Wyckdelta Chart · Order flow + GEX trên một biểu đồ</title>
+<title>Wyckdelta · Order flow + GEX, nhịp thị trường mỗi ngày</title>
 <meta name="description" content="Wyckdelta Chart: footprint, heatmap sổ lệnh, iceberg và các mức GEX trên một biểu đồ cho Vàng, ES, NQ, crypto. Kèm nhịp thị trường miễn phí: COT, tồn kho dầu, vĩ mô, lịch kinh tế, tin tức.">
 <meta name="theme-color" content="#0b0f17">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://wyckdelta.com/">
 <link rel="canonical" href="https://wyckdelta.com/">
 <meta property="og:site_name" content="Wyckdelta">
-<meta property="og:title" content="Wyckdelta Chart · Order flow + GEX trên một biểu đồ">
-<meta property="og:description" content="Dòng tiền thật và tường giá của dealer trên một biểu đồ, cho Vàng, ES, NQ, crypto. Nhịp thị trường miễn phí mỗi ngày.">
+<meta property="og:title" content="Wyckdelta · Order flow + GEX, nhịp thị trường mỗi ngày">
+<meta property="og:description" content="Wyckdelta Chart: footprint, heatmap sổ lệnh, iceberg và các mức GEX trên một biểu đồ cho Vàng, ES, NQ, crypto. Kèm nhịp thị trường miễn phí: COT, tồn kho dầu, vĩ mô, lịch kinh tế, tin tức.">
 <meta property="og:image" content="https://wyckdelta.com/img/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="manifest" href="manifest.webmanifest">
-<script src="i18n.js?v=1"></script>
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="icon" href="img/favicon-16.svg" type="image/svg+xml">
-<link rel="icon" href="img/favicon-32.png" sizes="32x32" type="image/png">
-<link rel="apple-touch-icon" href="img/icon-180.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<script src="/i18n.js?v=2"></script>
+<script>try { if (localStorage.getItem("gt-theme") === "light") document.documentElement.dataset.theme = "light"; } catch (e) {}</script>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/img/favicon-16.svg" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/img/icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-/* Brand tokens (Wyckdelta palette). Dark is the default; light is opt-in. */
-:root {
-  color-scheme: dark;
-  --bg: #0b0f17; --bg2: #0e1420; --panel: #121826; --panel2: #161e2e; --line: #1f2a3d; --line2: #2a3650;
-  --text: #e8edf5; --muted: #8a96ab; --faint: #7d889c;
-  --green: #22c55e; --gold: #f5b301; --red: #ef4444; --warn: #f59e0b;
-  --green-soft: rgba(34,197,94,.14); --gold-soft: rgba(245,179,1,.14); --red-soft: rgba(239,68,68,.14);
-  --on-gold: #111; --shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 20px 50px rgba(0,0,0,.35);
-  --track: #1b2436; --grid: #1c2536; --zero: #3a4763;
-}
-:root[data-theme="light"] {
-  color-scheme: light;
-  --bg: #f5f7fa; --bg2: #eef1f6; --panel: #ffffff; --panel2: #f8fafc; --line: #e2e7ef; --line2: #cfd7e3;
-  --text: #0f1724; --muted: #4f5a6c; --faint: #5b6577;
-  --green: #15803d; --gold: #8a6100; --red: #dc2626; --warn: #c2410c;
-  --green-soft: rgba(21,128,61,.10); --gold-soft: rgba(245,179,1,.18); --red-soft: rgba(220,38,38,.10);
-  --on-gold: #111; --shadow: 0 1px 2px rgba(15,23,36,.06), 0 10px 30px rgba(15,23,36,.06);
-  --track: #e6eaf0; --grid: #e8ecf2; --zero: #b4bfd0;
-}
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 112px; -webkit-text-size-adjust: 100%; }
-@media (min-width: 900px) { html { scroll-padding-top: 72px; } }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
-body { margin: 0; background: var(--bg); color: var(--text);
-  font: 15.5px/1.6 "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-a { color: inherit; }
-img { max-width: 100%; }
-.wrap { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
-.num { font-variant-numeric: tabular-nums; }
-.up { color: var(--green); } .down { color: var(--red); } .muted { color: var(--muted); }
-:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
-
-/* Buttons: one style with two variants */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 18px;
-  border-radius: 10px; border: 1px solid var(--line2); background: var(--panel); color: var(--text);
-  font: inherit; font-weight: 700; font-size: 15px; text-decoration: none; cursor: pointer; white-space: nowrap;
-  transition: transform 160ms ease-out, background-color 160ms ease-out, border-color 160ms ease-out; }
-/* Button gold stays the brand #f5b301 in both themes; --gold is only for gold text */
-.btn.gold { background: #f5b301; border-color: #f5b301; color: var(--on-gold); }
-.btn.sm { min-height: 44px; padding: 7px 14px; font-size: 14px; }
-.btn svg { width: 18px; height: 18px; flex: none; }
-@media (hover: hover) and (pointer: fine) {
-  .btn:hover { border-color: var(--muted); }
-  .btn.gold:hover { background: #ffc21a; border-color: #ffc21a; }
-}
-.btn:active { transform: scale(.98); }
-
-/* App shell: top bar + left sidebar + sticky filter chips (dashboard layout, 2026-11-20).
-   PC >= 1100px: sidebar docked (240px, or a 72px icon rail after the menu button). Below: sidebar is a drawer. */
-:root { --top: 56px; --side: 240px; --rail: 72px; }
-.topbar { position: sticky; top: 0; z-index: 30; height: var(--top); display: flex; align-items: center; gap: 8px; padding: 0 12px 0 8px;
-  background: var(--bg); border-bottom: 1px solid var(--line); }
-.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 19px; letter-spacing: -.3px; flex: none; }
-.logo img { width: 30px; height: 30px; border-radius: 8px; }
-.gsearch { flex: 0 1 560px; margin: 0 auto; display: flex; height: 40px; border: 1px solid var(--line2); border-radius: 999px; overflow: hidden; background: var(--bg2); }
-.gsearch input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--text); font: inherit; font-size: 15px; padding: 0 16px; outline: 0; }
-.gsearch:focus-within { border-color: var(--gold); }
-.gsearch button { width: 60px; border: 0; border-left: 1px solid var(--line2); background: var(--panel2); color: var(--text); cursor: pointer; display: grid; place-items: center; }
-.gsearch svg, .iconbtn.ghost svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.tools { display: flex; align-items: center; gap: 8px; margin-left: auto; flex: none; }
-.gsearch + .tools { margin-left: 0; }
-.iconbtn { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--line2);
-  background: var(--panel); color: var(--text); cursor: pointer; flex: none; }
-.iconbtn svg { width: 18px; height: 18px; }
-.iconbtn.ghost { border-color: transparent; background: transparent; border-radius: 50%; }
-@media (hover: hover) and (pointer: fine) { .iconbtn.ghost:hover { background: var(--panel2); } }
-.cta-short { display: none; }
-
-.side { position: fixed; z-index: 25; top: var(--top); left: 0; bottom: 0; width: var(--side); display: flex; flex-direction: column;
-  background: var(--bg); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; padding: 10px 10px 16px; }
-.links { display: grid; gap: 2px; }
-.links a { display: flex; align-items: center; gap: 18px; min-height: 40px; padding: 0 12px; border-radius: 10px; text-decoration: none;
-  color: var(--text); font-size: 14px; font-weight: 500; white-space: nowrap; }
-.links a svg { width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; color: var(--muted); }
-.links a.on { background: var(--panel2); font-weight: 700; }
-.links a.on svg { color: var(--gold); }
-@media (hover: hover) and (pointer: fine) { .links a:hover { background: var(--panel); } }
-.links hr { border: 0; border-top: 1px solid var(--line); margin: 10px 4px; width: auto; }
-.side-h { margin: 2px 12px 4px; font-size: 15px; font-weight: 700; }
-.side-foot { margin-top: auto; padding: 16px 4px 0; }
-.side-foot .btn { width: 100%; font-size: 14px; white-space: normal; text-align: center; }
-.side-foot p { margin: 8px 4px 0; font-size: 12px; color: var(--faint); line-height: 1.45; }
-.scrim { position: fixed; inset: 0; z-index: 24; background: rgba(0,0,0,.5); }
-
-.filterbar { position: sticky; top: var(--top); z-index: 20; display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none;
-  padding: 12px 24px; background: var(--bg); }
-.filterbar::-webkit-scrollbar { display: none; }
-.filterbar .chip { flex: none; min-height: 34px; border-radius: 8px; border: 0; background: var(--panel2); font-weight: 600; font-size: 14px; padding: 6px 12px; }
-.filterbar .chip[aria-pressed="true"] { background: var(--text); color: var(--bg); box-shadow: none; }
-@media (hover: hover) and (pointer: fine) { .filterbar .chip:hover { background: var(--line2); } .filterbar .chip[aria-pressed="true"]:hover { background: var(--text); } }
-.grid > .card[hidden] { display: none; }
-
-@media (min-width: 1100px) {
-  .shell { margin-left: var(--side); }
-  body.mini { --side: var(--rail); }
-  body.mini .side { padding: 4px; }
-  body.mini .links a { flex-direction: column; justify-content: center; gap: 6px; min-height: 74px; padding: 0 2px; font-size: 10.5px; }
-  body.mini .links a span { white-space: normal; text-align: center; line-height: 1.2; }
-  body.mini .links hr, body.mini .side-h, body.mini .side-foot, body.mini .links a.sub { display: none; }
-  .scrim { display: none; }
-}
-@media (max-width: 1099px) {
-  .side { top: 0; z-index: 40; width: 264px; transform: translateX(-100%); visibility: hidden;
-    transition: transform 200ms ease-out, visibility 0s linear 200ms; box-shadow: 0 0 40px rgba(0,0,0,.5); }
-  body.drawer .side { transform: none; visibility: visible; transition: transform 200ms ease-out; }
-  body.drawer .scrim { z-index: 35; }
-}
-@media (max-width: 899px) {
-  .gsearch { display: none; }
-  .filterbar { padding: 10px 16px; }
-  .chip { min-height: 40px; padding: 8px 14px; }
-  details.lesson summary { min-height: 44px; align-items: center; }
-  .cta-long { display: none; } .cta-short { display: inline; }
-}
-@media (max-width: 400px) { .topbar { gap: 4px; padding: 0 8px 0 4px; } .logo { font-size: 17px; gap: 8px; } .logo img { width: 26px; height: 26px; }
-  .tools { gap: 6px; } .tools .btn.sm { padding: 7px 10px; } }
-@media (max-width: 340px) { .logo { font-size: 0; } }
-@media (max-width: 1099px) { .side { padding-top: 16px; } }
-/* source notes folded behind a one-line toggle */
-details.src { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 8px; }
-details.src > summary { cursor: pointer; list-style: none; font-size: 12.5px; font-weight: 600; color: var(--faint); min-height: 32px; display: inline-flex; align-items: center; gap: 6px; }
-details.src > summary::-webkit-details-marker { display: none; }
-details.src > summary::before { content: "i"; display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; border: 1px solid currentColor; font-size: 10.5px; font-weight: 800; font-style: italic; }
-details.src .note { margin-top: 4px; }
-
-/* Hero */
-.hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line);
-  background: radial-gradient(900px 520px at 88% -10%, var(--gold-soft), transparent 60%),
-              radial-gradient(800px 600px at -10% 110%, var(--green-soft), transparent 60%), var(--bg); }
-.hero .wrap { display: grid; gap: 32px; padding-top: 48px; padding-bottom: 48px; align-items: center; }
-@media (min-width: 980px) { .hero .wrap { grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); padding-top: 72px; padding-bottom: 72px; } }
-.eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--gold);
-  letter-spacing: .04em; text-transform: uppercase; }
-.eyebrow i { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px var(--green-soft); }
-.hero h1 { margin: 14px 0 0; font-size: clamp(32px, 5.2vw, 54px); line-height: 1.12; letter-spacing: -1.2px; font-weight: 800; text-wrap: balance; }
-.hero h1 em { font-style: normal; color: var(--gold); }
-.hero .sub { margin: 16px 0 0; font-size: clamp(16px, 1.6vw, 18px); color: var(--muted); max-width: 560px; }
-.hero .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
-.markets { margin: 18px 0 0; font-size: 14px; font-weight: 600; color: var(--muted); }
-.markets b { color: var(--text); font-weight: 700; }
-.risk { margin: 18px 0 0; font-size: 12.5px; color: var(--faint); max-width: 560px; }
-.visual { position: relative; padding-bottom: 36px; }
-.shot { margin: 0; border-radius: 14px; overflow: hidden; border: 1px solid var(--line2); background: #0b0f17; box-shadow: var(--shadow); line-height: 0; }
-.shot img { width: 100%; height: auto; display: block; }
-.visual .pc { box-shadow: 0 30px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(245,179,1,.10); }
-.visual .phone { position: absolute; right: -6px; bottom: 0; width: 30%; max-width: 190px; border-radius: 22px; border: 3px solid #2a3650;
-  box-shadow: 0 24px 60px rgba(0,0,0,.6); }
-@media (max-width: 560px) { .visual .phone { width: 34%; right: 0; } }
-/* Phone: show the product right under the buttons; market list and risk line follow the picture */
-@media (max-width: 979px) {
-  .hero .wrap { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
-  .hero .copy { display: contents; }
-  .hero .copy > * { order: 1; }
-  .hero .visual { order: 2; margin-top: 24px; }
-  .hero .markets, .hero .risk { order: 3; }
-  .hero .eyebrow { align-self: flex-start; }
-}
-
-:root[data-theme="light"] .hero { background: radial-gradient(900px 520px at 88% -10%, rgba(245,179,1,.07), transparent 60%),
-  radial-gradient(800px 600px at -10% 110%, rgba(21,128,61,.05), transparent 60%), var(--bg); }
-:root[data-theme="light"] .final { background: radial-gradient(700px 300px at 50% 0%, rgba(245,179,1,.08), transparent 70%), var(--panel); }
-:root[data-theme="light"] .shot { border-color: #d3dbe7; box-shadow: 0 1px 3px rgba(15,23,36,.08), 0 18px 40px -10px rgba(15,23,36,.22); }
-
-/* Section scaffolding */
-section.block { padding: 56px 0 8px; }
-.sec-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 8px 16px; margin-bottom: 18px; }
-.sec-head h2 { margin: 0; font-size: clamp(24px, 3vw, 32px); letter-spacing: -.6px; line-height: 1.2; }
-.sec-head p { margin: 6px 0 0; color: var(--muted); max-width: 640px; }
-.kicker { font-size: 12.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--green); }
-.pill { font-size: 13px; color: var(--muted); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; }
-
-/* Pulse tiles (KPI strip) */
-.pulse { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
-@media (max-width: 560px) { .pulse { grid-template-columns: 1fr 1fr; gap: 10px; } }
-.tile { display: block; text-decoration: none; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; min-width: 0; }
-@media (hover: hover) and (pointer: fine) { a.tile:hover { border-color: var(--line2); } }
-.tile .lbl { font-size: 12.5px; color: var(--muted); font-weight: 600; }
-.tile .val { font-size: 24px; font-weight: 800; letter-spacing: -.4px; margin-top: 2px; line-height: 1.25; }
-.tile .val.small { font-size: 16px; letter-spacing: 0; }
-.tile .sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
-.tile.hot { border-color: color-mix(in srgb, var(--red) 45%, var(--line)); }
-
-/* Data cards */
-.grid { display: grid; gap: 16px; grid-template-columns: repeat(12, minmax(0, 1fr)); margin-top: 16px; }
-.card { grid-column: span 12; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px; min-width: 0; }
-@media (max-width: 560px) { .card { padding: 14px; } }
-.card-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 10px; margin-bottom: 12px; }
-.card-head h3 { margin: 0; font-size: 18px; letter-spacing: -.2px; }
-.badge { font-size: 12px; color: var(--muted); background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 1px 8px; }
-.badge.ok { color: var(--green); background: var(--green-soft); border-color: transparent; }
-.note { color: var(--faint); font-size: 12.5px; margin: 14px 0 0; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { border: 1px solid var(--line); background: var(--panel2); color: var(--text); border-radius: 999px; min-height: 34px;
-  padding: 4px 12px; font: inherit; font-size: 13px; cursor: pointer; }
-.chip[aria-pressed="true"] { background: var(--green-soft); border-color: var(--green); color: var(--green); font-weight: 700; }
-.empty { color: var(--muted); padding: 24px 0; text-align: center; }
-
-/* COT */
-.gauge { margin-top: 8px; font-size: 12px; }
-.gauge .row { display: flex; justify-content: space-between; color: var(--muted); }
-.bar { position: relative; height: 8px; background: var(--track); border-radius: 4px; margin: 3px 0 6px; }
-.bar b { position: absolute; top: -3px; width: 4px; height: 14px; border-radius: 2px; background: var(--text); transform: translateX(-2px); }
-.bar::before, .bar::after { content: ""; position: absolute; top: 0; height: 100%; width: 20%; opacity: .45; }
-.bar::before { left: 0; background: var(--red); border-radius: 4px 0 0 4px; }
-.bar::after { right: 0; background: var(--green); border-radius: 0 4px 4px 0; }
-.spark { width: 100%; height: 44px; display: block; margin-top: 4px; }
-
-/* Tables */
-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th, td { text-align: left; padding: 9px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
-th { color: var(--muted); font-weight: 600; font-size: 12.5px; }
-td.r, th.r { text-align: right; }
-tr:last-child td { border-bottom: 0; }
-.macro-name { font-weight: 600; }
-.macro-name small { display: block; font-weight: 400; color: var(--muted); font-size: 12.5px; line-height: 1.45; margin-top: 2px; }
-.impacts { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
-.imp { font-size: 11.5px; font-weight: 700; border-radius: 4px; padding: 1px 5px; background: var(--panel2); color: var(--muted); white-space: nowrap; }
-.imp.p { background: var(--green-soft); color: var(--green); }
-.imp.n { background: var(--red-soft); color: var(--red); }
-
-/* Scenarios */
-.tone { font-size: 12px; font-weight: 700; border-radius: 4px; padding: 1px 7px; white-space: nowrap; }
-.tone.p { background: var(--green-soft); color: var(--green); }
-.tone.n { background: var(--red-soft); color: var(--red); }
-.tone.z { background: var(--track); color: var(--muted); }
-
-/* News */
-.controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
-.search { flex: 1 1 200px; min-width: 0; min-height: 40px; border: 1px solid var(--line); background: var(--bg2); color: var(--text);
-  border-radius: 10px; padding: 8px 12px; font: inherit; font-size: 16px; }
-.item { padding: 11px 0; border-bottom: 1px solid var(--line); }
-.item:last-child { border-bottom: 0; }
-.meta { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; font-size: 12.5px; color: var(--muted); }
-.meta .src { font-weight: 600; color: var(--text); }
-.meta .off { color: var(--green); font-weight: 700; }
-.tag { background: var(--panel2); border: 1px solid var(--line); border-radius: 4px; padding: 0 6px; font-size: 11.5px; font-weight: 600; }
-.item h4 { margin: 3px 0 2px; font-size: 15px; line-height: 1.45; }
-.item h4 a { text-decoration: none; }
-@media (hover: hover) and (pointer: fine) { .item h4 a:hover { text-decoration: underline; } }
-.item p { margin: 0; color: var(--muted); font-size: 13.5px; }
-.more { display: block; margin: 10px auto 0; }
-
-/* Calendar */
-.day { font-weight: 700; font-size: 13.5px; margin: 12px 0 4px; }
-.day:first-child { margin-top: 0; }
-.ev { display: grid; grid-template-columns: 46px 52px 1fr; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
-.ev.past { opacity: .45; }
-.ev.next { background: var(--gold-soft); border-radius: 8px; padding: 7px; margin: 0 -7px; border-bottom-color: transparent; }
-.ev .t { font-weight: 700; }
-.ev .c { font-weight: 700; font-size: 12.5px; display: flex; align-items: center; gap: 5px; }
-.dot { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--muted); }
-.dot.High { background: var(--red); } .dot.Medium { background: var(--warn); }
-.ev .nums { display: block; font-size: 12px; color: var(--muted); }
-
-/* Features */
-.feature { display: grid; gap: 22px; align-items: center; padding: 26px 0; border-top: 1px solid var(--line); }
-.feature:first-of-type { border-top: 0; }
-@media (min-width: 900px) {
-  .feature { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 48px; padding: 40px 0; }
-  .feature.flip .copy { order: 2; }
-}
-.feature h3 { margin: 8px 0 0; font-size: clamp(22px, 2.6vw, 28px); letter-spacing: -.5px; line-height: 1.25; }
-.feature h3 em { font-style: normal; color: var(--gold); }
-.feature p { color: var(--muted); margin: 10px 0 0; }
-.feature ul { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
-.feature li { position: relative; padding-left: 22px; font-size: 14.5px; }
-.feature li::before { content: ""; position: absolute; left: 2px; top: .55em; width: 9px; height: 9px; border-radius: 3px; background: var(--green); }
-.duo { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 12px; align-items: start; }
-@media (max-width: 700px) { .duo { grid-template-columns: 1fr; } .duo .shot + .shot { max-width: 360px; width: 100%; margin-inline: auto; } }
-.shot.tall { max-width: 420px; margin-inline: auto; max-height: 560px; }
-.shot.tall img { height: 560px; max-height: 100%; object-fit: cover; object-position: top; }
-@media (max-width: 560px) { .shot.tall, .shot.tall img { height: 460px; max-height: 460px; } }
-.cap { display: block; font-size: 12px; color: var(--faint); margin-top: 8px; line-height: 1.4; }
-.extras { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 8px; }
-.extra { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
-.extra b { display: block; font-size: 15px; }
-.extra span { display: block; color: var(--muted); font-size: 13.5px; margin-top: 2px; }
-
-/* Lessons */
-.learn-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-details.lesson { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
-details.lesson summary { cursor: pointer; font-weight: 700; list-style: none; display: flex; justify-content: space-between; gap: 8px; min-height: 28px; }
-details.lesson summary::-webkit-details-marker { display: none; }
-details.lesson summary::after { content: "+"; color: var(--muted); font-weight: 400; }
-details.lesson[open] summary::after { content: "−"; }
-details.lesson .lead { color: var(--muted); font-size: 13.5px; margin: 4px 0 0; }
-details.lesson .body { font-size: 14px; margin-top: 8px; }
-details.lesson .body p { margin: 6px 0; }
-details.lesson .body ul { margin: 6px 0; padding-left: 18px; }
-
-/* Closing call to action */
-.final { margin-top: 56px; border-radius: 18px; border: 1px solid var(--line2); padding: 36px 24px; text-align: center;
-  background: radial-gradient(700px 300px at 50% 0%, var(--gold-soft), transparent 70%), var(--panel); }
-.final img { width: 52px; height: 52px; border-radius: 12px; }
-.final h2 { margin: 12px auto 0; font-size: clamp(24px, 3vw, 32px); letter-spacing: -.6px; max-width: 640px; line-height: 1.2; }
-.final p { color: var(--muted); margin: 10px auto 0; max-width: 560px; }
-.final .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
-.final .risk { margin: 16px auto 0; }
-
-footer { color: var(--faint); font-size: 12.5px; padding-top: 32px; padding-bottom: calc(40px + env(safe-area-inset-bottom)); }
-footer .row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding-bottom: 14px;
-  border-bottom: 1px solid var(--line); margin-bottom: 12px; }
-footer .row a { color: var(--muted); text-decoration: none; font-weight: 600; }
-footer p { margin: 6px 0; }
-footer details { margin-top: 8px; }
-
-@media (max-width: 560px) {
-  .hide-sm { display: none; }
-  th, td { padding: 8px 4px; }
-  .hero .actions .btn { flex: 1 1 100%; }
-  .hero .wrap { padding-top: 28px; padding-bottom: 36px; }
-  .hero h1 { font-size: 30px; letter-spacing: -.8px; margin-top: 10px; }
-  .hero .sub { font-size: 15.5px; margin-top: 12px; }
-  .hero .actions { margin-top: 18px; }
-  .tile .val { font-size: 20px; }
-}
-
-/* ---- Module redesign: per-asset hub, rows, filters, social ---- */
-.tile.hot { border-top: 3px solid var(--red); }
-.hint { margin: -4px 0 10px; color: var(--muted); font-size: 13.5px; }
-
-/* Asset tabs: a mini overview of all four markets that also switches the panel */
-.assets { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
-.asset { display: grid; gap: 2px; text-align: left; min-height: 56px; padding: 10px 12px; border-radius: 12px; cursor: pointer;
-  border: 1px solid var(--line); background: var(--panel2); color: var(--text); font: inherit;
-  transition: border-color 160ms ease-out, background-color 160ms ease-out; }
-.asset .tk { display: flex; align-items: baseline; gap: 6px; }
-.asset .tk b { font-size: 17px; }
-.asset .tk span { color: var(--muted); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.asset .ts { font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 5px; white-space: nowrap; overflow: hidden; }
-.asset[aria-selected="true"] { border-color: var(--gold); background: var(--gold-soft); }
-@media (hover: hover) and (pointer: fine) { .asset:hover { border-color: var(--line2); } .asset[aria-selected="true"]:hover { border-color: var(--gold); } }
-.dot2 { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--muted); }
-.dot2.p { background: var(--green); } .dot2.n { background: var(--red); }
-@media (max-width: 560px) {
-  .assets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-.asset-panel { display: grid; gap: 14px; }
-@media (min-width: 900px) { .asset-panel { grid-template-columns: 1.05fr 1fr 1fr; } }
-.asset-panel:focus-visible { outline-offset: 4px; }
-.blk { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--panel2); min-width: 0; }
-.blk h4 { margin: 0 0 8px; font-size: 14px; color: var(--muted); font-weight: 700; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.blk .big { font-size: 28px; font-weight: 800; letter-spacing: -.5px; line-height: 1.2; }
-.blk .sub { font-size: 13px; color: var(--muted); }
-.cap2 { font-size: 11.5px; color: var(--faint); margin-top: 2px; }
-.bul { margin: 0; padding-left: 18px; font-size: 14px; display: grid; gap: 6px; }
-.imps { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 14px; }
-.imps li { display: grid; grid-template-columns: 18px 1fr; gap: 6px; align-items: start; }
-.imps .arrow { font-size: 12px; line-height: 1.8; }
-.imps li.p .arrow, .imps li.p .why { color: var(--green); }
-.imps li.n .arrow, .imps li.n .why { color: var(--red); }
-.imps .why { font-weight: 600; }
-.more-link { display: inline-block; margin-top: 12px; font-size: 13.5px; font-weight: 600; color: var(--green); text-decoration: none; }
-
-/* Segmented filters */
-.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
-.seg { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 3px; border-radius: 11px; background: var(--bg2); border: 1px solid var(--line); }
-.seg .chip { border: 0; background: transparent; min-height: 34px; }
-.seg .chip[aria-pressed="true"] { background: var(--green-soft); color: var(--green); font-weight: 700; box-shadow: 0 0 0 1px var(--green); }
-.seg.sm { margin: 8px 0 4px; }
-.chips.scroll { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 10px -18px 0; padding: 0 18px 2px; }
-.chips.scroll::-webkit-scrollbar { display: none; }
-.chips.scroll .chip { flex: none; }
-@media (max-width: 560px) { .chips.scroll { margin: 10px -14px 0; padding: 0 14px 2px; } .seg .chip { min-height: 40px; } }
-
-/* Calendar rows */
-.toggle-past { width: 100%; min-height: 40px; margin-bottom: 6px; border: 1px dashed var(--line2); border-radius: 10px; background: transparent;
-  color: var(--muted); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; }
-.day { font-weight: 700; font-size: 13px; color: var(--gold);
-  padding: 8px 0 4px; margin: 6px 0 0; }
-.ev { display: grid; grid-template-columns: 58px 1fr; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
-.ev .t { font-weight: 700; display: grid; gap: 2px; align-content: start; }
-.ev .c { font-size: 12px; font-weight: 700; color: var(--muted); display: flex; align-items: center; gap: 5px; }
-.ev .ti b { display: block; font-weight: 600; line-height: 1.4; }
-.ev .orig { display: block; font-size: 12px; color: var(--faint); }
-.ev .nums { display: flex; flex-wrap: wrap; gap: 4px 6px; margin-top: 4px; }
-.ev .kv { white-space: nowrap; font-size: 12px; color: var(--muted); background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 1px 7px; }
-.ev .kv b { display: inline; color: var(--text); font-weight: 700; }
-.ev .cd { font-size: 12px; font-weight: 700; color: var(--on-gold); background: #f5b301; border-radius: 6px; padding: 1px 7px; }
-.ev.next { background: var(--gold-soft); border-radius: 10px; padding: 9px 8px; margin: 2px -8px; border-bottom-color: transparent; }
-
-/* News */
-#news .search { width: 100%; }
-.item h4 { font-size: 15.5px; }
-.item p { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.meta .off { background: var(--green-soft); border-radius: 4px; padding: 0 6px; }
-.more { display: flex; width: 100%; margin-top: 12px; }
-
-/* Macro rows (expandable) */
-.mrow { border-bottom: 1px solid var(--line); }
-.mrow:last-child { border-bottom: 0; }
-.mrow summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr auto auto; gap: 4px 12px; align-items: center; padding: 10px 0; min-height: 44px; }
-.mrow summary::-webkit-details-marker { display: none; }
-.mrow .nm { font-weight: 600; font-size: 14.5px; }
-.mrow[open] .nm { color: var(--gold); }
-.mrow summary::after { content: ""; }
-.mrow .v { font-weight: 700; text-align: right; }
-.mrow .chg { font-size: 13px; text-align: right; min-width: 48px; }
-.mrow .impacts { grid-column: 1 / -1; justify-content: flex-start; }
-@media (min-width: 900px) { .mrow summary { grid-template-columns: 1fr auto auto 210px; } .mrow .impacts { grid-column: auto; justify-content: flex-end; } }
-.mrow p { margin: 0 0 10px; color: var(--muted); font-size: 13.5px; }
-
-/* EIA rows */
-.summary { margin: 0 0 10px; padding: 10px 12px; border-radius: 10px; background: var(--panel2); border: 1px solid var(--line); font-size: 14px; }
-.summary.up { border-color: color-mix(in srgb, var(--green) 40%, var(--line)); }
-.summary.down { border-color: color-mix(in srgb, var(--red) 40%, var(--line)); }
-.summary.up b { color: var(--green); } .summary.down b { color: var(--red); }
-.drow { display: grid; grid-template-columns: 1fr auto auto; gap: 2px 12px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
-.drow:last-child { border-bottom: 0; }
-.drow.main .nm { font-weight: 700; }
-.drow .v { font-weight: 700; text-align: right; }
-.drow .chg { text-align: right; min-width: 44px; font-weight: 600; }
-.drow .yr { grid-column: 1 / -1; font-size: 12px; color: var(--faint); }
-
-/* Social links */
-.social { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 16px; }
-.soc { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 14px; border-radius: 10px; text-decoration: none;
-  border: 1px solid var(--line2); background: var(--panel2); color: var(--text); font-weight: 600; font-size: 14px; }
-.soc svg { width: 18px; height: 18px; fill: currentColor; flex: none; }
-@media (hover: hover) and (pointer: fine) { .soc:hover { border-color: var(--muted); } }
-.social.icons { justify-content: flex-start; margin: 0; gap: 4px; }
-.social.icons .soc { padding: 0; width: 44px; justify-content: center; background: transparent; border-color: transparent; color: var(--muted); }
-@media (hover: hover) and (pointer: fine) { .social.icons .soc:hover { color: var(--text); border-color: var(--line2); } }
-.follow-h { margin: 22px 0 0; font-size: 13px; font-weight: 700; color: var(--muted); }
-
-/* ---- Visual market section (standard design, 2026-11-15) ---- */
-@media (min-width: 900px) { .grid > .card.c7 { grid-column: span 7; } .grid > .card.c5 { grid-column: span 5; } }
-.q { color: var(--muted); font-size: 13.5px; margin: -4px 0 12px; }
-.card-head .push { margin-left: auto; }
-/* the macro card sits in the narrow column: impact pills always go on their own row */
-@media (min-width: 900px) { #macro .mrow summary { grid-template-columns: 1fr auto auto; } #macro .mrow .impacts { grid-column: 1 / -1; justify-content: flex-start; } }
-.chart { position: relative; display: block; }
-.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
-.axis text { fill: var(--faint); font-size: 11px; font-variant-numeric: tabular-nums; }
-.lbl { fill: var(--text); font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.tip { position: absolute; pointer-events: none; background: var(--bg); border: 1px solid var(--line2); border-radius: 8px; padding: 6px 10px;
-  font-size: 12.5px; line-height: 1.5; white-space: nowrap; transform: translate(-50%, calc(-100% - 10px)); opacity: 0;
-  transition: opacity 120ms ease-out; z-index: 3; box-shadow: var(--shadow); }
-.tip b { font-variant-numeric: tabular-nums; }
-.stats { display: flex; flex-wrap: wrap; gap: 6px 24px; margin: 0 0 6px; }
-.gld-charts { display: grid; gap: 4px 28px; }
-@media (min-width: 900px) { .gld-charts { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
-.stat .k { font-size: 12px; color: var(--muted); }
-.stat .v { font-size: 22px; font-weight: 800; letter-spacing: -.3px; line-height: 1.3; }
-.stat .v small { font-size: 12.5px; font-weight: 600; letter-spacing: 0; }
-.sub-h { font-size: 13px; color: var(--muted); font-weight: 600; margin: 12px 0 2px; }
-.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--muted); margin-top: 8px; }
-.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
-
-/* four market cards (also the tabs of the detail panel) */
-.four { display: grid; gap: 10px; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-bottom: 14px; }
-@media (max-width: 899px) { .four { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.mk { display: block; text-align: left; font: inherit; color: var(--text); cursor: pointer; background: var(--panel2); border: 1px solid var(--line);
-  border-radius: 12px; padding: 12px; min-width: 0; transition: border-color 160ms ease-out, background-color 160ms ease-out; }
-.mk[aria-selected="true"] { border-color: #f5b301; background: var(--gold-soft); }
-@media (hover: hover) and (pointer: fine) { .mk:hover { border-color: var(--line2); } .mk[aria-selected="true"]:hover { border-color: #f5b301; } }
-.mk > span { display: block; }
-.mk .t { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
-.mk .t b { font-size: 17px; } .mk .t .n { color: var(--muted); font-size: 12.5px; }
-.bias { font-size: 11.5px; font-weight: 700; border-radius: 5px; padding: 1px 7px; white-space: nowrap; }
-.bias.p { background: var(--green-soft); color: var(--green); } .bias.n { background: var(--red-soft); color: var(--red); } .bias.z { background: var(--track); color: var(--muted); }
-.mk .v { font-size: 20px; font-weight: 800; letter-spacing: -.3px; margin-top: 6px; line-height: 1.2; }
-.mk .s { font-size: 12px; color: var(--muted); }
-.mk .chart { margin: 8px 0 6px; }
-.mk .zone { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
-.zbar { flex: 1; height: 6px; border-radius: 3px; position: relative;
-  background: linear-gradient(90deg, rgba(239,68,68,.55) 0 20%, var(--track) 20% 80%, rgba(34,197,94,.55) 80% 100%); }
-.zbar i { position: absolute; top: -4px; width: 4px; height: 14px; border-radius: 2px; background: var(--text); transform: translateX(-2px); }
-.mk .zone b { color: var(--text); min-width: 20px; text-align: right; }
-
-/* week timeline + next events */
-.next { display: grid; gap: 8px; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 12px; }
-@media (max-width: 700px) { .next { grid-template-columns: 1fr; } }
-.nx { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: var(--panel2); min-width: 0; }
-.nx.first { border-color: #f5b301; background: var(--gold-soft); }
-.nx .w { font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
-.nx .w .cd { margin-left: auto; font-weight: 700; color: var(--on-gold); background: #f5b301; border-radius: 6px; padding: 0 6px; white-space: nowrap; }
-.nx b { display: block; margin-top: 2px; }
-.nx .o { display: block; font-size: 12px; color: var(--faint); }
-.full { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
-.full > summary { cursor: pointer; font-weight: 700; font-size: 14px; min-height: 40px; display: flex; align-items: center; gap: 8px; list-style: none; }
-.full > summary::-webkit-details-marker { display: none; }
-.full > summary::before { content: "▸"; color: var(--muted); transition: transform 160ms ease-out; }
-.full[open] > summary::before { transform: rotate(90deg); }
-.full .filters { margin-top: 6px; }
-
-/* ---- Crypto, macro rows with trend, news by time (2026-11-15) ---- */
-@media (min-width: 900px) { .four { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-.coins { display: grid; gap: 10px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-@media (max-width: 600px) { .coins { grid-template-columns: 1fr; } }
-.coin { background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; padding: 12px; min-width: 0; }
-.coin .t { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
-.coin .t b { font-size: 17px; } .coin .t .n { color: var(--muted); font-size: 12.5px; }
-.coin .v { font-size: 22px; font-weight: 800; letter-spacing: -.4px; margin-top: 4px; }
-.coin .chart { margin: 6px 0 4px; }
-.coin .s { font-size: 12px; color: var(--muted); }
-@media (max-width: 600px) {
-  .coin { display: grid; grid-template-columns: 1fr 120px; grid-template-areas: "t t" "v c" "s c"; column-gap: 12px; align-items: center; }
-  .coin .t { grid-area: t; } .coin .v { grid-area: v; } .coin .chart { grid-area: c; margin: 0; } .coin .s { grid-area: s; }
-}
-.fng { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr); gap: 8px 20px; align-items: center; margin-top: 14px;
-  background: var(--panel2); border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; }
-@media (max-width: 560px) { .fng { grid-template-columns: 1fr; } .fg-gauge { max-width: 260px; margin: 0 auto; width: 100%; } }
-.fg-text .k { font-size: 12.5px; color: var(--muted); }
-.fg-v b { font-size: 34px; font-weight: 800; letter-spacing: -.5px; }
-.fg-v span { font-size: 16px; font-weight: 700; }
-
-/* macro rows: name + plain-language impact | 1-month trend | value */
-.mrow2 { border-bottom: 1px solid var(--line); }
-.mrow2:last-child { border-bottom: 0; }
-.mrow2 summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) 84px auto; gap: 4px 12px; align-items: center; padding: 10px 0; min-height: 52px; }
-.mrow2 summary::-webkit-details-marker { display: none; }
-.mrow2 .mn b { display: block; font-size: 14.5px; font-weight: 600; line-height: 1.35; }
-.mrow2 .it { display: block; font-size: 12px; font-weight: 600; margin-top: 2px; }
-.mrow2 .spk { display: block; }
-.mrow2 .mv { text-align: right; display: grid; }
-.mrow2 .mv b { font-size: 16px; font-weight: 800; }
-.mrow2 .mv span { font-size: 12px; }
-.mrow2[open] .mn b { color: var(--gold); }
-.mrow2 p { margin: 0 0 10px; color: var(--muted); font-size: 13.5px; }
-
-/* news: search + language on one row, topics in one scrolling row, items grouped by time */
-.news-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-.news-bar .search { flex: 1 1 260px; }
-.chips.fade { -webkit-mask-image: linear-gradient(to right, #000 88%, transparent); mask-image: linear-gradient(to right, #000 88%, transparent); }
-.ngroup { margin-top: 14px; }
-.nh { font-size: 12.5px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: .04em; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
-.nlist { display: grid; column-gap: 28px; }
-@media (min-width: 1000px) { .nlist { grid-template-columns: 1fr 1fr; } }
-.nitem { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
-.nitem .tm { font-size: 12.5px; font-weight: 700; color: var(--muted); padding-top: 2px; }
-.nitem .nt { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-decoration: none;
-  font-weight: 700; font-size: 15px; line-height: 1.4; }
-@media (hover: hover) and (pointer: fine) { .nitem .nt:hover { text-decoration: underline; } }
-.nitem .nm { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; margin-top: 4px; font-size: 12px; color: var(--muted); }
-.nitem .src { font-weight: 600; }
-.nitem .offb { color: var(--green); background: var(--green-soft); border-radius: 4px; padding: 0 6px; font-weight: 700; }
-.nitem.off .nt { color: var(--green); }
-
-/* ---- Dashboard layout (2026-11-20): fluid content beside the sidebar, compact promo banner, paired cards ---- */
-html { scroll-padding-top: 120px; }
-@media (min-width: 900px) { html { scroll-padding-top: 124px; } }
-.shell .wrap { max-width: 1680px; padding: 0 24px; }
-@media (max-width: 899px) { .shell .wrap { padding: 0 16px; } }
-.hero { margin: 0 24px; border: 1px solid var(--line); border-radius: 18px; }
-.hero .wrap { padding: 28px 28px 0 !important; gap: 24px; }
-.hero h1 { font-size: clamp(28px, 2.5vw, 40px); letter-spacing: -.8px; margin-top: 10px; }
-.hero h1 br { display: none; }
-.hero .sub { font-size: 15.5px; margin-top: 12px; }
-.hero .actions { margin-top: 18px; }
-.hero .markets, .hero .risk { margin-top: 12px; }
-.visual { align-self: end; padding-bottom: 0; }
-.visual .pc { border-radius: 12px 12px 0 0; border-bottom: 0; max-height: 300px; }
-.visual .pc img { object-fit: cover; object-position: top; max-height: 300px; }
-.visual .phone { bottom: -40px; max-width: 150px; }
-@media (min-width: 980px) { .hero .wrap { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); padding: 32px 40px 0 !important; } .hero .copy { padding-bottom: 32px; } }
-@media (max-width: 899px) { .hero { margin: 0 16px; } .hero .wrap { padding: 20px 18px 0 !important; } .visual .pc, .visual .pc img { max-height: 200px; } .visual .phone { display: none; } }
-.hero { overflow: hidden; }
-section.block { padding-top: 32px; }
-.sec-head { margin-bottom: 14px; }
-.sec-head h2 { font-size: clamp(22px, 2.2vw, 28px); }
-.grid { gap: 16px; }
-@media (min-width: 900px) {
-  .grid > .card.c7, .grid > .card.c5 { grid-column: span 12; }
-  #calendar, #crypto, #gld { grid-column: span 7 !important; }
-  #macro, #crowd, #eia { grid-column: span 5 !important; }
-  #loi-suat, #flows { grid-column: span 6 !important; }
-  #thi-truong .grid.filtered > .card:not([hidden]) { grid-column: span 6 !important; }
-  #thi-truong .grid.filtered > .card.solo, #thi-truong .grid.filtered > #cot { grid-column: span 12 !important; }
-}
-@media (min-width: 1100px) and (max-width: 1399px) {
-  #macro .mrow2 summary { grid-template-columns: minmax(0, 1fr) 64px auto; }
-}
-.final { margin-top: 40px; }
-/* KPI strip right under the chips; one swipeable row on phones */
-.pulse-wrap { margin-bottom: 16px; }
-.pulse-wrap .tile { padding: 12px 14px; }
-@media (max-width: 899px) {
-  .pulse { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(200px, 62%); grid-template-columns: none !important;
-    overflow-x: auto; scrollbar-width: none; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; margin: 0 -16px; padding: 0 16px; gap: 10px; }
-  .pulse::-webkit-scrollbar { display: none; }
-  .pulse .tile { scroll-snap-align: start; }
-}
-/* phone: thumb tab bar at the bottom */
-.tabbar { display: none; }
-@media (max-width: 899px) {
-  .tabbar { position: fixed; z-index: 30; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(5, 1fr);
-    padding-bottom: env(safe-area-inset-bottom); background: var(--bg); border-top: 1px solid var(--line); }
-  .tabbar a, .tabbar button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 56px;
-    border: 0; background: none; color: var(--muted); font: inherit; font-size: 11px; font-weight: 600; text-decoration: none; cursor: pointer; }
-  .tabbar svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-  .tabbar a.on { color: var(--text); }
-  .tabbar a.on svg { color: var(--gold); }
-  footer { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
-}
-/* review fixes: touch targets, chip fade, phone hero, sidebar CTA only in the drawer */
-.filterbar { -webkit-mask-image: linear-gradient(to right, #000 90%, transparent); mask-image: linear-gradient(to right, #000 90%, transparent); }
-body.drawer { overflow: hidden; }
-@media (min-width: 1100px) { .side-foot { display: none; } }
-@media (max-width: 899px) {
-  .filterbar .chip, .links a, details.src > summary, .seg .chip { min-height: 44px; }
-  .hero .sub, .hero .markets, .hero .risk, .hero .actions .btn + .btn { display: none; }
-  .hero .wrap { padding-top: 16px !important; }
-  .hero h1 { font-size: 24px; }
-}
-@media (max-width: 560px) { .mk .t .n { display: none; } }
-/* VI | EN switch (site/i18n.js) */
-.langsw { display: inline-flex; height: 44px; padding: 3px; gap: 2px; border: 1px solid var(--line2); border-radius: 10px; background: var(--panel); flex: none; }
-.langsw button { min-width: 40px; border: 0; border-radius: 7px; background: none; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
-.langsw button[aria-pressed="true"] { background: var(--panel2); color: var(--text); box-shadow: 0 0 0 1px var(--line2); }
-@media (max-width: 899px) { .tools .langsw { display: none; } }
-.side-lang { margin-bottom: 12px; width: 100%; } .side-lang button { flex: 1; }
-@media (min-width: 1100px) { body.mini .side-lang { display: none; } }
-/* price ticker (licensed embed; spot gold, index CFDs, WTI, EUR/USD) */
-.ticker-wrap { margin-bottom: 10px; }
-.ticker { min-height: 46px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); overflow: hidden; }
-.ticker .tradingview-widget-copyright { display: none; }
-/* the embed page declares no color-scheme: give the iframe the same one, or the browser paints it opaque white */
-.ticker iframe { color-scheme: normal; }
-.ticker-src { display: block; margin-top: 4px; font-size: 11.5px; color: var(--faint); text-decoration: none; text-align: right; }
-@media (hover: hover) and (pointer: fine) { .ticker-src:hover { text-decoration: underline; } }
-.tile .val .pct { font-size: 14px; font-weight: 700; margin-left: 6px; }
-.tile .spk { margin-top: 4px; }
-.pulse { grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); }
-/* Site notice strip: separates wyckdelta.com (info/guide) from Wyckdelta Chart (the chart app) */
-.site-note { background: var(--panel); border-bottom: 1px solid var(--line); font-size: 13px; line-height: 1.45; color: var(--muted); }
-.site-note .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 14px; padding-top: 8px; padding-bottom: 8px; }
-.site-note p { margin: 0; flex: 1 1 320px; min-width: 0; overflow-wrap: anywhere; }
-.site-note b { color: var(--text); font-weight: 700; }
-.site-note .sn-links { display: flex; flex-wrap: wrap; gap: 6px; flex: none; }
-.site-note a { display: inline-flex; align-items: center; min-height: 30px; padding: 3px 10px; border-radius: 7px;
-  border: 1px solid var(--line2); background: var(--panel2); color: var(--text); font-weight: 700; font-size: 12.5px; text-decoration: none; white-space: nowrap; }
-.site-note a.pri { border-color: color-mix(in srgb, var(--gold) 55%, var(--line2)); color: var(--gold); background: var(--gold-soft); }
-@media (hover: hover) and (pointer: fine) { .site-note a:hover { border-color: var(--muted); } }
-@media (max-width: 560px) { .site-note { font-size: 12.5px; } .site-note .wrap { padding-top: 7px; padding-bottom: 7px; gap: 6px; } .site-note a { min-height: 32px; } }
-/* "Vào Wyckdelta Chart": one row per kind of visitor (has an account / new / expired) */
-.sn-cases { display: flex; flex-wrap: wrap; gap: 6px 14px; flex: none; }
-.sn-case { display: flex; align-items: center; gap: 8px; }
-.sn-case > span { color: var(--muted); white-space: nowrap; }
-@media (max-width: 560px) { .sn-cases { flex-direction: column; align-items: stretch; width: 100%; gap: 6px; }
-  .sn-case { justify-content: space-between; } .sn-case a { min-width: 172px; justify-content: center; } }
-/* header: open the chart (desktop; on a phone the row right under the header does it) */
-.chart-link svg { color: var(--gold); }
-@media (max-width: 640px) { .chart-link { display: none; } }
-</style>
+<link rel="stylesheet" href="/app.css?v=1916e4ac">
 </head>
-<body>
-
+<body data-cat="home" data-fold="1">
+<!-- generated by scripts/build_pages.py: edit scripts/site_src/ or that script, not this file -->
 <header class="topbar" id="top">
   <button class="iconbtn ghost" id="menu" type="button" aria-label="Menu" aria-controls="side" aria-expanded="false" title="Menu">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
   </button>
-  <a class="logo" href="#top" aria-label="Wyckdelta, về đầu trang"><img src="img/logo.png" alt="" width="30" height="30">Wyckdelta</a>
-  <form class="gsearch" id="gsearch" role="search">
-    <input id="gq" type="search" placeholder="Tìm tin thị trường… (Powell, CPI, OPEC, bitcoin)" autocomplete="off" aria-label="Tìm tin thị trường">
+  <a class="logo" href="/" aria-label="Wyckdelta, trang chủ"><img src="/img/logo.png" alt="" width="30" height="30">Wyckdelta</a>
+  <form class="gsearch" id="gsearch" role="search" action="/tin-tuc/" method="get">
+    <input id="gq" name="q" type="search" placeholder="Tìm tin thị trường… (Powell, CPI, OPEC, bitcoin)" autocomplete="off" aria-label="Tìm tin thị trường">
     <button type="submit" aria-label="Tìm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
   </form>
   <div class="tools">
@@ -688,32 +44,20 @@ body.drawer { overflow: hidden; }
     <button class="iconbtn" id="theme" type="button" aria-label="Đổi giao diện sáng / tối" title="Đổi giao diện sáng / tối">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18" /><path d="M12 3a9 9 0 0 1 0 18" fill="currentColor"/></svg>
     </button>
-    <a class="btn sm chart-link" href="chart.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg>Mở Wyckdelta Chart</a>
+    <a class="btn sm chart-link" href="/chart.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg>Mở Wyckdelta Chart</a>
     <a class="btn gold sm" href="https://m.me/61596278051545?ref=wyckdelta_web" target="_blank" rel="noopener"><span class="cta-long">Inbox để nhận link dùng thử</span><span class="cta-short">Nhận link</span></a>
   </div>
 </header>
 
 <aside class="side" id="side" aria-label="Điều hướng">
-  <nav class="links">
-    <a href="#top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Trang chủ</span></a>
-    <a href="#thi-truong"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg><span>Nhịp thị trường</span></a>
-    <hr>
-    <p class="side-h">Thị trường</p>
-    <a class="sub" href="#cot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M11 20V4M17 20v-8M3 20h18"/></svg><span>Quỹ lớn theo mã</span></a>
-    <a class="sub" href="#calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Lịch tin tuần</span></a>
-    <a class="sub" href="#crypto"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 8h4a2 2 0 0 1 0 4h-4m0 0h4.5a2 2 0 0 1 0 4H9.5V8"/></svg><span>Crypto</span></a>
-    <a class="sub" href="#crowd"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18a8 8 0 1 1 16 0"/><path d="M12 18l4-6"/></svg><span>Ai đang đông người</span></a>
-    <a class="sub" href="#loi-suat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19c4 0 5-10 9-11s6 1 9-3"/><path d="M3 21h18"/></svg><span>Lợi suất Mỹ</span></a>
-    <a class="sub" href="#macro"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10l9-6 9 6M5 10v9M9.5 10v9M14.5 10v9M19 10v9M3 21h18"/></svg><span>Vĩ mô Mỹ</span></a>
-    <a class="sub" href="#flows"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16M3 8l4-4 4 4M17 20V4M13 16l4 4 4-4"/></svg><span>Ai mua, ai bán</span></a>
-    <a class="sub" href="#eia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/></svg><span>Tồn kho dầu</span></a>
-    <a class="sub" href="#gld"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 20l2-5h7l2 5zM11 20l2-5h7l2 5zM6.5 15l2-5h7l2 5"/></svg><span>Quỹ vàng GLD</span></a>
-    <a href="#news"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg><span>Tin tức</span></a>
-    <hr>
-    <p class="side-h">Wyckdelta Chart</p>
-    <a href="#tinh-nang"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 14l3-3 2 2 5-5M8 21h8"/></svg><span>Tính năng</span></a>
-    <a href="#hoc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2zM20 19v2H6"/></svg><span>Học order flow</span></a>
-    <a href="huong-dan.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg><span>Cài đặt app</span></a>
+  <nav class="rail">
+    <div class="ri open" data-cat="home"><a class="rl" href="/" aria-current="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Trang chủ</span></a></div>
+    <div class="ri" data-cat="thi-truong"><a class="rl" href="/thi-truong/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg><span>Thị trường</span></a><button class="ri-tog" type="button" aria-expanded="false" aria-label="Mở mục Thị trường"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="fly"><p class="fly-h">Thị trường</p><a href="/thi-truong/">Tổng quan</a><a href="/thi-truong/vang/">Vàng</a><a href="/thi-truong/chung-khoan-my/">S&P 500 · Nasdaq</a><a href="/thi-truong/dau/">Dầu WTI</a><a href="/thi-truong/crypto/">Crypto</a></div></div>
+    <div class="ri" data-cat="vi-the"><a class="rl" href="/vi-the/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M11 20V4M17 20v-8M3 20h18"/></svg><span>Vị thế</span></a><button class="ri-tog" type="button" aria-expanded="false" aria-label="Mở mục Vị thế"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="fly"><p class="fly-h">Vị thế</p><a href="/vi-the/">Tổng quan</a><a href="/vi-the/cot/">Quỹ lớn (COT)</a><a href="/vi-the/ai-mua-ai-ban/">Ai mua, ai bán</a><a href="/vi-the/dong-nguoi/">Ai đang đông người</a><a href="/vi-the/quy-vang-gld/">Quỹ vàng GLD</a></div></div>
+    <div class="ri" data-cat="vi-mo"><a class="rl" href="/vi-mo/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10l9-6 9 6M5 10v9M9.5 10v9M14.5 10v9M19 10v9M3 21h18"/></svg><span>Vĩ mô</span></a><button class="ri-tog" type="button" aria-expanded="false" aria-label="Mở mục Vĩ mô"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="fly"><p class="fly-h">Vĩ mô</p><a href="/vi-mo/">Tổng quan</a><a href="/vi-mo/lich-tin/">Lịch tin tuần</a><a href="/vi-mo/loi-suat/">Lợi suất Mỹ</a><a href="/vi-mo/chi-so/">Chỉ số vĩ mô Mỹ</a><a href="/vi-mo/ton-kho-dau/">Tồn kho dầu</a></div></div>
+    <div class="ri" data-cat="tin-tuc"><a class="rl" href="/tin-tuc/"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg><span>Tin tức</span></a><button class="ri-tog" type="button" aria-expanded="false" aria-label="Mở mục Tin tức"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="fly up"><p class="fly-h">Tin tức</p><a href="/tin-tuc/">Tin liên quan</a><a href="/tin-tuc/vang/">Vàng</a><a href="/tin-tuc/chung-khoan/">S&P · Nasdaq</a><a href="/tin-tuc/dau/">Dầu</a><a href="/tin-tuc/crypto/">Crypto</a><a href="/tin-tuc/fed/">Fed & vĩ mô</a><a href="/tin-tuc/chinh-thuc/">Nguồn chính thức</a></div></div>
+    <div class="ri" data-cat="hoc"><a class="rl" href="/hoc/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2zM20 19v2H6"/></svg><span>Học</span></a><button class="ri-tog" type="button" aria-expanded="false" aria-label="Mở mục Học"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="fly up"><p class="fly-h">Học</p><a href="/hoc/">Tất cả bài học</a><a href="/hoc/footprint/">Footprint</a><a href="/hoc/delta-cvd/">Delta & CVD</a><a href="/hoc/volume-profile/">Volume Profile</a><a href="/hoc/cot/">Báo cáo COT</a></div></div>
+    <div class="ri" data-cat="wyckdelta-chart"><a class="rl" href="/wyckdelta-chart/"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 14l3-3 2 2 5-5M8 21h8"/></svg><span>Wyckdelta Chart</span></a><button class="ri-tog" type="button" aria-expanded="false" aria-label="Mở mục Wyckdelta Chart"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><div class="fly up"><p class="fly-h">Wyckdelta Chart</p><a href="/wyckdelta-chart/">Tính năng</a><a href="/huong-dan.html">Cài đặt app</a><a href="/chart.html">Mở Wyckdelta Chart</a></div></div>
   </nav>
   <div class="side-foot">
     <div class="langsw side-lang" data-lang-switch role="group" aria-label="Ngôn ngữ / Language"><button type="button" data-l="VI">VI</button><button type="button" data-l="EN">EN</button></div>
@@ -723,32 +67,26 @@ body.drawer { overflow: hidden; }
 </aside>
 <div class="scrim" id="scrim" hidden></div>
 <nav class="tabbar" aria-label="Mục chính">
-  <a href="#thi-truong"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg>Thị trường</a>
-  <a href="#calendar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Lịch tin</a>
-  <a href="#crypto"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 8h4a2 2 0 0 1 0 4h-4m0 0h4.5a2 2 0 0 1 0 4H9.5V8"/></svg>Crypto</a>
-  <a href="#news"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>Tin tức</a>
+  <a href="/thi-truong/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg>Thị trường</a><a href="/vi-the/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M11 20V4M17 20v-8M3 20h18"/></svg>Vị thế</a><a href="/vi-mo/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10l9-6 9 6M5 10v9M9.5 10v9M14.5 10v9M19 10v9M3 21h18"/></svg>Vĩ mô</a><a href="/tin-tuc/"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>Tin tức</a>
   <button type="button" id="tab-more" aria-controls="side"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>Menu</button>
 </nav>
-
 
 <div class="shell">
 <div class="site-note" role="note">
   <div class="wrap">
     <p>wyckdelta.com là trang giới thiệu và hướng dẫn. Biểu đồ nằm trong <b>Wyckdelta Chart</b>: app Windows, điện thoại và Mac.</p>
     <div class="sn-cases">
-      <div class="sn-case"><span>Đã có tài khoản</span><a class="pri" href="chart.html">Mở Wyckdelta Chart</a></div>
-      <div class="sn-case"><span>Chưa có tài khoản</span><a href="huong-dan.html">Cài đặt 3 bước</a></div>
+      <div class="sn-case"><span>Đã có tài khoản</span><a class="pri" href="/chart.html">Mở Wyckdelta Chart</a></div>
+      <div class="sn-case"><span>Chưa có tài khoản</span><a href="/huong-dan.html">Cài đặt 3 bước</a></div>
       <div class="sn-case"><span>Tài khoản hết hạn</span><a href="https://t.me/wyckdeltachart" target="_blank" rel="noopener">Inbox Wyckdelta</a></div>
     </div>
   </div>
 </div>
-<div class="filterbar" id="filterbar" role="group" aria-label="Lọc theo thị trường"></div>
 <div class="wrap ticker-wrap">
   <div class="ticker" id="ticker" data-i18n-skip translate="no"></div>
   <a class="ticker-src" href="https://www.tradingview.com/" target="_blank" rel="noopener nofollow">Giá vàng giao ngay và chỉ số: TradingView, trễ theo quy định của sàn</a>
 </div>
 <div class="wrap pulse-wrap"><div class="pulse" id="pulse"></div></div>
-
 <section class="hero">
   <div class="wrap">
     <div class="copy">
@@ -759,41 +97,38 @@ body.drawer { overflow: hidden; }
         <a class="btn gold" href="https://m.me/61596278051545?ref=wyckdelta_web" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.6L3 21l1.4-5.1A8.5 8.5 0 1 1 21 12Z"/></svg>
           Inbox để nhận link dùng thử</a>
-        <a class="btn" href="#thi-truong">Xem nhịp thị trường hôm nay</a>
+        <a class="btn" href="#nhip">Xem nhịp thị trường hôm nay</a>
       </div>
       <p class="markets">Thị trường: <b>Vàng · ES · NQ · BTC · ETH · SOL</b></p>
       <p class="risk">Wyckdelta Chart là công cụ phân tích dữ liệu thị trường, không phải lời khuyên đầu tư. Giao dịch phái sinh và tài sản số có rủi ro cao.</p>
     </div>
     <div class="visual">
-      <figure class="shot pc"><img src="img/hero_heatmap.webp" width="1600" height="1115" fetchpriority="high"
+      <figure class="shot pc"><img src="/img/hero_heatmap.webp" width="1600" height="1115" fetchpriority="high"
         alt="Chart Vàng trên Wyckdelta Chart: heatmap sổ lệnh, bong bóng lệnh lớn, nhãn iceberg ICE và các mức GEX"></figure>
-      <figure class="shot phone"><img src="img/hero_phone.webp" width="780" height="1350" loading="lazy"
+      <figure class="shot phone"><img src="/img/hero_phone.webp" width="780" height="1350" loading="lazy"
         alt="Cùng chart heatmap trên điện thoại"></figure>
     </div>
   </div>
 </section>
-
-<main class="wrap">
-  <section class="block" id="thi-truong">
-    <div class="sec-head">
-      <div>
-        <span class="kicker">Miễn phí cho tất cả</span>
-        <h2>Nhịp thị trường hôm nay</h2>
-        <p>Vàng, ES, NQ, dầu, BTC, ETH: quỹ lớn, vĩ mô, lịch tin và tin tức. Tự cập nhật mỗi 30 phút.</p>
-      </div>
-      <span class="pill" id="updated">Đang tải dữ liệu…</span>
+<main class="wrap" id="nhip">
+  
+  <div class="page-head">
+    <div>
+      <span class="kicker">Miễn phí cho tất cả</span>
+      <h2>Nhịp thị trường hôm nay</h2>
+      <p>Vàng, ES, NQ, dầu, BTC, ETH: quỹ lớn, vĩ mô, lịch tin. Tự cập nhật mỗi 30 phút. Mỗi mục có trang riêng ở menu bên trái.</p>
     </div>
-
-    <div class="grid">
-      <section class="card" id="cot" data-tags="gc es nq cl crypto">
+    <span class="pill" id="updated">Đang tải dữ liệu…</span>
+  </div>
+<div class="grid">
+<section class="card" id="cot" data-tags="gc es nq cl crypto">
         <div class="card-head"><h3>Quỹ lớn đang nghiêng về đâu?</h3><span class="badge" id="cot-badge">Đang tải…</span></div>
         <p class="q">Vị thế ròng 52 tuần của 6 mã. Thanh dưới mỗi thẻ là COT Index 26 tuần: hai đầu tô màu là vùng đã đông người. Bấm một mã để xem kịch bản.</p>
         <div class="four" id="four" role="tablist" aria-label="Chọn mã"></div>
         <div class="asset-panel" role="tabpanel" id="asset-panel" tabindex="0"></div>
         <p class="note">COT: báo cáo Commitments of Traders (Legacy, nhóm Non-commercial) của CFTC, chốt số thứ Ba, công bố thứ Sáu. COT Index là vị trí của vị thế ròng trong biên cao–thấp 26 hoặc 156 tuần (0 = thấp nhất, 100 = cao nhất). Kịch bản tự suy ra từ COT, vĩ mô và EIA theo quy tắc đơn giản, mang tính giáo dục, không phải khuyến nghị mua bán.</p>
       </section>
-
-      <section class="card" id="calendar" data-tags="macro">
+<section class="card" id="calendar" data-tags="macro">
         <div class="card-head"><h3>Tuần này có tin gì?</h3><span class="badge">Giờ VN</span>
           <div class="seg push" id="week-imp" role="group" aria-label="Mức ảnh hưởng trên dòng thời gian"></div></div>
         <p class="q">Tin USD trong tuần. Vạch vàng là bây giờ; hàng trên là tin đỏ (ảnh hưởng cao), hàng dưới là tin cam.</p>
@@ -809,227 +144,33 @@ body.drawer { overflow: hidden; }
         </details>
         <p class="note">Nguồn: lịch kinh tế tuần này của Forex Factory. Tên sự kiện dịch sang tiếng Việt, tên gốc ghi bên dưới.</p>
       </section>
-
-      <section class="card c5" id="macro" data-tags="macro gc es nq">
+<section class="card c5" id="macro" data-tags="macro gc es nq">
         <div class="card-head"><h3>Vĩ mô Mỹ</h3><span class="badge" id="macro-badge">Đang tải…</span></div>
         <p class="hint">So với khoảng 1 tháng trước. Bấm vào từng dòng để xem vì sao chỉ số này quan trọng.</p>
         <div id="macro-body"></div>
         <p class="note">Nguồn: U.S. Treasury, Fed New York. Nhãn ▲/▼ là chiều tác động thường gặp lên từng tài sản, mang tính giáo dục, không phải dự báo.</p>
       </section>
-
-      <section class="card c7" id="crypto" data-tags="crypto">
+<section class="card c7" id="crypto" data-tags="crypto">
         <div class="card-head"><h3>Crypto hôm nay</h3><span class="badge" id="crypto-badge">Đang tải…</span></div>
         <p class="q">Giá tham khảo (USD), thay đổi 24 giờ và đường giá 7 ngày. Chỉ số Sợ hãi &amp; Tham lam đo tâm lý chung của thị trường crypto.</p>
         <div class="coins" id="coins"></div>
         <div class="fng" id="fng"></div>
         <p class="note">Giá: <a href="https://www.coingecko.com" target="_blank" rel="noopener">CoinGecko</a>. Chỉ số Sợ hãi &amp; Tham lam: <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener">alternative.me</a>. Cập nhật mỗi 30 phút, không dùng để giao dịch.</p>
       </section>
-      <section class="card c5" id="crowd" data-tags="gc es nq cl crypto">
+<section class="card c5" id="crowd" data-tags="gc es nq cl crypto">
         <div class="card-head"><h3>Ai đang đông người?</h3></div>
         <p class="q">COT Index của 6 mã trên một thang 0–100. Ở hai đầu là vùng dễ đảo chiều.</p>
         <div class="chart" id="map"></div>
         <div class="legend"><span><i style="background:#f5b301;border-radius:50%"></i>26 tuần</span><span><i style="border:2px solid var(--muted);border-radius:50%"></i>3 năm</span><span><i style="background:rgba(239,68,68,.35)"></i>Bán đã đông</span><span><i style="background:rgba(34,197,94,.35)"></i>Mua đã đông</span></div>
       </section>
-
-      <section class="card c7" id="loi-suat" data-tags="macro gc">
-        <div class="card-head"><h3>Đường cong lợi suất Mỹ</h3><span class="badge" id="curve-badge">Đang tải…</span></div>
-        <p class="q">Lợi suất trái phiếu chính phủ Mỹ theo kỳ hạn. Dốc lên là bình thường; đầu ngắn cao hơn đầu dài (đảo ngược) thường đi trước suy thoái.</p>
-        <div class="stats" id="curve-stats"></div>
-        <div class="chart" id="curve"></div>
-        <p class="note">Nguồn: U.S. Treasury, Daily Treasury Par Yield Curve.</p>
-      </section>
-
-      <section class="card c7" id="flows" data-tags="gc es nq cl crypto">
-        <div class="card-head"><h3>Ai đang mua, ai đang bán?</h3><div class="seg push" id="flow-asset" role="group" aria-label="Chọn mã"></div></div>
-        <p class="q">Vị thế ròng của từng nhóm trên sàn. Quỹ đầu cơ thường đi theo xu hướng; nhà sản xuất và ngân hàng thường đứng phía phòng hộ.</p>
-        <div class="stats" id="flow-stats"></div>
-        <div class="sub-h">Quỹ đầu cơ mua thêm (+) / bán bớt (−) mỗi tuần, hợp đồng</div>
-        <div class="chart" id="flow-change"></div>
-        <div class="sub-h">Vị thế ròng của quỹ đầu cơ, 52 tuần</div>
-        <div class="chart" id="flow-level"></div>
-        <p class="note">Nguồn: CFTC, báo cáo Disaggregated (Managed Money = quỹ đầu cơ, Producer/Merchant = nhà sản xuất và thương nhân, Swap Dealer = ngân hàng). Chốt số thứ Ba, công bố thứ Sáu.</p>
-      </section>
-
-      <section class="card c5" id="eia" data-tags="cl">
-        <div class="card-head"><h3>Tồn kho dầu Mỹ tuần này</h3><span class="badge" id="eia-badge">Đang tải…</span></div>
-        <div id="eia-sum"></div>
-        <div class="chart" id="eia-chart"></div>
-        <p class="note">Sang trái (xanh) = tồn kho giảm, thường đọc là cầu mạnh; sang phải (đỏ) = tăng. Nguồn: U.S. EIA, Weekly Petroleum Status (thứ Tư, khoảng 21:30 giờ VN).</p>
-      </section>
-
-      <section class="card" id="gld" data-tags="gc">
-        <div class="card-head"><h3>Quỹ vàng SPDR (GLD) đang mua hay bán?</h3><span class="badge" id="gld-badge">Đang tải…</span></div>
-        <p class="q">Số tấn vàng quỹ ETF vàng lớn nhất thế giới đang giữ. Quỹ mua thêm vàng khi nhà đầu tư rót tiền vào và bán ra khi họ rút tiền, nên đây là thước đo dòng tiền đầu tư vào vàng.</p>
-        <div class="stats" id="gld-stats"></div>
-        <div class="gld-charts">
-          <div><div class="sub-h">Mua thêm (+) / bán ra (−) mỗi phiên, tấn</div><div class="chart" id="gld-change"></div></div>
-          <div><div class="sub-h">Số tấn đang giữ, 6 tháng</div><div class="chart" id="gld-level"></div></div>
-        </div>
-        <p class="note">Nguồn: <a href="https://www.spdrgoldshares.com/usa/gld/" target="_blank" rel="noopener">SPDR® Gold Shares (GLD)</a>, số tấn quỹ công bố mỗi ngày giao dịch sau giờ đóng cửa New York; trang cập nhật một lần mỗi ngày, buổi sáng giờ VN. SPDR® là nhãn hiệu của Standard &amp; Poor's Financial Services LLC; Wyckdelta không liên kết với SPDR® Gold Trust hay đơn vị quản lý quỹ. Dòng tiền vào quỹ đi kèm xu hướng giá nhưng không báo trước giá; mang tính giáo dục, không phải khuyến nghị.</p>
-      </section>
-
-      <section class="card" id="news" data-tags="gc es nq cl crypto macro">
-        <div class="card-head"><h3>Tin tức</h3><span class="badge" id="news-badge">Đang tải…</span></div>
-        <div class="news-bar">
-          <input class="search" id="q" type="search" placeholder="Tìm tin… (vd: Powell, OPEC, CPI, bitcoin)" autocomplete="off" aria-label="Tìm tin">
-          <div class="seg" id="langs" role="group" aria-label="Ngôn ngữ"></div>
-        </div>
-        <div class="chips scroll fade" id="topics" role="group" aria-label="Chủ đề"></div>
-        <div id="news-list"></div>
-        <p class="note">Nguồn: RSS của Federal Reserve, EIA, CFTC và các trang tin tài chính, crypto. Chỉ hiện tiêu đề và link; bấm tiêu đề để đọc bài gốc.</p>
-      </section>    </div>
-  </section>
-
-  <section class="block" id="tinh-nang">
-    <div class="sec-head">
-      <div>
-        <span class="kicker">Tính năng</span>
-        <h2>Xem ai đang giữ giá, ngay trên chart</h2>
-        <p>Mọi ảnh dưới đây chụp từ Wyckdelta Chart với dữ liệu Vàng thật, phiên Mỹ ngày 11/11.</p>
-      </div>
-    </div>
-
-    <article class="feature">
-      <div class="copy">
-        <span class="kicker">Order flow + GEX</span>
-        <h3>Tường giá của dealer vẽ <em>ngay trên giá</em></h3>
-        <p>Các mức gamma tính mỗi ngày từ quyền chọn và khoá theo phiên. ES, NQ được quy sẵn ra điểm futures, Vàng cũng có đủ bộ mức.</p>
-        <ul>
-          <li>Call Wall, Put Wall, Gamma Flip (Zero Gamma), 0DTE và GEX1–5</li>
-          <li>Profile GEX theo từng strike ở cạnh phải chart</li>
-          <li>Mức nằm chung với footprint và heatmap, không cần mở hai công cụ</li>
-        </ul>
-      </div>
-      <figure class="shot"><img src="img/f_gex.webp" width="1200" height="857" loading="lazy" decoding="async"
-        alt="Chart Vàng 15 phút với Call Wall 4100, Zero Gamma 4085,6 và profile GEX theo strike"></figure>
-    </article>
-
-    <article class="feature flip">
-      <div class="copy">
-        <span class="kicker">Footprint · iceberg</span>
-        <h3>Thấy <em>ai mua, ai bán</em> ở từng mức giá</h3>
-        <p>Wyckdelta Chart theo dõi từng lệnh chờ: khớp, rút, dời hay nạp lại, rồi gắn nhãn ngay trong nến.</p>
-        <ul>
-          <li>Footprint bid × ask, imbalance xếp chồng, POC từng nến</li>
-          <li>Nhãn ICE cho lệnh ẩn khối lượng, kèm mức như @POC, @VAL</li>
-          <li>Vùng hấp thụ và cú quét giá được dán nhãn rõ ràng</li>
-        </ul>
-      </div>
-      <figure class="shot"><img src="img/f_footprint.webp" width="1200" height="890" loading="lazy" decoding="async"
-        alt="Footprint Vàng 1 phút với nhãn ICE, sweep bán và hai vùng hấp thụ"></figure>
-    </article>
-
-    <article class="feature">
-      <div class="copy">
-        <span class="kicker">Bảng quyền chọn</span>
-        <h3>Biết dealer đang ở <em>thế nào</em> trước khi vào phiên</h3>
-        <p>Chế độ gamma, biên độ kỳ vọng, GEX theo kỳ hạn và Gamma Surface vẽ ngay sau nến.</p>
-        <ul>
-          <li>Gamma dương / âm và biên độ kỳ vọng 1 ngày</li>
-          <li>GEX, DEX theo kỳ hạn, có thay đổi so với hôm qua</li>
-          <li>IV, HV, VRP, skew 25-delta có lịch sử</li>
-        </ul>
-      </div>
-      <div class="duo">
-        <figure class="shot"><img src="img/f_surface.webp" width="1200" height="972" loading="lazy" decoding="async"
-          alt="Gamma Surface 10 phiên vẽ phía sau nến Vàng 1 giờ"></figure>
-        <figure class="shot"><img src="img/f_dash.webp" width="762" height="900" loading="lazy" decoding="async"
-          alt="Bảng GEX trên điện thoại: biên độ kỳ vọng, vị thế dealer, GEX theo kỳ hạn"></figure>
-      </div>
-    </article>
-
-    <article class="feature flip">
-      <div class="copy">
-        <span class="kicker">Bản tin phiên</span>
-        <h3>Bản tin <em>Á · Âu · Mỹ</em> bằng tiếng Việt, mỗi ngày</h3>
-        <p>Viết từ GEX, Volume Profile và order flow cho Vàng, ES, NQ, BTC, ETH. Mọi con số giá được đối chiếu với dữ liệu thật trước khi đăng.</p>
-        <ul>
-          <li>Bối cảnh phiên trước, các mức cần xem, kịch bản lên / xuống</li>
-          <li>Kèm dòng "ý kiến cá nhân, không phải lời khuyên đầu tư"</li>
-        </ul>
-      </div>
-      <div>
-        <figure class="shot tall"><img src="img/f_brief.webp" width="762" height="990" loading="lazy" decoding="async"
-          alt="Bản tin phiên Mỹ của Vàng trên điện thoại"></figure>
-        <span class="cap" style="text-align: center;">Bản tin là ý kiến cá nhân, không phải lời khuyên đầu tư.</span>
-      </div>
-    </article>
-
-    <div class="extras">
-      <div class="extra"><b>Volume Profile, TPO, VWAP</b><span>Profile phiên, cố định, cạnh phải; VWAP ±σ; CVD có phân kỳ.</span></div>
-      <div class="extra"><b>Đủ trên điện thoại</b><span>Heatmap, footprint, SuperDOM, GEX, cùng lõi với bản PC.</span></div>
-      <div class="extra"><b>Cảnh báo giá 24/7</b><span>Chạy trên máy chủ, đẩy thông báo về điện thoại dù đã tắt app.</span></div>
-      <div class="extra"><b>Replay để luyện tập</b><span>Chạy lại thị trường, vào lệnh giấy, xem thống kê.</span></div>
-    </div>
-  </section>
-
-  <section class="block" id="hoc">
-    <div class="sec-head">
-      <div>
-        <span class="kicker">Kiến thức nền</span>
-        <h2>Học order flow</h2>
-        <p>Bốn khái niệm cơ bản để đọc dòng tiền và vị thế. Mở từng mục để đọc.</p>
-      </div>
-    </div>
-    <div class="learn-grid">
-      <details class="lesson">
-        <summary>Footprint là gì?</summary>
-        <p class="lead">Đọc khối lượng bid/ask tại từng mức giá, nhận biết hấp thụ và mất cân bằng.</p>
-        <div class="body">
-          <p>Footprint tách mỗi cây nến thành từng mức giá. Ở mỗi mức có hai con số: khối lượng khớp do <b>bên bán chủ động</b> (đánh vào giá bid) và do <b>bên mua chủ động</b> (đánh vào giá ask).</p>
-          <ul>
-            <li><b>Mất cân bằng (imbalance):</b> một bên áp đảo bên kia theo đường chéo, thường từ 3:1 trở lên. Nhiều imbalance mua xếp chồng là dấu hiệu lực mua mạnh.</li>
-            <li><b>POC của nến:</b> mức giá khớp nhiều nhất trong nến, cho biết thị trường "chấp nhận" giá ở đâu.</li>
-            <li><b>Hấp thụ:</b> khối lượng bán chủ động rất lớn ở đáy nhưng giá không giảm thêm, nghĩa là có lệnh giới hạn mua đang đỡ.</li>
-          </ul>
-        </div>
-      </details>
-      <details class="lesson">
-        <summary>Delta &amp; CVD</summary>
-        <p class="lead">Chênh lệch lệnh chủ động mua/bán và cách nó phân kỳ với giá.</p>
-        <div class="body">
-          <p><b>Delta</b> = khối lượng mua chủ động − khối lượng bán chủ động trong một cây nến. <b>CVD</b> (Cumulative Volume Delta) là tổng cộng dồn của delta theo thời gian.</p>
-          <ul>
-            <li>Giá tạo đỉnh mới nhưng CVD không tạo đỉnh mới: lực mua chủ động đang yếu đi, dễ có điều chỉnh.</li>
-            <li>Giá giảm nhưng CVD tăng: bên mua chủ động vẫn vào, nhưng bị lệnh giới hạn bán lớn chặn. Cần xem giá có phá được vùng đó không.</li>
-            <li>Delta rất lớn mà giá gần như không chạy thường là dấu hiệu hấp thụ.</li>
-          </ul>
-        </div>
-      </details>
-      <details class="lesson">
-        <summary>Volume Profile &amp; Value Area</summary>
-        <p class="lead">Khối lượng phân bố theo giá trong một phiên hay một khoảng thời gian.</p>
-        <div class="body">
-          <p><b>POC</b> là mức giá có khối lượng lớn nhất. <b>Value Area</b> là vùng chứa khoảng 70% khối lượng, giới hạn bởi <b>VAH</b> (trên) và <b>VAL</b> (dưới).</p>
-          <ul>
-            <li>Giá mở cửa trong Value Area hôm trước thường dao động quanh đó.</li>
-            <li>Giá mở ngoài Value Area rồi quay lại vào trong thường có xu hướng chạy sang cạnh bên kia.</li>
-            <li>Vùng khối lượng thấp (LVN) giá thường đi qua nhanh, vùng khối lượng cao (HVN) giá thường chậm lại.</li>
-          </ul>
-        </div>
-      </details>
-      <details class="lesson">
-        <summary>Cách đọc báo cáo COT</summary>
-        <p class="lead">Quỹ lớn đang nghiêng về phía nào và đã cực đoan chưa.</p>
-        <div class="body">
-          <p>Nhóm <b>Non-commercial</b> (quỹ đầu cơ lớn) thường đi theo xu hướng. Nhóm <b>Commercial</b> (nhà sản xuất, người phòng hộ) thường đi ngược giá.</p>
-          <ul>
-            <li>COT Index gần 100: quỹ mua ròng gần mức cao nhất trong kỳ. Xu hướng tăng mạnh nhưng vị thế đã đông, dễ đảo chiều khi có tin xấu.</li>
-            <li>COT Index gần 0: ngược lại, bên bán đã đông.</li>
-            <li>COT là dữ liệu tuần, trễ 3 ngày, dùng để xem bối cảnh chứ không dùng để vào lệnh trong ngày.</li>
-          </ul>
-        </div>
-      </details>
-    </div>
-  </section>
-
+</div><section class="directory"><h2>Khám phá theo mục</h2><div class="dir-grid"><div class="dir"><a class="dir-h" href="/thi-truong/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg><b>Thị trường</b><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><ul><li><a href="/thi-truong/vang/">Vàng</a><span>COT, quỹ GLD, lợi suất thực</span></li><li><a href="/thi-truong/chung-khoan-my/">S&P 500 · Nasdaq</a><span>Vị thế quỹ lớn ES, NQ</span></li><li><a href="/thi-truong/dau/">Dầu WTI</a><span>COT, tồn kho EIA</span></li><li><a href="/thi-truong/crypto/">Crypto</a><span>Giá, tâm lý, vị thế CME</span></li></ul></div><div class="dir"><a class="dir-h" href="/vi-the/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M11 20V4M17 20v-8M3 20h18"/></svg><b>Vị thế</b><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><ul><li><a href="/vi-the/cot/">Quỹ lớn (COT)</a><span>Vị thế ròng 52 tuần</span></li><li><a href="/vi-the/ai-mua-ai-ban/">Ai mua, ai bán</a><span>Quỹ, nhà sản xuất, ngân hàng</span></li><li><a href="/vi-the/dong-nguoi/">Ai đang đông người</a><span>COT Index 0–100</span></li><li><a href="/vi-the/quy-vang-gld/">Quỹ vàng GLD</a><span>Số tấn vàng quỹ đang giữ</span></li></ul></div><div class="dir"><a class="dir-h" href="/vi-mo/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10l9-6 9 6M5 10v9M9.5 10v9M14.5 10v9M19 10v9M3 21h18"/></svg><b>Vĩ mô</b><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><ul><li><a href="/vi-mo/lich-tin/">Lịch tin tuần</a><span>Tin USD theo giờ VN</span></li><li><a href="/vi-mo/loi-suat/">Lợi suất Mỹ</a><span>Đường cong trái phiếu</span></li><li><a href="/vi-mo/chi-so/">Chỉ số vĩ mô Mỹ</a><span>Lợi suất thực, EFFR</span></li><li><a href="/vi-mo/ton-kho-dau/">Tồn kho dầu</a><span>Báo cáo EIA thứ Tư</span></li></ul></div><div class="dir"><a class="dir-h" href="/tin-tuc/"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg><b>Tin tức</b><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><ul><li><a href="/tin-tuc/vang/">Vàng</a><span>Tin vàng</span></li><li><a href="/tin-tuc/chung-khoan/">S&P · Nasdaq</a><span>Tin chứng khoán Mỹ</span></li><li><a href="/tin-tuc/dau/">Dầu</a><span>Tin dầu</span></li><li><a href="/tin-tuc/crypto/">Crypto</a><span>Tin crypto</span></li><li><a href="/tin-tuc/fed/">Fed & vĩ mô</a><span>Fed, lạm phát, việc làm</span></li><li><a href="/tin-tuc/chinh-thuc/">Nguồn chính thức</a><span>Fed, EIA, CFTC</span></li></ul></div><div class="dir"><a class="dir-h" href="/hoc/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2zM20 19v2H6"/></svg><b>Học</b><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><ul><li><a href="/hoc/footprint/">Footprint</a><span>Bid/ask tại từng mức giá</span></li><li><a href="/hoc/delta-cvd/">Delta & CVD</a><span>Lệnh chủ động mua/bán</span></li><li><a href="/hoc/volume-profile/">Volume Profile</a><span>POC, Value Area</span></li><li><a href="/hoc/cot/">Báo cáo COT</a><span>Đọc vị thế quỹ lớn</span></li></ul></div><div class="dir"><a class="dir-h" href="/wyckdelta-chart/"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 14l3-3 2 2 5-5M8 21h8"/></svg><b>Wyckdelta Chart</b><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a><ul><li><a href="/huong-dan.html">Cài đặt app</a><span>Windows, điện thoại, Mac</span></li><li><a href="/chart.html">Mở Wyckdelta Chart</a><span>Đã có tài khoản</span></li></ul></div></div></section>
   <section class="final" aria-labelledby="final-h">
-    <img src="img/logo.png" alt="" width="52" height="52" loading="lazy">
+    <img src="/img/logo.png" alt="" width="52" height="52" loading="lazy">
     <h2 id="final-h">Xem phiên hôm nay trên Wyckdelta Chart</h2>
     <p>Footprint, heatmap, iceberg và GEX cho Vàng, ES, NQ, crypto. Trên PC, Mac, iPhone, Android.</p>
     <div class="actions">
       <a class="btn gold" href="https://m.me/61596278051545?ref=wyckdelta_web" target="_blank" rel="noopener">Inbox để nhận link dùng thử</a>
-      <a class="btn" href="huong-dan.html">Hướng dẫn cài đặt</a>
+      <a class="btn" href="/huong-dan.html">Hướng dẫn cài đặt</a>
     </div>
     <p class="follow-h">Theo dõi Wyckdelta trên các kênh</p>
     <nav class="social" aria-label="Kênh của Wyckdelta">
@@ -1045,7 +186,7 @@ body.drawer { overflow: hidden; }
 
 <footer class="wrap">
   <div class="row">
-    <a class="logo" href="#top" style="font-size: 16px; color: var(--text);"><img src="img/logo.png" alt="" width="24" height="24" loading="lazy" style="width:24px;height:24px">Wyckdelta</a>
+    <a class="logo" href="/" style="font-size: 16px; color: var(--text);"><img src="/img/logo.png" alt="" width="24" height="24" loading="lazy" style="width:24px;height:24px">Wyckdelta</a>
     <nav class="social icons" aria-label="Kênh của Wyckdelta">
       <a class="soc" href="https://t.me/wyckdelta" target="_blank" rel="noopener" aria-label="Wyckdelta trên Telegram" title="Telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></a>
       <a class="soc" href="https://www.facebook.com/profile.php?id=61596278051545" target="_blank" rel="noopener" aria-label="Wyckdelta trên Facebook" title="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg></a>
@@ -1060,641 +201,7 @@ body.drawer { overflow: hidden; }
 </footer>
 </div>
 
-<script type="module">
-import { add, fresh, tipFor, divergingBars, levelLine, miniArea, miniLine, halfGauge, curveChart } from "./charts.js?v=2";  // bump when charts.js changes (Pages caches 10 min)
-const I18N = window.WD_I18N || { en: false, locale: "vi-VN", t: v => v }, LOC = I18N.locale;
-const VN = "Asia/Ho_Chi_Minh";
-const ASSETS = { GC: "Vàng", ES: "S&P 500", NQ: "Nasdaq 100", CL: "Dầu WTI", BTC: "Bitcoin", ETH: "Ether" };
-const TOPICS = { rel: "Liên quan", GC: "GC · Vàng", ES: "ES · S&P", NQ: "NQ · Nasdaq", CL: "CL · Dầu", CRYPTO: "Crypto", FED: "Fed", MACRO: "Vĩ mô", official: "Nguồn chính thức", all: "Mọi tin" };
-const LANGS = { all: "Tất cả", vi: "Tiếng Việt", en: "English" };
-const IMPACTS = { High: I18N.t("Cao", "High"), Medium: I18N.t("Trung bình", "Medium"), Low: I18N.t("Thấp", "Low") };
-const CCYS = { all: "Mọi tiền tệ", USD: "USD" };
-const PAGE = 16, REFRESH_MS = 5 * 60 * 1000;
-
-const state = load("mtt-state", { topic: "rel", lang: "all", impacts: ["High", "Medium"], ccy: "USD", asset: "GC", showPast: false, weekImp: "Medium", flow: "GC" });
-let news = null, cal = null, market = null, shown = PAGE;
-
-function load(k, d) { try { return { ...d, ...JSON.parse(localStorage.getItem(k)) }; } catch { return d; } }
-function save() { try { localStorage.setItem("mtt-state", JSON.stringify(state)); } catch {} }
-function el(tag, props = {}, ...kids) {
-  const e = Object.assign(document.createElement(tag), props);
-  for (const k of kids.flat()) if (k != null && k !== false) e.append(k);
-  return e;
-}
-const $ = id => document.getElementById(id);
-function safeUrl(u) { try { const x = new URL(u); return /^https?:$/.test(x.protocol) ? x.href : "#"; } catch { return "#"; } }
-const nf = new Intl.NumberFormat(LOC);
-const fmtN = (n, d = 0) => new Intl.NumberFormat(LOC, { minimumFractionDigits: d, maximumFractionDigits: d }).format(n);
-const signed = (n, d = 0) => (n > 0 ? "+" : n < 0 ? "−" : "") + fmtN(Math.abs(n), d);
-const cls = n => n > 0 ? "up" : n < 0 ? "down" : "muted";
-const vnTime = d => d.toLocaleTimeString(LOC, { hour: "2-digit", minute: "2-digit", timeZone: VN });
-// vi-VN prints "25-10" without a year; normalise to "25/10"
-const vnDate = (d, o = { day: "2-digit", month: "2-digit", year: "numeric" }) =>
-  d.toLocaleDateString(LOC, { ...o, timeZone: VN }).replace(/(\d{2})-(\d{2})/, "$1/$2");
-const rtf = new Intl.RelativeTimeFormat(I18N.en ? "en" : "vi", { numeric: "auto" });
-function ago(iso) {
-  if (!iso) return "";
-  const s = (new Date(iso) - Date.now()) / 1000;
-  if (Math.abs(s) < 60) return "vừa xong";
-  if (Math.abs(s) < 3600) return rtf.format(Math.round(s / 60), "minute");
-  if (Math.abs(s) < 86400) return rtf.format(Math.round(s / 3600), "hour");
-  return rtf.format(Math.round(s / 86400), "day");
-}
-function until(d) {
-  const m = Math.max(0, Math.round((d - Date.now()) / 60000)), days = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), mm = m % 60;
-  if (I18N.en) return "in " + (days ? `${days}d ${h}h` : h ? `${h}h ${mm}m` : `${mm}m`);
-  return "còn " + (days ? `${days} ngày ${h} giờ` : h ? `${h} giờ ${mm} phút` : `${mm} phút`);
-}
-function chipGroup(box, options, isOn, onClick) {
-  box.replaceChildren(...Object.entries(options).map(([k, label]) =>
-    el("button", { type: "button", className: "chip", textContent: label, ariaPressed: String(isOn(k)), onclick: () => onClick(k) })));
-}
-
-// ---------- Pulse tiles ----------
-function tile(href, label, value, sub, extra = "") {
-  return el("a", { className: "tile " + extra, href },
-    el("div", { className: "lbl", textContent: label }), value, sub ? el("div", { className: "sub", textContent: sub }) : null);
-}
-function renderPulse() {
-  const out = [];
-  for (const c of (market?.crypto?.coins || []).filter(c => c.sym === "BTC" || c.sym === "ETH")) {
-    const t = tile("#crypto", `${c.sym} · ${c.name}`,
-      el("div", { className: "val num" }, "$" + fmtN(c.price, c.price < 100 ? 2 : 0),
-        el("span", { className: "pct num " + cls(c.ch24), textContent: (c.ch24 > 0 ? "+" : c.ch24 < 0 ? "−" : "") + fmtN(Math.abs(c.ch24 ?? 0), 2) + "%" })),
-      "24 giờ · CoinGecko");
-    const sp = el("div", { className: "chart spk" }); t.append(sp);
-    if (c.spark?.length) miniLine(sp, c.spark, { h: 28, color: c.ch7 >= 0 ? "var(--green)" : "var(--red)", fill: false });
-    out.push(t);
-  }
-  const now = Date.now();
-  const next = cal?.events.map(e => ({ ...e, d: new Date(e.time) }))
-    .filter(e => e.impact === "High" && e.country === "USD" && e.d > now).sort((a, b) => a.d - b.d)[0];
-  out.push(next
-    ? tile("#calendar", "Tin đỏ USD kế tiếp", el("div", { className: "val small", textContent: viTitle(next.title) }),
-        `${vnDate(next.d, { weekday: "short", day: "2-digit", month: "2-digit" })} ${vnTime(next.d)} · ${until(next.d)}`, "hot")
-    : tile("#calendar", "Tin đỏ USD kế tiếp", el("div", { className: "val small", textContent: "Hết tin đỏ tuần này" }), ""));
-  const ry = market?.macro?.find(m => /thực/.test(m.name));
-  if (ry) out.push(tile("#macro", "Lợi suất thực 10 năm",
-    // Neutral colour: a rising yield is not "good", so the impact is said in words instead
-    el("div", { className: "val num" }, fmtN(ry.value, 2) + "% ", el("small", { className: "num muted", style: "font-size:14px", textContent: signed(ry.change, 2) })),
-    "so với 1 tháng · " + (ry.change < 0 ? "thường hỗ trợ Vàng" : ry.change > 0 ? "thường gây áp lực lên Vàng" : "đi ngang")));
-  const gc = market?.cot?.assets?.GC;
-  if (gc) out.push(tile("#cot", "Quỹ lớn · Vàng (COT)",
-    el("div", { className: "val num " + cls(gc.net), textContent: signed(gc.net) }),
-    `hợp đồng ròng · COT Index ${gc.index26} (${zone(gc.index26)})`));
-  const crude = market?.eia?.rows?.[0];
-  if (crude) out.push(tile("#eia", "Tồn kho dầu thô Mỹ",
-    el("div", { className: "val num " + cls(-crude.change), textContent: signed(crude.change, 1) + I18N.t(" tr thùng", " M bbl") }),
-    `trong tuần · ${crude.change > 0 ? "thường đọc là cầu yếu" : crude.change < 0 ? "thường đọc là cầu mạnh" : "đi ngang"}`));
-  $("pulse").replaceChildren(...out);
-}
-
-// ---------- Big funds: 4 markets at once + detail panel ----------
-const zone = v => v >= 80 ? "cao, cực đoan" : v <= 20 ? "thấp, cực đoan" : "vùng giữa";
-const BIAS = b => b > 0 ? ["p", "Thuận lợi"] : b < 0 ? ["n", "Áp lực"] : ["z", "Trung tính"];
-const SHORTNAME = { GC: "Vàng", ES: "S&P 500", NQ: "Nasdaq", CL: "Dầu WTI", BTC: "Bitcoin", ETH: "Ether" };
-function selectAsset(k, focus) { state.asset = k; save(); renderFour(); if (focus) $("tab-" + k)?.focus(); }
-function renderFour() {
-  const cot = market?.cot, sc = market?.scenarios;
-  if (!cot) { $("four").replaceChildren(el("div", { className: "empty", textContent: "Chưa có dữ liệu COT." })); return; }
-  $("cot-badge").textContent = `COT ngày ${vnDate(new Date(cot.report_date + "T12:00:00Z"))}`; $("cot-badge").className = "badge ok";
-  const keys = Object.keys(ASSETS).filter(k => cot.assets[k]);
-  if (!keys.includes(state.asset)) state.asset = keys[0];
-  $("four").replaceChildren(...keys.map((k, i) => {
-    const a = cot.assets[k], [c, label] = BIAS(sc?.[k]?.bias ?? 0), on = k === state.asset;
-    const card = el("button", { type: "button", role: "tab", id: "tab-" + k, className: "mk", ariaSelected: String(on), tabIndex: on ? 0 : -1,
-      onclick: () => selectAsset(k),
-      onkeydown: e => { const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
-        if (d) { e.preventDefault(); selectAsset(keys[(i + d + keys.length) % keys.length], true); } } },
-      el("span", { className: "t" }, el("span", {}, el("b", { textContent: k }), " ", el("span", { className: "n", textContent: SHORTNAME[k] })),
-        el("span", { className: "bias " + c, textContent: label })),
-      el("span", { className: "v num " + cls(a.net), textContent: signed(a.net) }),
-      el("span", { className: "s" }, "hợp đồng ròng · tuần ", el("b", { className: "num " + cls(a.change), textContent: signed(a.change) })),
-      el("span", { className: "chart" }),
-      el("span", { className: "zone" }, el("span", { textContent: "COT" }), el("span", { className: "zbar" }, el("i", { style: `left:${a.index26}%` })),
-        el("b", { className: "num", textContent: a.index26 })));
-    return card;
-  }));
-  keys.forEach(k => miniArea($("tab-" + k).querySelector(".chart"), cot.assets[k].history.map(h => h.net), { h: 56 }));
-  renderDetail();
-}
-function renderDetail() {
-  const k = state.asset, a = market.cot.assets[k], s = market.scenarios?.[k], [c, label] = BIAS(s?.bias ?? 0);
-  $("asset-panel").setAttribute("aria-labelledby", "tab-" + k);
-  const impacts = (market.macro || []).filter(m => m.impact?.[k]).map(m => {
-    const up = m.impact[k] > 0;
-    return el("li", { className: up ? "p" : "n" },
-      el("span", { className: "arrow", textContent: up ? "▲" : "▼", ariaHidden: "true" }),
-      el("span", {}, el("b", { textContent: m.name }),
-        el("span", { className: "muted num", textContent: ` ${fmtN(m.value, 2)}${m.unit === "%" ? "%" : ""} (${signed(m.change, 2)})` }),
-        el("span", { className: "why", textContent: up ? " · thường hỗ trợ" : " · thường gây áp lực" })));
-  });
-  if (k === "CL" && market.eia?.rows?.[0]) {
-    const r = market.eia.rows[0], up = r.change < 0;
-    impacts.push(el("li", { className: up ? "p" : "n" }, el("span", { className: "arrow", textContent: up ? "▲" : "▼", ariaHidden: "true" }),
-      el("span", {}, el("b", { textContent: "Tồn kho dầu thô" }), el("span", { className: "muted num", textContent: ` ${signed(r.change, 1)} triệu thùng / tuần` }),
-        el("span", { className: "why", textContent: up ? " · thường hỗ trợ" : " · thường gây áp lực" }))));
-  }
-  if (k === "GC" && market.gld && Math.abs(market.gld.m1) >= 0.5) {
-    const g = market.gld, up = g.m1 > 0;
-    impacts.push(el("li", { className: up ? "p" : "n" }, el("span", { className: "arrow", textContent: up ? "▲" : "▼", ariaHidden: "true" }),
-      el("span", {}, el("b", { textContent: "Quỹ vàng GLD" }), el("span", { className: "muted num", textContent: ` ${signed(g.m1, 1)} tấn / 1 tháng` }),
-        el("span", { className: "why", textContent: up ? " · dòng tiền vào vàng" : " · dòng tiền rút khỏi vàng" }))));
-  }
-  const gauge = (lbl, v) => el("div", { className: "gauge" },
-    el("div", { className: "row" }, el("span", { textContent: lbl }), el("b", { className: "num", textContent: `${v} · ${zone(v)}` })),
-    el("div", { className: "bar" }, el("b", { style: `left:${v}%` })));
-  $("asset-panel").replaceChildren(
-    el("div", { className: "blk" },
-      el("h4", { textContent: `${k} · ${SHORTNAME[k]}: chi tiết vị thế` }),
-      el("div", { className: "sub num" }, `${I18N.t("Mua", "Long")} ${nf.format(a.long)} (${signed(a.long_change)}) · ${I18N.t("Bán", "Short")} ${nf.format(a.short)} (${signed(a.short_change)})`),
-      el("div", { className: "sub num" }, `Vị thế ròng bằng ${fmtN(a.net_pct_oi, 1)}% hợp đồng mở`),
-      gauge("COT Index 26 tuần", a.index26), gauge("COT Index 3 năm", a.index156)),
-    el("div", { className: "blk" },
-      el("h4", {}, "Kịch bản để quan sát ", el("span", { className: "tone " + c, textContent: label })),
-      s ? el("ul", { className: "bul" }, ((I18N.en && s.notes_en) || s.notes).map(n => el("li", { textContent: n }))) : el("p", { className: "muted", textContent: "Chưa có kịch bản." })),
-    el("div", { className: "blk" },
-      el("h4", { textContent: `Vĩ mô tác động lên ${SHORTNAME[k]}` }),
-      impacts.length ? el("ul", { className: "imps" }, impacts) : el("p", { className: "muted", textContent: "Không có yếu tố vĩ mô nổi bật cho mã này." }),
-      el("a", { className: "more-link", href: "#macro", textContent: "Xem bảng vĩ mô đầy đủ →" })));
-}
-
-// ---------- Week timeline ----------
-function renderWeek() {
-  if (!cal) return;
-  chipGroup($("week-imp"), { High: "Chỉ tin đỏ", Medium: "Đỏ + cam" }, k => (k === "High") === (state.weekImp === "High"),
-    k => { state.weekImp = k; save(); renderWeek(); });
-  const imps = state.weekImp === "High" ? ["High"] : ["High", "Medium"];
-  const evs = cal.events.filter(e => e.country === "USD" && imps.includes(e.impact)).map(e => ({ ...e, d: new Date(e.time) })).sort((a, b) => a.d - b.d);
-  const box = $("week"), H = 150, [s, W] = fresh(box, H), L = 8, R = 16, T = 22, B = 30;
-  // Monday 00:00 Vietnam time of the calendar's week, five days wide
-  const first = cal.events.map(e => new Date(e.time)).sort((a, b) => a - b)[0] || new Date();
-  const parts = new Intl.DateTimeFormat("en-CA", { timeZone: VN, year: "numeric", month: "2-digit", day: "2-digit", weekday: "short" }).formatToParts(first);
-  const p = Object.fromEntries(parts.map(x => [x.type, x.value]));
-  const back = { Mon: 0, Tue: 1, Wed: 2, Thu: 3, Fri: 4, Sat: 5, Sun: 6 }[p.weekday] ?? 0;
-  const t0 = Date.parse(`${p.year}-${p.month}-${p.day}T00:00:00+07:00`) - back * 864e5, t1 = t0 + 5 * 864e5;
-  const x = t => L + (t - t0) / (t1 - t0) * (W - L - R), lane = { High: T + 22, Medium: T + 62 };
-  const g = add(s, "g", { class: "axis" }), names = I18N.en ? ["Mon", "Tue", "Wed", "Thu", "Fri"] : ["T2", "T3", "T4", "T5", "T6"];
-  for (let i = 0; i <= 5; i++) {
-    const tx = x(t0 + i * 864e5); add(g, "line", { x1: tx, x2: tx, y1: T - 8, y2: H - B + 4, stroke: "var(--grid)" });
-    if (i < 5) add(g, "text", { x: tx + (x(t0 + 864e5) - x(t0)) / 2, y: H - 10, "text-anchor": "middle" },
-      `${names[i]} ${vnDate(new Date(t0 + i * 864e5 + 6 * 36e5), { day: "2-digit", month: "2-digit" })}`);
-  }
-  add(g, "text", { x: L + 2, y: lane.High - 12 }, I18N.t("Đỏ", "High")); if (imps.length > 1) add(g, "text", { x: L + 2, y: lane.Medium - 12 }, I18N.t("Cam", "Medium"));
-  const now = Date.now(), tip = tipFor(box), nextE = evs.find(e => e.d > now);
-  if (now > t0 && now < t1) {
-    add(s, "line", { x1: x(now), x2: x(now), y1: T - 10, y2: H - B + 4, stroke: "#f5b301", "stroke-width": 2 });
-    add(s, "text", { x: x(now) + 4, y: T - 2, fill: "#f5b301", "font-size": 11, "font-weight": 700 }, "Bây giờ");
-  }
-  evs.forEach(e => {
-    const cx = x(e.d.getTime()), cy = lane[e.impact] ?? lane.Medium, isNext = e === nextE;
-    add(s, "circle", { cx, cy, r: isNext ? 8 : 6, fill: e.impact === "High" ? "var(--red)" : "var(--warn)", opacity: e.d < now ? .35 : 1,
-      stroke: isNext ? "#f5b301" : "var(--panel)", "stroke-width": 2 });
-    const hit = add(s, "circle", { cx, cy, r: 14, fill: "transparent" });
-    hit.addEventListener("pointerenter", () => tip.show(cx / W * box.clientWidth, (cy - 8) / H * box.clientHeight,
-      `${vnDate(e.d, { weekday: "short", day: "2-digit", month: "2-digit" })} ${vnTime(e.d)}<br><b>${viTitle(e.title)}</b>` +
-      (e.forecast ? `<br>Dự báo ${e.forecast} · Trước ${e.previous || "–"}` : "")));
-    hit.addEventListener("pointerleave", () => tip.hide());
-  });
-  const up = evs.filter(e => e.d > now).slice(0, 3);
-  $("next").replaceChildren(...(up.length ? up.map((e, i) => el("div", { className: "nx" + (i ? "" : " first") },
-    el("div", { className: "w" }, el("span", { className: "dot " + e.impact }),
-      vnDate(e.d, { weekday: "long" }) + " " + vnTime(e.d), i ? null : el("span", { className: "cd", textContent: until(e.d) })),
-    el("b", { textContent: viTitle(e.title) }),
-    el("span", { className: "o", textContent: [I18N.en ? "" : e.title, e.forecast ? `Dự báo ${e.forecast} · Trước ${e.previous || "–"}` : ""].filter(Boolean).join(" · ") })))
-    : [el("div", { className: "empty", textContent: "Không còn tin nào phù hợp trong tuần này." })]));
-}
-
-// ---------- Yield curve ----------
-function renderCurve() {
-  const c = market?.curve;
-  if (!c) { $("curve").replaceChildren(el("div", { className: "empty", textContent: "Chưa có dữ liệu đường cong." })); return; }
-  const [today] = c.series, i2 = c.labels.indexOf("2N"), i10 = c.labels.indexOf("10N"), i3 = c.labels.indexOf("3T");
-  const sp = today.v[i10] - today.v[i2], sp3 = today.v[i10] - today.v[i3];
-  $("curve-badge").textContent = `Ngày ${vnDate(new Date(today.date + "T12:00:00Z"))}`; $("curve-badge").className = "badge ok";
-  $("curve-stats").replaceChildren(
-    el("div", { className: "stat" }, el("div", { className: "k", textContent: "Lợi suất 10 năm" }), el("div", { className: "v num", textContent: fmtN(today.v[i10], 2) + "%" })),
-    el("div", { className: "stat" }, el("div", { className: "k", textContent: "Chênh 10 năm − 2 năm" }), el("div", { className: "v num" }, signed(sp, 2), el("small", { className: "muted", textContent: " điểm %" }))),
-    el("div", { className: "stat" }, el("div", { className: "k", textContent: "Chênh 10 năm − 3 tháng" }), el("div", { className: "v num" }, signed(sp3, 2),
-      el("small", { className: "muted", textContent: sp3 < 0 ? " đảo ngược" : " dốc lên" }))));
-  // tenor labels are written T (tháng) / N (năm); English: M / Y
-  curveChart($("curve"), I18N.en ? c.labels.map(l => l.replace(/T$/, "M").replace(/N$/, "Y")) : c.labels, c.series.map(se => ({ name: se.name, v: se.v })));
-}
-
-// ---------- Positioning map ----------
-function renderMap() {
-  const cot = market?.cot; if (!cot) return;
-  const box = $("map"), keys = Object.keys(ASSETS).filter(k => cot.assets[k]), rowH = 46, T = 10, H = T + keys.length * rowH + 24;
-  const [s, W] = fresh(box, H), L = 84, R = 14, x = v => L + v / 100 * (W - L - R);
-  add(s, "rect", { x: x(0), y: T, width: x(20) - x(0), height: keys.length * rowH, fill: "rgba(239,68,68,.16)", rx: 4 });
-  add(s, "rect", { x: x(80), y: T, width: x(100) - x(80), height: keys.length * rowH, fill: "rgba(34,197,94,.16)", rx: 4 });
-  const g = add(s, "g", { class: "axis" });
-  [0, 20, 50, 80, 100].forEach(t => { add(g, "line", { x1: x(t), x2: x(t), y1: T, y2: T + keys.length * rowH, stroke: "var(--grid)" }); add(g, "text", { x: x(t), y: H - 6, "text-anchor": "middle" }, t); });
-  const tip = tipFor(box);
-  keys.forEach((k, i) => {
-    const a = cot.assets[k], cy = T + i * rowH + rowH / 2;
-    add(s, "line", { x1: x(0), x2: x(100), y1: cy, y2: cy, stroke: "var(--line2)" });
-    add(s, "text", { x: 0, y: cy + 5, fill: "var(--text)", "font-size": 14, "font-weight": 700 }, k);
-    add(s, "text", { x: k.length * 10 + 6, y: cy + 5, fill: "var(--muted)", "font-size": 11.5 }, SHORTNAME[k]);
-    add(s, "line", { x1: x(a.index156), x2: x(a.index26), y1: cy, y2: cy, stroke: "var(--muted)", "stroke-width": 2 });
-    add(s, "circle", { cx: x(a.index156), cy, r: 5, fill: "var(--panel)", stroke: "var(--muted)", "stroke-width": 2 });
-    add(s, "circle", { cx: x(a.index26), cy, r: 8, fill: "#f5b301", stroke: "var(--panel)", "stroke-width": 2 });
-    add(s, "text", { class: "lbl", x: x(a.index26), y: cy - 12, "text-anchor": "middle" }, a.index26);
-    const hit = add(s, "rect", { x: 0, y: cy - rowH / 2, width: W, height: rowH, fill: "transparent" });
-    hit.addEventListener("pointerenter", () => tip.show(x(a.index26) / W * box.clientWidth, (cy - 10) / H * box.clientHeight,
-      `${k} · ${SHORTNAME[k]}<br>26 tuần <b>${a.index26}</b> · 3 năm <b>${a.index156}</b>`));
-    hit.addEventListener("pointerleave", () => tip.hide());
-  });
-}
-
-// ---------- Who is buying (CFTC disaggregated) ----------
-function renderFlows() {
-  const f = market?.flows;
-  if (!f) { $("flow-stats").replaceChildren(el("div", { className: "empty", textContent: "Chưa có dữ liệu." })); return; }
-  const keys = Object.keys(f.assets);
-  if (!keys.includes(state.flow)) state.flow = keys[0];
-  chipGroup($("flow-asset"), Object.fromEntries(keys.map(k => [k, `${k} · ${SHORTNAME[k]}`])), k => k === state.flow, k => { state.flow = k; save(); renderFlows(); });
-  const a = f.assets[state.flow], wk = d => "Tuần " + vnDate(new Date(d + "T12:00:00Z"));
-  const stat = (k, v, chg) => el("div", { className: "stat" }, el("div", { className: "k", textContent: k }),
-    el("div", { className: "v num " + cls(v) }, signed(v), el("small", { className: "num " + cls(chg), textContent: " " + signed(chg) + I18N.t(" tuần", " w/w") })));
-  $("flow-stats").replaceChildren(stat("Quỹ đầu cơ", a.mm, a.mm_change), stat("Nhà sản xuất, thương nhân", a.prod, a.prod_change), stat("Ngân hàng (swap)", a.swap, a.swap_change));
-  const h = a.history, chg = h.slice(1).map((r, i) => ({ v: r.mm - h[i].mm, label: wk(r.d), short: vnDate(new Date(r.d + "T12:00:00Z"), { day: "2-digit", month: "2-digit" }) })).slice(-26);
-  divergingBars($("flow-change"), chg, { unit: "hợp đồng", digits: 0, h: 190 });
-  levelLine($("flow-level"), h.map(r => ({ v: r.mm, label: wk(r.d), short: vnDate(new Date(r.d + "T12:00:00Z"), { day: "2-digit", month: "2-digit" }) })),
-    { unit: "hđ", digits: 0, h: 150, color: "#f5b301" });
-}
-
-// ---------- EIA ----------
-function renderEia() {
-  const eia = market?.eia;
-  if (!eia) { $("eia-chart").replaceChildren(el("div", { className: "empty", textContent: "Chưa có dữ liệu EIA." })); return; }
-  $("eia-badge").textContent = `Tuần đến ${vnDate(new Date(eia.week + "T12:00:00Z"))}`; $("eia-badge").className = "badge ok";
-  const c = eia.rows[0];
-  $("eia-sum").replaceChildren(el("p", { className: "summary " + cls(-c.change) },
-    el("b", { className: "num", textContent: I18N.en
-      ? `Crude ${c.change > 0 ? "up" : c.change < 0 ? "down" : "flat"} ${fmtN(Math.abs(c.change), 1)} million barrels`
-      : `Dầu thô ${c.change > 0 ? "tăng" : c.change < 0 ? "giảm" : "đi ngang"} ${fmtN(Math.abs(c.change), 1)} triệu thùng` }),
-    !c.change ? "" : I18N.en ? ` · usually read as ${c.change > 0 ? "weak" : "strong"} demand`
-      : ` · thường được đọc là cầu ${c.change > 0 ? "yếu" : "mạnh"}`));
-  const box = $("eia-chart"), rows = eia.rows, rowH = 52, H = 6 + rows.length * rowH, [s, W] = fresh(box, H);
-  const L = 4, R = 4, cx = L + (W - L - R) / 2, m = Math.max(...rows.map(r => Math.abs(r.change))) * 1.4 || 1, sc = v => v / m * (W - L - R) / 2;
-  add(s, "line", { x1: cx, x2: cx, y1: 26, y2: H - 2, stroke: "var(--zero)" });
-  const tip = tipFor(box);
-  rows.forEach((r, i) => {
-    const top = 4 + i * rowH, by = top + 24, w = Math.abs(sc(r.change)), x0 = r.change < 0 ? cx - w : cx;
-    add(s, "text", { x: L, y: top + 15, fill: "var(--text)", "font-size": 13, "font-weight": i ? 500 : 700 }, r.name);
-    add(s, "text", { x: W - R, y: top + 15, fill: "var(--faint)", "font-size": 11.5, "text-anchor": "end" }, fmtN(r.value, 1));
-    add(s, "rect", { x: x0, y: by, width: Math.max(2, w), height: 16, rx: 4, fill: r.change < 0 ? "var(--green)" : "var(--red)", opacity: .9 });
-    add(s, "text", { class: "lbl", x: r.change < 0 ? x0 - 6 : x0 + w + 6, y: by + 12, "text-anchor": r.change < 0 ? "end" : "start" }, signed(r.change, 1) + I18N.t(" tr", " M"));
-    const hit = add(s, "rect", { x: 0, y: top, width: W, height: rowH, fill: "transparent" });
-    hit.addEventListener("pointerenter", () => tip.show(cx / W * box.clientWidth, by / H * box.clientHeight,
-      `${r.name}<br>Hiện tại <b>${fmtN(r.value, 1)}</b> triệu thùng<br>Tuần <b>${signed(r.change, 1)}</b> · năm trước ${fmtN(r.year_ago, 1)}`));
-    hit.addEventListener("pointerleave", () => tip.hide());
-  });
-}
-
-// ---------- Gold ETF holdings (SPDR GLD) ----------
-function renderGld() {
-  const g = market?.gld;
-  if (!g?.history?.length) { $("gld-stats").replaceChildren(el("div", { className: "empty", textContent: "Chưa có dữ liệu GLD." })); return; }
-  $("gld-badge").textContent = `Ngày ${vnDate(new Date(g.date + "T12:00:00Z"))}`; $("gld-badge").className = "badge ok";
-  const stat = (k, v, sub) => el("div", { className: "stat" }, el("div", { className: "k", textContent: k }), v, sub);
-  const chg = v => el("div", { className: "v num " + cls(v) }, signed(v, 1), el("small", { className: "muted", textContent: " tấn" }));
-  $("gld-stats").replaceChildren(
-    stat("Đang giữ", el("div", { className: "v num" }, fmtN(g.tonnes, 1), el("small", { className: "muted", textContent: " tấn" }))),
-    stat("Phiên gần nhất", chg(g.d1)), stat("1 tuần", chg(g.w1)), stat("1 tháng", chg(g.m1)),
-    stat("Từ đầu năm", chg(g.ytd)),
-    stat("52 tuần", el("div", { className: "v num", style: "font-size:16px" }, `${fmtN(g.low52, 0)}–${fmtN(g.high52, 0)}`,
-      el("small", { className: "muted", textContent: " tấn" }))));
-  const day = d => new Date(d + "T12:00:00Z"), h = g.history;
-  const pts = h.slice(1).map(([d, t], i) => ({ v: +(t - h[i][1]).toFixed(2), label: "Phiên " + vnDate(day(d)), short: vnDate(day(d), { day: "2-digit", month: "2-digit" }) })).slice(-30);
-  divergingBars($("gld-change"), pts, { unit: "tấn", digits: 1, h: 190 });
-  levelLine($("gld-level"), h.map(([d, t]) => ({ v: t, label: vnDate(day(d)), short: vnDate(day(d), { day: "2-digit", month: "2-digit" }) })),
-    { unit: "tấn", digits: 1, h: 190, color: "#f5b301" });
-}
-
-// ---------- Macro (trend + plain-language impact) ----------
-const IMP_NAME = { GC: "Vàng", ES: "S&P", NQ: "Nasdaq", CL: "Dầu", BTC: "BTC", ETH: "ETH" };
-function renderMacro() {
-  const macro = market?.macro;
-  if (!macro?.length) { $("macro-body").replaceChildren(el("div", { className: "empty", textContent: "Chưa có dữ liệu vĩ mô." })); return; }
-  $("macro-badge").textContent = `Ngày ${vnDate(new Date(macro[0].date + "T12:00:00Z"))}`; $("macro-badge").className = "badge ok";
-  $("macro-body").replaceChildren(...macro.map(m => {
-    const sup = Object.keys(m.impact).filter(a => m.impact[a] > 0).map(a => IMP_NAME[a] || a);
-    const pre = Object.keys(m.impact).filter(a => m.impact[a] < 0).map(a => IMP_NAME[a] || a);
-    const unit = m.unit === "%" ? "%" : "";
-    const spark = el("span", { className: "spk" });
-    const row = el("details", { className: "mrow2" },
-      el("summary", {},
-        el("span", { className: "mn" }, el("b", { textContent: m.name }),
-          sup.length ? el("span", { className: "it up", textContent: "Thường hỗ trợ: " + sup.join(", ") }) : null,
-          pre.length ? el("span", { className: "it down", textContent: "Thường gây áp lực: " + pre.join(", ") }) : null,
-          !sup.length && !pre.length ? el("span", { className: "it muted", textContent: "Đi ngang, ít tác động" }) : null),
-        spark,
-        el("span", { className: "mv" }, el("b", { className: "num", textContent: fmtN(m.value, 2) + unit }),
-          el("span", { className: "num muted", textContent: (m.change > 0 ? "▲ " : m.change < 0 ? "▼ " : "") + signed(m.change, 2) }))),
-      el("p", {}, m.note, el("span", { className: "muted", textContent: ` 1 tháng trước: ${fmtN(m.prev, 2)}${unit} (${vnDate(new Date(m.prev_date + "T12:00:00Z"), { day: "2-digit", month: "2-digit" })}).` })));
-    return [row, spark, m];
-  }).map(([row, spark, m]) => { queueMicrotask(() => m.history?.length > 1 && miniLine(spark, m.history.map(h => h[1]), { h: 34, color: "var(--muted)", fill: false })); return row; }));
-}
-
-// ---------- Crypto ----------
-const FNG_ZONES = [
-  { from: 0, to: 25, color: "#ef4444", label: "Sợ hãi tột độ" }, { from: 25, to: 45, color: "#f59e0b", label: "Sợ hãi" },
-  { from: 45, to: 55, color: "#8a96ab", label: "Trung lập" }, { from: 55, to: 75, color: "#84cc16", label: "Tham lam" },
-  { from: 75, to: 100, color: "#22c55e", label: "Tham lam tột độ" }];
-const money = v => v >= 1000 ? fmtN(v, 0) : v >= 1 ? fmtN(v, 2) : fmtN(v, 4);
-const pct = v => v == null ? "–" : signed(v, 2) + "%";
-function renderCrypto() {
-  const c = market?.crypto;
-  if (!c?.coins?.length) { $("coins").replaceChildren(el("div", { className: "empty", textContent: "Chưa có dữ liệu crypto." })); return; }
-  $("crypto-badge").textContent = `Lúc ${vnTime(new Date(c.time))} · ${ago(c.time)}`; $("crypto-badge").className = "badge ok";
-  $("coins").replaceChildren(...c.coins.map(x => {
-    const ch = el("span", { className: "chart" });
-    const card = el("div", { className: "coin" },
-      el("div", { className: "t" }, el("span", {}, el("b", { textContent: x.sym }), " ", el("span", { className: "n", textContent: x.name })),
-        el("span", { className: "bias " + (x.ch24 >= 0 ? "p" : "n"), textContent: pct(x.ch24) })),
-      el("div", { className: "v num", textContent: "$" + money(x.price) }),
-      ch,
-      el("div", { className: "s num" }, "7 ngày ", el("b", { className: cls(x.ch7), textContent: pct(x.ch7) }), " · 30 ngày ", el("b", { className: cls(x.ch30), textContent: pct(x.ch30) })));
-    queueMicrotask(() => x.spark?.length > 1 && miniLine(ch, x.spark, { h: 46, color: x.ch7 >= 0 ? "var(--green)" : "var(--red)" }));
-    return card;
-  }));
-  const f = c.fng;
-  if (!f) { $("fng").replaceChildren(); return; }
-  const z = FNG_ZONES.find(z => f.value >= z.from && f.value < z.to) || FNG_ZONES.at(-1);
-  const g = el("div", { className: "chart g" }), trend = el("div", { className: "chart" });
-  $("fng").replaceChildren(
-    el("div", { className: "fg-gauge" }, g),
-    el("div", { className: "fg-text" },
-      el("div", { className: "k", textContent: "Chỉ số Sợ hãi & Tham lam" }),
-      el("div", { className: "fg-v" }, el("b", { className: "num", textContent: f.value }), el("span", { style: `color:${z.color}`, textContent: " " + f.label })),
-      el("div", { className: "k", textContent: I18N.en ? `30 days: low ${Math.min(...f.history)} · high ${Math.max(...f.history)}` : `30 ngày: thấp ${Math.min(...f.history)} · cao ${Math.max(...f.history)}` }),
-      trend));
-  queueMicrotask(() => { halfGauge(g, f.value, FNG_ZONES, { h: 112 }); if (f.history?.length > 1) miniLine(trend, f.history, { h: 36, color: z.color }); });
-}
-
-// ---------- News (grouped by time, headline first) ----------
-const TAG_VI = { GC: "Vàng", ES: "S&P", NQ: "Nasdaq", CL: "Dầu", CRYPTO: "Crypto", FED: "Fed", MACRO: "Vĩ mô" };
-function bucket(iso) {
-  if (!iso) return "Trước đó";
-  const d = new Date(iso), key = x => vnDate(x, { day: "2-digit", month: "2-digit", year: "numeric" });
-  if (Date.now() - d < 36e5) return "Trong 1 giờ qua";
-  if (key(d) === key(new Date())) return "Hôm nay";
-  if (key(d) === key(new Date(Date.now() - 864e5))) return "Hôm qua";
-  return "Trước đó";
-}
-function renderNews() {
-  if (!news) return;
-  chipGroup($("topics"), TOPICS, k => state.topic === k, k => { state.topic = k; shown = PAGE; save(); renderNews(); });
-  chipGroup($("langs"), LANGS, k => state.lang === k, k => { state.lang = k; shown = PAGE; save(); renderNews(); });
-  const q = $("q").value.trim().toLowerCase();
-  const items = news.items.filter(it =>
-    (state.topic === "all" || (state.topic === "rel" ? it.topics.length > 0 || it.official : state.topic === "official" ? it.official : it.topics.includes(state.topic))) &&
-    (state.lang === "all" || it.lang === state.lang) &&
-    (!q || (it.title + " " + it.summary + " " + it.source).toLowerCase().includes(q)));
-  $("news-badge").textContent = `${items.length} tin · 3 ngày gần nhất`; $("news-badge").className = "badge ok";
-  const box = $("news-list");
-  if (!items.length) { box.replaceChildren(el("div", { className: "empty", textContent: "Không có tin phù hợp. Thử bỏ bớt bộ lọc." })); return; }
-  const groups = new Map();
-  for (const it of items.slice(0, shown)) { const b = bucket(it.time); if (!groups.has(b)) groups.set(b, []); groups.get(b).push(it); }
-  box.replaceChildren(...[...groups].map(([label, list]) => el("div", { className: "ngroup" },
-    el("div", { className: "nh" }, label, el("span", { className: "muted", textContent: ` · ${list.length}` })),
-    el("div", { className: "nlist" }, list.map(it => {
-      const d = it.time ? new Date(it.time) : null, recent = d && Date.now() - d < 36e5;
-      return el("article", { className: "nitem" + (it.official ? " off" : "") },
-        el("time", { className: "tm num", textContent: !d ? "" : recent ? Math.max(1, Math.round((Date.now() - d) / 6e4)) + I18N.t(" phút", " min") : vnTime(d),
-          title: d ? d.toLocaleString(LOC, { timeZone: VN }) : "" }),
-        el("div", { className: "nb" },
-          el("a", { className: "nt", href: safeUrl(it.link), target: "_blank", rel: "noopener noreferrer", textContent: it.title, translate: false }),
-          el("div", { className: "nm" }, el("span", { className: "src", textContent: it.source, translate: false }),
-            it.official ? el("span", { className: "offb", textContent: "Chính thức" }) : null,
-            it.topics.map(t => el("span", { className: "tag", textContent: TAG_VI[t] || t })))));
-    })))),
-    items.length > shown ? el("button", { type: "button", className: "btn more", textContent: I18N.en ? `Show ${Math.min(PAGE, items.length - shown)} more` : `Xem thêm ${Math.min(PAGE, items.length - shown)} tin`,
-      onclick: () => { shown += PAGE; renderNews(); } }) : null);
-}
-
-// ---------- Calendar ----------
-// Vietnamese names for the usual USD releases; the original title is always shown underneath.
-const VI_EVENTS = {
-  "Non-Farm Employment Change": "Bảng lương phi nông nghiệp (NFP)", "ADP Non-Farm Employment Change": "Việc làm ADP",
-  "Unemployment Rate": "Tỷ lệ thất nghiệp", "Unemployment Claims": "Đơn xin trợ cấp thất nghiệp",
-  "Average Hourly Earnings": "Thu nhập bình quân theo giờ", "JOLTS Job Openings": "Việc làm trống JOLTS",
-  "CPI": "CPI", "Core CPI": "CPI lõi", "PPI": "PPI", "Core PPI": "PPI lõi",
-  "Core PCE Price Index": "Chỉ số giá PCE lõi", "PCE Price Index": "Chỉ số giá PCE",
-  "Retail Sales": "Doanh số bán lẻ", "Core Retail Sales": "Doanh số bán lẻ lõi",
-  "Federal Funds Rate": "Quyết định lãi suất Fed", "FOMC Statement": "Tuyên bố FOMC", "FOMC Press Conference": "Họp báo FOMC",
-  "FOMC Meeting Minutes": "Biên bản họp FOMC", "FOMC Economic Projections": "Dự báo kinh tế của FOMC",
-  "ISM Manufacturing PMI": "PMI sản xuất ISM", "ISM Services PMI": "PMI dịch vụ ISM",
-  "Flash Manufacturing PMI": "PMI sản xuất sơ bộ", "Flash Services PMI": "PMI dịch vụ sơ bộ",
-  "Final Manufacturing PMI": "PMI sản xuất cuối", "Final Services PMI": "PMI dịch vụ cuối",
-  "Philly Fed Manufacturing Index": "Chỉ số sản xuất Philly Fed", "Empire State Manufacturing Index": "Chỉ số sản xuất Empire State",
-  "Advance GDP": "GDP lần đầu", "Prelim GDP": "GDP sơ bộ", "Final GDP": "GDP cuối",
-  "Durable Goods Orders": "Đơn hàng hàng bền", "Core Durable Goods Orders": "Đơn hàng hàng bền lõi",
-  "Industrial Production": "Sản lượng công nghiệp", "Trade Balance": "Cán cân thương mại",
-  "Building Permits": "Giấy phép xây dựng", "Housing Starts": "Nhà khởi công", "Existing Home Sales": "Doanh số nhà cũ",
-  "New Home Sales": "Doanh số nhà mới", "Pending Home Sales": "Doanh số nhà chờ bán",
-  "CB Consumer Confidence": "Niềm tin tiêu dùng CB",
-  "Prelim UoM Consumer Sentiment": "Niềm tin tiêu dùng UoM (sơ bộ)", "Revised UoM Consumer Sentiment": "Niềm tin tiêu dùng UoM (điều chỉnh)",
-  "Prelim UoM Inflation Expectations": "Kỳ vọng lạm phát UoM (sơ bộ)", "Revised UoM Inflation Expectations": "Kỳ vọng lạm phát UoM (điều chỉnh)",
-  "Crude Oil Inventories": "Tồn kho dầu thô EIA", "Natural Gas Storage": "Tồn trữ khí tự nhiên",
-  "Bank Holiday": "Nghỉ lễ ngân hàng", "Employment Cost Index": "Chỉ số chi phí lao động",
-  "Cleveland Fed Inflation Expectations": "Kỳ vọng lạm phát Cleveland Fed", "ADP Weekly Employment Change": "Việc làm ADP hằng tuần",
-  "Import Prices": "Giá nhập khẩu", "Capacity Utilization Rate": "Hiệu suất sử dụng công suất", "Business Inventories": "Tồn kho doanh nghiệp",
-  "NAHB Housing Market Index": "Chỉ số thị trường nhà NAHB", "API Weekly Statistical Bulletin": "Tồn kho dầu API hằng tuần",
-  "TIC Long-Term Purchases": "Dòng vốn dài hạn TIC", "CB Leading Index": "Chỉ số dẫn báo CB", "Mortgage Delinquencies": "Nợ quá hạn thế chấp",
-};
-const PERIOD = { "m/m": "tháng", "q/q": "quý", "y/y": "năm" };
-function viTitle(t) {
-  if (I18N.en) return t;  // English page: the release name as published
-  let m;
-  if ((m = t.match(/^Fed Chair(?:man)? (.+) Speaks$/))) return `Chủ tịch Fed ${m[1]} phát biểu`;
-  if ((m = t.match(/^FOMC Member (.+) Speaks$/))) return `Thành viên FOMC ${m[1]} phát biểu`;
-  if ((m = t.match(/^(\d+)-y Bond Auction$/))) return `Đấu giá trái phiếu ${m[1]} năm`;
-  if ((m = t.match(/^(.*?) (m\/m|q\/q|y\/y)$/)) && VI_EVENTS[m[1]]) return `${VI_EVENTS[m[1]]} (${PERIOD[m[2]]})`;
-  return VI_EVENTS[t] || t;
-}
-function dayLabel(d) {
-  const key = x => vnDate(x, { day: "2-digit", month: "2-digit", year: "numeric" });
-  const today = key(new Date()), tomorrow = key(new Date(Date.now() + 864e5));
-  const base = vnDate(d, { weekday: "long", day: "2-digit", month: "2-digit" });
-  const nice = base[0].toUpperCase() + base.slice(1);
-  return key(d) === today ? "Hôm nay · " + nice : key(d) === tomorrow ? "Ngày mai · " + nice : nice;
-}
-function renderCal() {
-  if (!cal) return;
-  chipGroup($("impacts"), IMPACTS, k => state.impacts.includes(k), k => {
-    state.impacts = state.impacts.includes(k) ? state.impacts.filter(x => x !== k) : [...state.impacts, k]; save(); renderCal(); });
-  chipGroup($("ccy"), CCYS, k => state.ccy === k, k => { state.ccy = k; save(); renderCal(); });
-  const now = Date.now();
-  const all = cal.events.map(e => ({ ...e, d: new Date(e.time) }))
-    .filter(e => state.impacts.includes(e.impact) && (state.ccy === "all" || e.country === state.ccy))
-    .sort((a, b) => a.d - b.d);
-  const past = all.filter(e => e.d < now), evs = state.showPast ? all : all.filter(e => e.d >= now);
-  $("cal-badge").textContent = `${all.length - past.length} sắp tới` + (past.length ? ` · ${past.length} đã qua` : ""); $("cal-badge").className = "badge ok";
-  const out = [];
-  if (past.length) out.push(el("button", { type: "button", className: "toggle-past", textContent: state.showPast ? `Ẩn ${past.length} sự kiện đã qua` : `Hiện ${past.length} sự kiện đã qua`,
-    onclick: () => { state.showPast = !state.showPast; save(); renderCal(); } }));
-  if (!evs.length) { out.push(el("div", { className: "empty", textContent: "Không còn sự kiện nào phù hợp trong tuần này." })); $("cal-list").replaceChildren(...out); return; }
-  const next = evs.find(e => e.d >= now);
-  let day = "";
-  for (const e of evs) {
-    const dk = dayLabel(e.d);
-    if (dk !== day) { day = dk; out.push(el("div", { className: "day", textContent: dk })); }
-    const vi = viTitle(e.title);
-    const nums = [e.forecast && ["Dự báo", e.forecast], e.previous && ["Trước", e.previous]].filter(Boolean);
-    out.push(el("div", { className: "ev" + (e.d < now ? " past" : "") + (e === next ? " next" : "") },
-      el("span", { className: "t num" }, vnTime(e.d), el("span", { className: "c" },
-        el("span", { className: "dot " + e.impact, title: IMPACTS[e.impact] || e.impact }), e.country)),
-      el("span", { className: "ti" },
-        el("b", { textContent: vi }),
-        vi !== e.title ? el("span", { className: "orig", textContent: e.title }) : null,
-        nums.length || e === next ? el("span", { className: "nums" },
-          e === next ? el("span", { className: "cd", textContent: until(e.d) }) : null,
-          nums.map(([k, v]) => el("span", { className: "kv num" }, k + " ", el("b", { textContent: v })))) : null)));
-  }
-  $("cal-list").replaceChildren(...out);
-}
-
-// ---------- Data loading ----------
-function renderSources() {
-  const rows = [];
-  if (market?.errors) for (const [k] of Object.entries(market.errors)) rows.push(`● ${k}: lỗi lần lấy gần nhất, đang hiện bản cũ`);
-  if (news) for (const s of news.sources) rows.push(`${s.ok ? "●" : "○"} ${s.source}: ${s.ok ? s.count + I18N.t(" tin", " items") : I18N.t("lỗi", "error")}`);
-  $("sources").replaceChildren(...rows.map(t => el("div", { textContent: t })));
-}
-async function getJson(name) {
-  const r = await fetch(`data/${name}?t=${Math.floor(Date.now() / 60000)}`);
-  if (!r.ok) throw new Error(name);
-  return r.json();
-}
-async function refresh() {
-  const [n, c, m] = await Promise.allSettled([getJson("news.json"), getJson("calendar.json"), getJson("market.json")]);
-  if (n.status === "fulfilled") news = n.value; else $("news-badge").textContent = "Lỗi tải tin";
-  if (c.status === "fulfilled") cal = c.value;
-  if (m.status === "fulfilled") market = m.value;
-  const upd = [news?.updated, market?.updated].filter(Boolean).sort().at(-1);
-  $("updated").textContent = upd ? `Cập nhật ${vnTime(new Date(upd))} ${vnDate(new Date(upd), { day: "2-digit", month: "2-digit" })} (giờ VN) · ${ago(upd)}`
-                                 : "Không tải được dữ liệu";
-  renderPulse(); renderFour(); renderWeek(); renderCrypto(); renderCurve(); renderMap(); renderFlows(); renderEia(); renderGld(); renderMacro(); renderNews(); renderCal(); renderSources();
-}
-
-// ---------- Start ----------
-const savedTheme = (() => { try { return localStorage.getItem("gt-theme"); } catch { return null; } })();
-if (savedTheme === "light") document.documentElement.dataset.theme = "light";
-$("theme").onclick = () => {
-  const light = document.documentElement.dataset.theme !== "light";
-  if (light) document.documentElement.dataset.theme = "light"; else delete document.documentElement.dataset.theme;
-  try { localStorage.setItem("gt-theme", light ? "light" : "dark"); } catch {}
-};
-$("q").oninput = () => { shown = PAGE; renderNews(); };
-
-// Price ticker: licensed embed (spot gold, S&P 500 / Nasdaq 100 CFDs, WTI, EUR/USD), delayed per exchange rules
-function renderTicker() {
-  const box = $("ticker"), light = document.documentElement.dataset.theme === "light";
-  const w = el("div", { className: "tradingview-widget-container" }, el("div", { className: "tradingview-widget-container__widget" }));
-  const sc = el("script", { src: "https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js", async: true });
-  sc.textContent = JSON.stringify({
-    symbols: [
-      { proName: "OANDA:XAUUSD", title: I18N.t("Vàng giao ngay", "Gold spot") },
-      { proName: "FOREXCOM:SPXUSD", title: "S&P 500" },
-      { proName: "FOREXCOM:NSXUSD", title: "Nasdaq 100" },
-      { proName: "TVC:USOIL", title: I18N.t("Dầu WTI", "WTI crude") },
-      { proName: "FX_IDC:EURUSD", title: "EUR/USD" },
-    ],
-    showSymbolLogo: true, isTransparent: true, displayMode: "adaptive",
-    colorTheme: light ? "light" : "dark", locale: I18N.en ? "en" : "vi_VN",
-  });
-  w.append(sc);
-  box.replaceChildren(w);
-}
-renderTicker();
-new MutationObserver(renderTicker).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-
-// ---------- App shell: sidebar, filter chips, top search, folded source notes ----------
-const wide = matchMedia("(min-width: 1100px)");
-function setDrawer(open) {
-  document.body.classList.toggle("drawer", open); $("scrim").hidden = !open; $("menu").ariaExpanded = String(open); $("tab-more").ariaExpanded = String(open);
-  for (const x of document.querySelectorAll(".shell, .tabbar, .topbar")) x.inert = open;
-  if (open) $("side").querySelector("a")?.focus();
-}
-try { if (localStorage.getItem("wd-mini") === "1") document.body.classList.add("mini"); } catch {}
-$("menu").onclick = () => {
-  if (wide.matches) {
-    const mini = document.body.classList.toggle("mini");
-    try { localStorage.setItem("wd-mini", mini ? "1" : "0"); } catch {}
-    dispatchEvent(new Event("resize"));
-  } else setDrawer(!document.body.classList.contains("drawer"));
-};
-$("scrim").onclick = () => setDrawer(false);
-addEventListener("keydown", e => { if (e.key === "Escape" && document.body.classList.contains("drawer")) { setDrawer(false); $("menu").focus(); } });
-function showTarget(e) {
-  const a = e.target.closest("a[href^='#']"); if (!a) return;
-  const t = document.querySelector(a.getAttribute("href"));
-  if (t?.closest(".grid > .card[hidden]") || t?.hidden) applyFilter("all");
-}
-$("side").addEventListener("click", e => { showTarget(e); if (e.target.closest("a") && !wide.matches) setDrawer(false); });
-document.querySelector(".tabbar").addEventListener("click", showTarget);
-wide.addEventListener("change", () => setDrawer(false));
-
-// Filter chips: show only the cards for one market (data-tags) and point the per-asset widgets at it
-const FILTERS = { all: "Tất cả", gc: "Vàng", es: "ES · S&P 500", nq: "NQ · Nasdaq", cl: "Dầu", crypto: "Crypto", macro: "Vĩ mô & lịch tin", news: "Tin tức" };
-const FILTER_ASSET = { gc: "GC", es: "ES", nq: "NQ", cl: "CL", crypto: "BTC" };
-let filter = "all";
-function applyFilter(k, jump) {
-  filter = k;
-  const grid = document.querySelector("#thi-truong .grid"), cards = [...grid.querySelectorAll(":scope > .card")];
-  cards.forEach(c => { c.hidden = k === "news" ? c.id !== "news" : k !== "all" && !c.dataset.tags.split(" ").includes(k); c.classList.remove("solo"); });
-  const vis = cards.filter(c => !c.hidden && c.id !== "cot");
-  grid.classList.toggle("filtered", k !== "all");
-  if (vis.length % 2) vis[vis.length - 1].classList.add("solo");
-  const a = FILTER_ASSET[k];
-  if (a) {
-    if (market?.cot?.assets?.[a]) selectAsset(a);
-    if (market?.flows?.assets?.[a]) { state.flow = a; save(); renderFlows(); }
-    const t = a === "BTC" ? "CRYPTO" : a; if (TOPICS[t]) { state.topic = t; save(); shown = PAGE; if (news) renderNews(); }
-  }
-  [...$("filterbar").children].forEach(b => b.ariaPressed = String(b.dataset.k === k));
-  if (market) dispatchEvent(new Event("resize"));
-  if (jump) document.getElementById(k === "news" ? "news" : "thi-truong").scrollIntoView({ behavior: "instant", block: "start" });
-}
-$("filterbar").replaceChildren(...Object.entries(FILTERS).map(([k, v]) => {
-  const b = el("button", { type: "button", className: "chip", textContent: v, ariaPressed: String(k === "all"), onclick: () => applyFilter(k, true) });
-  b.dataset.k = k; return b;
-}));
-
-// Top search feeds the news search
-$("gsearch").onsubmit = e => {
-  e.preventDefault();
-  $("q").value = $("gq").value; shown = PAGE; if (news) renderNews();
-  if (filter !== "all" && filter !== "news") applyFilter("all");
-  $("news").scrollIntoView();
-};
-
-// Card prose (how to read + source) folded behind one "i" line per card: the card face shows data only
-for (const card of document.querySelectorAll("#thi-truong .grid > .card")) {
-  const prose = [...card.querySelectorAll(":scope > p.q, :scope > p.hint, :scope > p.note")];
-  if (!prose.length) continue;
-  const d = el("details", { className: "src" }, el("summary", { textContent: "Cách đọc và nguồn" }));
-  prose.forEach(p => { p.className = "note"; d.append(p); });
-  card.append(d);
-}
-$("tab-more").onclick = () => setDrawer(true);
-
-// Highlight the section in view on the sidebar and the phone tab bar
-const links = [...document.querySelectorAll(".links a, .tabbar a")];
-const watched = links.map(a => document.querySelector(a.getAttribute("href"))).filter(Boolean);
-const io = new IntersectionObserver(entries => {
-  for (const e of entries) if (e.isIntersecting)
-    links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id));
-}, { rootMargin: "-40% 0px -55% 0px" });
-watched.forEach(s => io.observe(s));
-
-refresh();
-setInterval(refresh, REFRESH_MS);
-let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (market) { renderFour(); renderCrypto(); renderCurve(); renderMap(); renderFlows(); renderEia(); renderGld(); renderMacro(); } if (cal) renderWeek(); }, 150); });
-</script>
+<script type="module" src="/app.js?v=84612b20"></script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "5df5afcbbd9046bf8af0256168f49f57"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

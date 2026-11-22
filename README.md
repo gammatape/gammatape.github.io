@@ -34,7 +34,10 @@ feeds.json                    Danh sách nguồn RSS (sửa ở đây để thê
 scripts/common.py             Hàm dùng chung
 scripts/fetch_news.py         Tin tức + lịch kinh tế  -> site/data/news.json, calendar.json
 scripts/fetch_market.py       COT, EIA, vĩ mô, quỹ GLD, kịch bản -> site/data/market.json
-site/index.html               Trang web (không cần build)
+scripts/build_pages.py        Dựng mọi trang từ một khung: danh sách mục (NAV), danh sách trang (PAGES), bài chuyên sâu
+scripts/site_src/             Phần HTML dùng chung: các thẻ dữ liệu (cards.html), hero, tính năng, bài học, lời kết, footer
+site/index.html, site/<mục>/  Trang SINH RA bởi build_pages.py, không sửa tay (trang chủ, thi-truong/, vi-the/, vi-mo/, tin-tuc/, hoc/, wyckdelta-chart/)
+site/app.css, site/app.js     CSS và mã chung của mọi trang (thẻ nào không có trên trang thì bỏ qua)
 site/huong-dan.html           Hướng dẫn cài đặt + đăng nhập cho khách (iPhone / Android / Windows / Mac); ghi địa chỉ máy chủ wyckdelta.tail65e625.ts.net (chủ yêu cầu 2026-11-20; chỉ mở được qua Tailscale với link mời)
 site/img/huong-dan/           Ảnh app Windows lấy từ Tuong-Chart apps/gammatape_viewer/tests/shots (Gmail mẫu); dang-nhap*, sau-dang-nhap, tai-khoan chụp từ ui_harness (tài khoản khách thử, không phải server thật)
 site/charts.js                Bộ vẽ biểu đồ SVG tự viết (cột hai chiều, đường, đường cong, sparkline), không thư viện ngoài
@@ -44,6 +47,29 @@ site/img/                     Ảnh chụp Wyckdelta (WebP, đã cắt bỏ than
 ```
 
 Các script chỉ dùng thư viện chuẩn Python, không cần cài gì thêm. Nguồn nào tạm lỗi thì giữ lại số liệu cũ, trang không bị trống.
+
+### Các mục (2026-11-22)
+
+Mỗi mục có URL riêng, kiểu cổng tài chính lớn: thanh rail trái (icon + tên mục), rê chuột / Tab vào mục thì hiện bảng
+mục con; điện thoại là ngăn kéo (bấm mũi tên để mở mục con) + thanh tab dưới; mỗi trang có hàng tab mục con và
+breadcrumb. Link cũ dạng `wyckdelta.com/#cot` tự chuyển sang trang mới (bảng `OLD` trong app.js).
+
+| Mục | Trang con |
+|---|---|
+| Thị trường `/thi-truong/` | Vàng, S&P 500 · Nasdaq, Dầu WTI, Crypto (mỗi mã: COT riêng, kịch bản, vĩ mô tác động, "Điều cần theo dõi") |
+| Vị thế `/vi-the/` | Quỹ lớn (COT), Ai mua ai bán, Ai đang đông người, Quỹ vàng GLD |
+| Vĩ mô `/vi-mo/` | Lịch tin tuần, Lợi suất Mỹ, Chỉ số vĩ mô Mỹ, Tồn kho dầu |
+| Tin tức `/tin-tuc/` | Vàng, S&P · Nasdaq, Dầu, Crypto, Fed & vĩ mô, Nguồn chính thức |
+| Học `/hoc/` | Footprint, Delta & CVD, Volume Profile, Báo cáo COT (mỗi bài một trang) |
+| Wyckdelta Chart `/wyckdelta-chart/` | Tính năng, Cài đặt app (huong-dan.html), Mở Wyckdelta Chart (chart.html) |
+
+Sửa nội dung hay thêm trang: sửa `scripts/build_pages.py` / `scripts/site_src/`, rồi
+
+```bash
+py -B scripts/build_pages.py
+py -B scripts/i18n_build.py --strict
+py -B scripts/build_pages.py --check
+```
 
 ## Chạy thử trên máy
 

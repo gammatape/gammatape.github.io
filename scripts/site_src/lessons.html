@@ -1,0 +1,48 @@
+      <details class="lesson">
+        <summary>Footprint là gì?</summary>
+        <p class="lead">Đọc khối lượng bid/ask tại từng mức giá, nhận biết hấp thụ và mất cân bằng.</p>
+        <div class="body">
+          <p>Footprint tách mỗi cây nến thành từng mức giá. Ở mỗi mức có hai con số: khối lượng khớp do <b>bên bán chủ động</b> (đánh vào giá bid) và do <b>bên mua chủ động</b> (đánh vào giá ask).</p>
+          <ul>
+            <li><b>Mất cân bằng (imbalance):</b> một bên áp đảo bên kia theo đường chéo, thường từ 3:1 trở lên. Nhiều imbalance mua xếp chồng là dấu hiệu lực mua mạnh.</li>
+            <li><b>POC của nến:</b> mức giá khớp nhiều nhất trong nến, cho biết thị trường "chấp nhận" giá ở đâu.</li>
+            <li><b>Hấp thụ:</b> khối lượng bán chủ động rất lớn ở đáy nhưng giá không giảm thêm, nghĩa là có lệnh giới hạn mua đang đỡ.</li>
+          </ul>
+        </div>
+      </details>
+      <details class="lesson">
+        <summary>Delta &amp; CVD</summary>
+        <p class="lead">Chênh lệch lệnh chủ động mua/bán và cách nó phân kỳ với giá.</p>
+        <div class="body">
+          <p><b>Delta</b> = khối lượng mua chủ động − khối lượng bán chủ động trong một cây nến. <b>CVD</b> (Cumulative Volume Delta) là tổng cộng dồn của delta theo thời gian.</p>
+          <ul>
+            <li>Giá tạo đỉnh mới nhưng CVD không tạo đỉnh mới: lực mua chủ động đang yếu đi, dễ có điều chỉnh.</li>
+            <li>Giá giảm nhưng CVD tăng: bên mua chủ động vẫn vào, nhưng bị lệnh giới hạn bán lớn chặn. Cần xem giá có phá được vùng đó không.</li>
+            <li>Delta rất lớn mà giá gần như không chạy thường là dấu hiệu hấp thụ.</li>
+          </ul>
+        </div>
+      </details>
+      <details class="lesson">
+        <summary>Volume Profile &amp; Value Area</summary>
+        <p class="lead">Khối lượng phân bố theo giá trong một phiên hay một khoảng thời gian.</p>
+        <div class="body">
+          <p><b>POC</b> là mức giá có khối lượng lớn nhất. <b>Value Area</b> là vùng chứa khoảng 70% khối lượng, giới hạn bởi <b>VAH</b> (trên) và <b>VAL</b> (dưới).</p>
+          <ul>
+            <li>Giá mở cửa trong Value Area hôm trước thường dao động quanh đó.</li>
+            <li>Giá mở ngoài Value Area rồi quay lại vào trong thường có xu hướng chạy sang cạnh bên kia.</li>
+            <li>Vùng khối lượng thấp (LVN) giá thường đi qua nhanh, vùng khối lượng cao (HVN) giá thường chậm lại.</li>
+          </ul>
+        </div>
+      </details>
+      <details class="lesson">
+        <summary>Cách đọc báo cáo COT</summary>
+        <p class="lead">Quỹ lớn đang nghiêng về phía nào và đã cực đoan chưa.</p>
+        <div class="body">
+          <p>Nhóm <b>Non-commercial</b> (quỹ đầu cơ lớn) thường đi theo xu hướng. Nhóm <b>Commercial</b> (nhà sản xuất, người phòng hộ) thường đi ngược giá.</p>
+          <ul>
+            <li>COT Index gần 100: quỹ mua ròng gần mức cao nhất trong kỳ. Xu hướng tăng mạnh nhưng vị thế đã đông, dễ đảo chiều khi có tin xấu.</li>
+            <li>COT Index gần 0: ngược lại, bên bán đã đông.</li>
+            <li>COT là dữ liệu tuần, trễ 3 ngày, dùng để xem bối cảnh chứ không dùng để vào lệnh trong ngày.</li>
+          </ul>
+        </div>
+      </details>

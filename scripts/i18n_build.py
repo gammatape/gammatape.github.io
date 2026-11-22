@@ -145,7 +145,7 @@ def py_fragments(path, out):
 
 def collect():
     units, frags = set(), set()
-    for p in sorted(SITE.glob("*.html")):
+    for p in sorted(SITE.rglob("*.html")):
         walk_page(BeautifulSoup(p.read_text(encoding="utf-8"), "html.parser"), units, frags)
     for p in sorted(SITE.glob("*.js")):
         if not p.name.startswith("i18n"):
@@ -165,7 +165,7 @@ def main():
     sys.stdout.reconfigure(encoding="utf-8")
     units, frags = collect()
     have = json.loads(FRAG_DICT.read_text(encoding="utf-8")) if FRAG_DICT.exists() else {}
-    for p in [*SITE.glob("*.html"), *SITE.glob("*.js")]:   # the code's own pairs need no entry
+    for p in [*SITE.rglob("*.html"), *SITE.glob("*.js")]:   # the code's own pairs need no entry
         for m in PAIR.finditer(p.read_text(encoding="utf-8")):
             have.setdefault(norm(m.group(1)), m.group(2))
     uhave = json.loads(UNIT_DICT.read_text(encoding="utf-8")) if UNIT_DICT.exists() else {}
