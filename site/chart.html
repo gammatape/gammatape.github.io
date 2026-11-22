@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mở Wyckdelta Chart</title>
+<meta name="description" content="Mở Wyckdelta Chart: biểu đồ order flow + GEX. Chưa có tài khoản thì cài đặt 3 bước, hết hạn thì inbox Wyckdelta.">
+<meta name="theme-color" content="#0b0f17">
+<link rel="canonical" href="https://wyckdelta.com/chart.html">
+<meta property="og:site_name" content="Wyckdelta">
+<meta property="og:title" content="Mở Wyckdelta Chart">
+<meta property="og:image" content="https://wyckdelta.com/img/og.jpg">
+<link rel="manifest" href="manifest.webmanifest">
+<script src="i18n.js?v=1"></script>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="img/favicon-16.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="img/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  // Apply the saved theme before first paint (same key as the other pages)
+  try { if (localStorage.getItem("gt-theme") === "light") document.documentElement.dataset.theme = "light"; } catch {}
+</script>
+<style>
+/* Brand tokens: same as index.html. Dark is the default; light is opt-in. */
+:root {
+  color-scheme: dark;
+  --bg: #0b0f17; --panel: #121826; --panel2: #161e2e; --line: #1f2a3d; --line2: #2a3650;
+  --text: #e8edf5; --muted: #8a96ab; --gold: #f5b301; --gold-soft: rgba(245,179,1,.12); --on-gold: #0b0f17;
+  --green: #22c55e; --red: #ef4444;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f5f7fa; --panel: #ffffff; --panel2: #f8fafc; --line: #e2e7ef; --line2: #cfd7e3;
+  --text: #0f1724; --muted: #4f5a6c; --gold: #8a6100; --gold-soft: rgba(245,179,1,.16); --on-gold: #0b0f17;
+  --green: #15803d; --red: #dc2626;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); }
+body { font: 16px/1.55 "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif; -webkit-text-size-adjust: 100%; }
+a { color: inherit; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+.topbar { border-bottom: 1px solid var(--line); }
+.topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 64px; }
+.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 19px; letter-spacing: -.3px; }
+.logo img { width: 30px; height: 30px; }
+.langsw { display: inline-flex; border: 1px solid var(--line2); border-radius: 10px; overflow: hidden; }
+.langsw button { min-width: 40px; min-height: 40px; border: 0; background: transparent; color: var(--muted); font: 700 13px/1 inherit; cursor: pointer; }
+.langsw button[aria-pressed="true"], .langsw button.on { background: var(--panel2); color: var(--text); }
+main.wrap { padding-top: 28px; padding-bottom: 48px; }
+h1 { font-size: 28px; line-height: 1.2; letter-spacing: -.4px; margin: 0 0 8px; }
+.lead { color: var(--muted); margin: 0 0 20px; }
+.cases { display: grid; gap: 12px; }
+.case { border: 1px solid var(--line); border-radius: 12px; background: var(--panel); padding: 16px; }
+.case h2 { font-size: 17px; margin: 0 0 4px; }
+.case p { margin: 0 0 12px; color: var(--muted); font-size: 15px; }
+.case.first { border-color: color-mix(in srgb, var(--gold) 45%, var(--line)); }
+.acts { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 9px 16px; border-radius: 10px;
+  border: 1px solid var(--line2); background: var(--panel2); color: var(--text); font: 600 15px/1.2 inherit; text-decoration: none; cursor: pointer; }
+.btn.gold { background: #f5b301; border-color: #f5b301; color: var(--on-gold); }
+@media (hover: hover) and (pointer: fine) { .btn:hover { border-color: var(--muted); } .btn.gold:hover { background: #ffc21a; border-color: #ffc21a; } }
+.addr { font-family: ui-monospace, Consolas, monospace; font-size: 14px; overflow-wrap: anywhere; color: var(--text); }
+.foot { color: var(--muted); font-size: 13px; margin-top: 24px; }
+[hidden] { display: none !important; }
+@media (max-width: 480px) { h1 { font-size: 24px; } .acts .btn { flex: 1 1 100%; } }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <a class="logo" href="./" aria-label="Wyckdelta, về trang chủ"><img src="img/logo.png" alt="" width="30" height="30">Wyckdelta</a>
+    <div class="langsw" data-lang-switch role="group" aria-label="Ngôn ngữ / Language"><button type="button" data-l="VI">VI</button><button type="button" data-l="EN">EN</button></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Mở Wyckdelta Chart</h1>
+  <p class="lead">Biểu đồ order flow + GEX của Wyckdelta. Chọn đúng trường hợp của bạn.</p>
+
+  <div class="cases">
+    <section class="case first">
+      <h2>Đã có tài khoản</h2>
+      <p>Bật Tailscale (công tắc xanh) rồi bấm nút dưới. Máy Windows: mở app Wyckdelta Chart trên màn hình Desktop.</p>
+      <div class="acts">
+        <a class="btn gold" href="https://wyckdelta.tail65e625.ts.net/">Mở Wyckdelta Chart</a>
+      </div>
+      <p class="addr" style="margin:10px 0 0">https://wyckdelta.tail65e625.ts.net</p>
+    </section>
+    <section class="case">
+      <h2>Chưa có tài khoản</h2>
+      <p>Cài Tailscale, nhận link mời rồi tự tạo tài khoản. Khoảng 5 phút, chỉ làm một lần.</p>
+      <div class="acts">
+        <a class="btn" href="huong-dan.html">Cài đặt 3 bước</a>
+        <a class="btn" href="https://m.me/61596278051545?ref=wyckdelta_chart" target="_blank" rel="noopener">Inbox để nhận link mời</a>
+      </div>
+    </section>
+    <section class="case">
+      <h2>Tài khoản hết hạn</h2>
+      <p>Trang đăng nhập báo tài khoản đã hết hạn hoặc bị khoá: inbox Wyckdelta để gia hạn.</p>
+      <div class="acts">
+        <a class="btn" href="https://m.me/61596278051545?ref=wyckdelta_chart" target="_blank" rel="noopener">Inbox Wyckdelta</a>
+      </div>
+    </section>
+  </div>
+
+  <p class="foot">Wyckdelta Chart là công cụ phân tích dữ liệu thị trường, không phải lời khuyên đầu tư.</p>
+</main>
+
+<!-- No reachability probe: the chart server sends Cross-Origin-Resource-Policy: same-origin (any cross-site fetch or
+     image is refused) and Chrome may ask for local-network permission; a plain link (top-level navigation) has neither. -->
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "5df5afcbbd9046bf8af0256168f49f57"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

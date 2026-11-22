@@ -661,6 +661,15 @@ body.drawer { overflow: hidden; }
 .site-note a.pri { border-color: color-mix(in srgb, var(--gold) 55%, var(--line2)); color: var(--gold); background: var(--gold-soft); }
 @media (hover: hover) and (pointer: fine) { .site-note a:hover { border-color: var(--muted); } }
 @media (max-width: 560px) { .site-note { font-size: 12.5px; } .site-note .wrap { padding-top: 7px; padding-bottom: 7px; gap: 6px; } .site-note a { min-height: 32px; } }
+/* "Vào Wyckdelta Chart": one row per kind of visitor (has an account / new / expired) */
+.sn-cases { display: flex; flex-wrap: wrap; gap: 6px 14px; flex: none; }
+.sn-case { display: flex; align-items: center; gap: 8px; }
+.sn-case > span { color: var(--muted); white-space: nowrap; }
+@media (max-width: 560px) { .sn-cases { flex-direction: column; align-items: stretch; width: 100%; gap: 6px; }
+  .sn-case { justify-content: space-between; } .sn-case a { min-width: 172px; justify-content: center; } }
+/* header: open the chart (desktop; on a phone the row right under the header does it) */
+.chart-link svg { color: var(--gold); }
+@media (max-width: 640px) { .chart-link { display: none; } }
 </style>
 </head>
 <body>
@@ -679,6 +688,7 @@ body.drawer { overflow: hidden; }
     <button class="iconbtn" id="theme" type="button" aria-label="Đổi giao diện sáng / tối" title="Đổi giao diện sáng / tối">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18" /><path d="M12 3a9 9 0 0 1 0 18" fill="currentColor"/></svg>
     </button>
+    <a class="btn sm chart-link" href="chart.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg>Mở Wyckdelta Chart</a>
     <a class="btn gold sm" href="https://m.me/61596278051545?ref=wyckdelta_web" target="_blank" rel="noopener"><span class="cta-long">Inbox để nhận link dùng thử</span><span class="cta-short">Nhận link</span></a>
   </div>
 </header>
@@ -724,10 +734,11 @@ body.drawer { overflow: hidden; }
 <div class="shell">
 <div class="site-note" role="note">
   <div class="wrap">
-    <p>wyckdelta.com là trang giới thiệu và hướng dẫn. Biểu đồ nằm trong <b>Wyckdelta Chart</b>: app Windows, hoặc https://wyckdelta.tail65e625.ts.net trên điện thoại / Mac (cần Tailscale).</p>
-    <div class="sn-links">
-      <a href="huong-dan.html">Cách cài Wyckdelta Chart</a>
-      <a class="pri" href="https://wyckdelta.tail65e625.ts.net" target="_blank" rel="noopener">Mở Wyckdelta Chart</a>
+    <p>wyckdelta.com là trang giới thiệu và hướng dẫn. Biểu đồ nằm trong <b>Wyckdelta Chart</b>: app Windows, điện thoại và Mac.</p>
+    <div class="sn-cases">
+      <div class="sn-case"><span>Đã có tài khoản</span><a class="pri" href="chart.html">Mở Wyckdelta Chart</a></div>
+      <div class="sn-case"><span>Chưa có tài khoản</span><a href="huong-dan.html">Cài đặt 3 bước</a></div>
+      <div class="sn-case"><span>Tài khoản hết hạn</span><a href="https://m.me/61596278051545?ref=wyckdelta_web" target="_blank" rel="noopener">Inbox Wyckdelta</a></div>
     </div>
   </div>
 </div>
