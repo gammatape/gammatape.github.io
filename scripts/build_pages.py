@@ -346,11 +346,21 @@ def quote_card(assets):
             f'</section>')
 
 
+# Forecast / previous for every currency: TradingView Economic Calendar (licensed embed, app.js renderEvents). Our own
+# calendar card above it shows release times only, from the US agencies' official schedules.
+EVENTS_CARD = ('<section class="card full" id="events">\n'
+               '  <div class="card-head"><h3>Dự báo và số trước</h3><span class="badge">TradingView</span></div>\n'
+               '  <p class="q">Tin quan trọng và trung bình của Mỹ, châu Âu, Anh, Nhật, Trung Quốc, Úc, Canada, Thuỵ Sĩ.</p>\n'
+               '  <div class="tv-events" id="tv-events" data-i18n-skip translate="no"></div>\n'
+               '  <p class="note">Qua widget lịch kinh tế của TradingView, giờ theo múi giờ của máy bạn.</p>\n'
+               '</section>')
+
+
 def asset_page(path, title, h1, intro, assets, news, extra):
     rel = [("Vị thế quỹ lớn", "/vi-the/cot/", "Cả 6 mã"), ("Lịch tin tuần", "/vi-mo/lich-tin/", "Tin USD giờ VN"),
            ("Tin tức", news_url(news), "Tin của mã này")]
     return P(path, "thi-truong", title, h1, intro, grid(quote_card(assets), *extra) + WATCH[assets] + related(*rel),
-             intro=intro, kicker="Thị trường", assets=assets, news=news, ticker=True)
+             intro=intro, kicker="Thị trường", assets=assets, news=news)
 
 
 def news_url(topics):
@@ -372,19 +382,19 @@ PAGES = [
     P("/", "home", "Wyckdelta · Order flow + GEX, nhịp thị trường mỗi ngày", "Nhịp thị trường hôm nay",
       "Wyckdelta Chart: footprint, heatmap sổ lệnh, iceberg và các mức GEX trên một biểu đồ cho Vàng, ES, NQ, crypto. "
       "Kèm nhịp thị trường miễn phí: COT, tồn kho dầu, vĩ mô, lịch kinh tế, tin tức.",
-      grid(card("cot"), card("calendar"), card("macro"), card("crypto"), card("crowd")) + directory(),
+      grid(card("cot"), card("vn-gold", full=True), card("calendar"), card("macro"), card("crypto"), card("crowd")) + directory(),
       intro="Vàng, ES, NQ, dầu, BTC, ETH: quỹ lớn, vĩ mô, lịch tin. Tự cập nhật mỗi 30 phút. Mỗi mục có trang riêng ở menu bên trái.",
       kicker="Miễn phí cho tất cả", ticker=True, pulse=True, note=True, hero=True, fold=True),
 
     # ---- Thị trường
     P("/thi-truong/", "thi-truong", "Thị trường hôm nay", "Thị trường hôm nay",
       "Sáu mã trên một màn hình: vị thế quỹ lớn, kịch bản, crypto và vùng đông người.",
-      grid(card("cot"), card("crypto"), card("crowd")) + directory(["thi-truong"]),
+      grid(card("cot", full=True), card("vn-gold", full=True), card("crypto"), card("crowd")),
       intro="Sáu mã trên một màn hình. Bấm một mã để xem kịch bản, hoặc mở trang riêng của mã ở thanh mục phía trên.",
-      kicker="Thị trường", ticker=True, pulse=True, fold=True),
+      kicker="Thị trường", ticker=True, fold=True),
     asset_page("/thi-truong/vang/", "Vàng (GC) hôm nay", "Vàng · GC",
                "Quỹ lớn, quỹ vàng GLD, ba nhóm trên sàn và vĩ mô tác động lên vàng, trên một trang.",
-               "GC", "GC", [card("cot", full=True, one=True), card("gld", full=True), card("flows"), card("macro")]),
+               "GC", "GC", [card("vn-gold", full=True), card("cot", full=True, one=True), card("gld", full=True), card("flows"), card("macro")]),
     asset_page("/thi-truong/chung-khoan-my/", "S&P 500 và Nasdaq 100 hôm nay", "S&P 500 · Nasdaq 100",
                "Vị thế quỹ lớn trên hợp đồng ES, NQ, lợi suất Mỹ và lịch tin trong tuần.",
                "ES NQ", "ES NQ", [card("cot", full=True, two=True), card("loi-suat"), card("macro"), card("calendar", full=True)]),
@@ -398,7 +408,7 @@ PAGES = [
     # ---- Vị thế
     P("/vi-the/", "vi-the", "Vị thế quỹ lớn", "Vị thế: ai đang nắm giữ gì",
       "Báo cáo COT của CFTC, ba nhóm trên sàn hàng hoá và quỹ vàng GLD.",
-      grid(card("cot"), card("crowd"), card("flows"), card("gld", full=True)) + directory(["vi-the"]),
+      grid(card("cot", full=True), card("crowd"), card("flows"), card("gld", full=True)),
       intro="Báo cáo COT của CFTC, ba nhóm trên sàn hàng hoá và quỹ vàng GLD.", kicker="Vị thế", fold=True),
     P("/vi-the/cot/", "vi-the", "Quỹ lớn đang nghiêng về đâu (COT)", "Vị thế quỹ lớn (COT)",
       "Vị thế ròng 52 tuần và COT Index của Vàng, S&P 500, Nasdaq, Dầu, Bitcoin, Ether.",
@@ -424,13 +434,14 @@ PAGES = [
     # ---- Vĩ mô
     P("/vi-mo/", "vi-mo", "Vĩ mô Mỹ hôm nay", "Vĩ mô Mỹ",
       "Lịch tin tuần theo giờ VN, đường cong lợi suất, lợi suất thực, EFFR và tồn kho dầu.",
-      grid(card("calendar"), card("macro"), card("loi-suat"), card("eia")) + directory(["vi-mo"]),
+      grid(card("calendar"), card("macro"), card("loi-suat"), card("eia")),
       intro="Lịch tin tuần theo giờ VN, đường cong lợi suất, lợi suất thực, EFFR và tồn kho dầu.", kicker="Vĩ mô", fold=True),
     P("/vi-mo/lich-tin/", "vi-mo", "Lịch tin kinh tế tuần này (giờ VN)", "Lịch tin kinh tế tuần này",
-      "Lịch tin USD trong tuần theo giờ Việt Nam: NFP, CPI, Fed, kèm dự báo và số trước.",
-      grid(card("calendar", full=True, open_cal=True)) + ART["calendar"] +
+      "Lịch tin USD trong tuần theo giờ Việt Nam: NFP, CPI, Fed, theo lịch công bố chính thức; dự báo và số trước của "
+      "mọi đồng tiền ở bảng bên dưới.",
+      grid(card("calendar", full=True, open_cal=True), EVENTS_CARD) + ART["calendar"] +
       related(("Tin Fed & vĩ mô", "/tin-tuc/fed/", "Tin mới nhất"), ("Chỉ số vĩ mô Mỹ", "/vi-mo/chi-so/", "Lợi suất, EFFR")),
-      intro="Tin USD trong tuần, giờ Việt Nam, kèm dự báo và số trước.", kicker="Vĩ mô"),
+      intro="Tin USD trong tuần, giờ Việt Nam, theo lịch công bố chính thức; kèm bảng dự báo và số trước.", kicker="Vĩ mô"),
     P("/vi-mo/loi-suat/", "vi-mo", "Đường cong lợi suất Mỹ", "Lợi suất trái phiếu Mỹ",
       "Lợi suất trái phiếu chính phủ Mỹ theo kỳ hạn: hôm nay, 1 tháng trước, đầu năm.",
       grid(card("loi-suat", full=True)) + ART["curve"] + related(("Chỉ số vĩ mô Mỹ", "/vi-mo/chi-so/", "Lợi suất thực, EFFR")),
@@ -482,6 +493,29 @@ PAGES = [
 
 
 # ------------------------------------------------------------------ page shell
+def right_rail(p):
+    """Right column on PC (>= 1280px, sticky): what a trader checks every day. Filled by app.js from the data files and
+    the clock; below 1280px it follows the main column and its first two boxes are repeated at the top (#topstrip)."""
+    cat, news = p["cat"], p["news"]
+    news_box = "" if cat == "tin-tuc" else (
+        f'<section class="rr"><h2>Tin mới</h2><div id="rr-news"></div>'
+        f'<a class="rr-more" href="{news_url(news) if news else "/tin-tuc/"}">Xem tất cả tin →</a></section>')
+    vn_box = "" if p["path"] == "/thi-truong/vang/" else (
+        '<section class="rr"><h2>Vàng SJC và tỷ giá</h2><div id="rr-vn"></div>'
+        '<a class="rr-more" href="/thi-truong/vang/">Vàng trong nước so với thế giới →</a></section>')
+    return f'''<aside class="rrail" aria-label="Nhịp hôm nay">
+  <section class="rr"><h2>Phiên giao dịch <span class="rr-clock num" id="rr-clock"></span></h2><div id="rr-sess"></div>
+    <p class="rr-note">Giờ Việt Nam, tự đổi theo giờ mùa hè / mùa đông ở Mỹ và châu Âu. Chưa tính ngày lễ và giờ nghỉ trưa.</p></section>
+  <section class="rr"><h2>Tin đỏ USD sắp ra</h2><div id="rr-next"></div><a class="rr-more" href="/vi-mo/lich-tin/">Cả lịch tuần →</a></section>
+  <section class="rr"><h2>Fed họp lần tới</h2><div id="rr-fomc"></div></section>
+  {vn_box}
+  {news_box}
+  <section class="rr rr-cta"><h2>Wyckdelta Chart</h2><p>Footprint, heatmap sổ lệnh và các mức GEX trên một biểu đồ, cho Vàng, ES, NQ, crypto.</p>
+    <a class="btn gold" href="{INBOX}" target="_blank" rel="noopener">Inbox để nhận link dùng thử</a>
+    <a class="btn" href="/chart.html">Mở Wyckdelta Chart</a></section>
+</aside>'''
+
+
 def page(p, v_css, v_js):
     path, cat = p["path"], p["cat"]
     url = BASE + path
@@ -601,7 +635,8 @@ def page(p, v_css, v_js):
     </div>
     {pill}
   </div>
-{p["body"]}''')
+{'<div class="topstrip" id="topstrip"></div>' if p["data"] else ""}
+{f'<div class="layout"><div class="main-col">{p["body"]}</div>{right_rail(p)}</div>' if p["data"] else p["body"]}''')
     if p["final"]:
         parts.append(read("final.html").rstrip().replace('src="img/', 'src="/img/').replace('href="huong-dan.html"', 'href="/huong-dan.html"'))
     parts.append("</main>\n")

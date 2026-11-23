@@ -5,6 +5,8 @@
 - Tồn kho dầu hằng tuần từ EIA
 - Lợi suất trái phiếu (danh nghĩa và thực) và đường cong lợi suất từ Bộ Tài chính Mỹ, lãi suất EFFR từ Fed New York
 - Số tấn vàng quỹ SPDR Gold Shares (GLD) nắm giữ, từ file lưu trữ công khai của quỹ
+- Chỉ số đô la rộng (Fed H.10) và lịch họp FOMC từ trang của Fed
+- Giá vàng SJC (sjc.com.vn), tỷ giá USD Vietcombank, giá vàng / bạc thế giới (gold-api.com), quy đổi và chênh lệch
 - Kịch bản quan sát mang tính giáo dục, suy ra từ các số liệu trên
 Tất cả là dữ liệu công khai của cơ quan nhà nước Mỹ.
 """
@@ -192,19 +194,21 @@ IMPACT = {
     "be10":   {"GC": 1, "ES": 0, "NQ": 0, "CL": 1, "BTC": 0, "ETH": 0},
     "curve":  {"GC": 0, "ES": 0, "NQ": 0, "CL": 0, "BTC": 0, "ETH": 0},
     "effr":   {"GC": -1, "ES": -1, "NQ": -1, "CL": 0, "BTC": -1, "ETH": -1},
+    "usd":    {"GC": -1, "ES": 0, "NQ": 0, "CL": -1, "BTC": -1, "ETH": -1},
 }
 FLAT = 0.05  # thay đổi dưới 0,05 điểm % xem như đi ngang
+FLAT_BY = {"usd": 0.5}  # chỉ số USD rộng (~120 điểm): dưới 0,5 điểm xem như đi ngang
 
 
 SHORT = {"real10": "lợi suất thực", "y10": "lợi suất 10 năm", "y2": "lợi suất 2 năm",
-         "be10": "lạm phát kỳ vọng", "curve": "chênh lệch 10–2 năm", "effr": "lãi suất EFFR"}
+         "be10": "lạm phát kỳ vọng", "curve": "chênh lệch 10–2 năm", "effr": "lãi suất EFFR", "usd": "chỉ số USD rộng"}
 SHORT_EN = {"real10": "real yield", "y10": "10-year yield", "y2": "2-year yield",
-            "be10": "inflation expectations", "curve": "10–2 year spread", "effr": "EFFR rate"}
+            "be10": "inflation expectations", "curve": "10–2 year spread", "effr": "EFFR rate", "usd": "broad dollar index"}
 
 
 def macro_item(key, name, cur, old, unit, note, series=None):
     chg = round(cur[1] - old[1], 2)
-    direction = 0 if abs(chg) < FLAT else (1 if chg > 0 else -1)
+    direction = 0 if abs(chg) < FLAT_BY.get(key, FLAT) else (1 if chg > 0 else -1)
     return {
         "key": key, "name": name, "short": SHORT[key], "short_en": SHORT_EN[key], "value": round(cur[1], 2), "date": cur[0].isoformat(),
         "prev": round(old[1], 2), "prev_date": old[0].isoformat(), "change": chg, "unit": unit,
@@ -242,6 +246,12 @@ def get_macro():
                                 f"Biên mục tiêu của Fed: {effr[0]['targetRateFrom']}–{effr[0]['targetRateTo']}%.", s))
     except Exception:
         pass
+    try:   # chỉ số đô la rộng của Fed (H.10), thay cho DXY
+        rows = list(reversed(h10_rows()))
+        items.append(macro_item("usd", "Chỉ số USD rộng (Fed)", rows[0], month_ago(rows), "",
+                                "Đô la mạnh so với rổ tiền tệ của các đối tác thương mại của Mỹ. Tăng thường gây áp lực lên vàng, dầu và crypto.", rows))
+    except Exception as e:
+        print(f"  ! usd: {type(e).__name__}: {e}")
     return items
 
 
@@ -386,6 +396,111 @@ def get_crypto():
     return {"time": datetime.now(timezone.utc).isoformat(), "coins": coins, "fng": fng}
 
 
+# --------------------------------------- Vàng trong nước, tỷ giá USD ----
+# SJC: bảng giá công khai (robots.txt Allow: /, chỉ cấm bot huấn luyện AI). Vietcombank: tỷ giá công khai (robots.txt
+# Allow: /; file XML ghi "một lần mỗi 5 phút", ta gọi 30 phút một lần). Giá vàng / bạc thế giới: gold-api.com (miễn phí,
+# điều khoản cho dùng trên website). Mọi con số là tham khảo, ghi nguồn trên trang.
+SJC_URL = "https://sjc.com.vn/GoldPrice/Services/PriceService.ashx"
+VCB_URL = "https://www.vietcombank.com.vn/api/exchangerates?date={d}"
+METAL_URL = "https://api.gold-api.com/price/{sym}"
+LUONG_OZ = 37.5 / 31.1034768   # 1 lượng = 37,5 g; 1 troy ounce = 31,1034768 g
+
+
+def get_vn(prev):
+    sjc = json.loads(fetch(SJC_URL))
+    rows = {r["Id"]: r for r in sjc.get("data", [])}
+    bar, ring = rows.get(1), rows.get(49)   # Id 1: vàng miếng SJC 1L-1KG, Id 49: nhẫn SJC 99,99 (Hồ Chí Minh)
+    if not bar:
+        raise ValueError("SJC: thiếu dòng vàng miếng")
+    usd = None
+    for back in range(0, 5):   # cuối tuần / ngày lễ / ngày lỗi: lấy ngày gần nhất có tỷ giá
+        d = (datetime.now(timezone(timedelta(hours=7))) - timedelta(days=back)).date().isoformat()
+        try:
+            r = json.loads(fetch(VCB_URL.format(d=d)))
+        except Exception as e:
+            print(f"  ! vietcombank {d}: {type(e).__name__}: {e}")
+            continue
+        usd = next((x for x in r.get("Data", []) if x.get("currencyCode") == "USD"), None)
+        if usd:
+            usd = {"buy": float(usd["transfer"]), "sell": float(usd["sell"]), "date": r.get("UpdatedDate") or d}
+            break
+    if not usd:
+        raise ValueError("Vietcombank: không có tỷ giá USD")
+    xau, xag = (json.loads(fetch(METAL_URL.format(sym=s))) for s in ("XAU", "XAG"))
+    world = xau["price"] * LUONG_OZ * usd["sell"]          # giá vàng thế giới quy ra VNĐ / lượng, chưa thuế phí
+    out = {
+        "time": datetime.now(timezone.utc).isoformat(),
+        "sjc": {"buy": bar["BuyValue"], "sell": bar["SellValue"], "date": sjc.get("latestDate")},
+        "ring": {"buy": ring["BuyValue"], "sell": ring["SellValue"]} if ring else None,
+        "usd": usd,
+        "xau": round(xau["price"], 2), "xag": round(xag["price"], 3), "metal_time": xau.get("updatedAt"),
+        "world": round(world, -3), "spread": round(bar["SellValue"] - world, -3),
+        "ratio": round(xau["price"] / xag["price"], 2),
+    }
+    # một điểm mỗi ngày (giờ VN) để vẽ chênh lệch theo thời gian; giữ 120 ngày
+    day = datetime.now(timezone(timedelta(hours=7))).date().isoformat()
+    hist = [h for h in ((prev or {}).get("history") or []) if h[0] != day]
+    hist.append([day, out["sjc"]["sell"], out["world"], usd["sell"]])
+    out["history"] = hist[-120:]
+    return out
+
+
+# Chỉ số đô la Mỹ rộng (Nominal Broad U.S. Dollar Index) của Fed, bảng H.10: dữ liệu công khai của Chính phủ Mỹ.
+H10_URL = "https://www.federalreserve.gov/releases/h10/summary/jrxwtfb_nb.htm"
+
+
+@functools.lru_cache(maxsize=1)
+def h10_rows():
+    import re
+    html = fetch(H10_URL).decode("utf-8", "replace")
+    rows = []
+    for d, v in re.findall(r"<th[^>]*>\s*(\d{1,2}-[A-Z]{3}-\d{2})\s*</th>\s*<td[^>]*>\s*([\d.]+)\s*</td>", html):
+        rows.append((datetime.strptime(d, "%d-%b-%y").date(), float(v)))
+    rows.sort()
+    if len(rows) < 30:
+        raise ValueError("H.10: quá ít dòng")
+    return rows
+
+
+# Lịch họp FOMC: trang chính thức của Fed (công khai). Quyết định lãi suất công bố 14:00 giờ New York ngày họp cuối.
+FOMC_URL = "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+MONTHS = {m[:3]: i for i, m in enumerate(["January", "February", "March", "April", "May", "June", "July", "August",
+                                          "September", "October", "November", "December"], 1)}
+
+
+def get_fomc():
+    import re
+    html = fetch(FOMC_URL).decode("utf-8", "replace")
+    heads = [(m.start(), int(m.group(1))) for m in re.finditer(r"(20\d\d) FOMC Meetings", html)]
+    out = []
+    for i, (pos, year) in enumerate(heads):
+        seg = html[pos: heads[i + 1][0] if i + 1 < len(heads) else len(html)]
+        for chunk in seg.split("fomc-meeting__month")[1:]:   # one meeting per chunk, with its notes
+            m = re.search(r'^[^>]*>\s*<strong>([^<]+)</strong>.*?fomc-meeting__date[^>]*>([^<]+)<', chunk, re.S)
+            if not m:
+                continue
+            mon, days = m.groups()
+            # "December" / "Apr/May" with "30-1"; skip notation votes, unscheduled meetings and the policy-strategy
+            # meetings (no 14:00 rate decision)
+            note = re.sub(r"<[^>]+>", " ", chunk[m.end():])
+            if re.search(r"notation|unscheduled|cancel", days, re.I) or re.search(r"Strategy Meeting", note, re.I):
+                continue
+            parts = [x.strip()[:3] for x in mon.split("/")]
+            nums = re.findall(r"\d+", days)
+            if not nums or any(x not in MONTHS for x in parts):
+                continue
+            m1, m2 = MONTHS[parts[0]], MONTHS[parts[-1]]
+            end = date(year + (1 if m2 < m1 else 0), m2, int(nums[-1]))
+            start = date(year, m1, int(nums[0]))
+            out.append({"start": start.isoformat(), "end": end.isoformat(), "sep": "*" in days})
+    out = sorted({m["end"]: m for m in out}.values(), key=lambda m: m["end"])
+    today = date.today()
+    upcoming = [m for m in out if date.fromisoformat(m["end"]) >= today - timedelta(days=1)]
+    if not upcoming:
+        raise ValueError("FOMC: không thấy kỳ họp sắp tới")
+    return {"meetings": upcoming[:8]}
+
+
 # ----------------------------------------------------------- Kịch bản ----
 def scenarios(cot, macro, eia, gld=None):
     """Gợi ý những điều nên quan sát, suy ra theo quy tắc đơn giản. Không phải khuyến nghị.
@@ -454,7 +569,8 @@ def main():
     prev = previous_json("market.json") or {}
     data = {"updated": datetime.now(timezone.utc).isoformat(), "errors": {}}
     for name, fn in (("cot", lambda: get_cot(prev)), ("flows", lambda: get_flows(prev)), ("eia", get_eia),
-                     ("macro", get_macro), ("curve", get_curve), ("crypto", get_crypto), ("gld", lambda: get_gld(prev))):
+                     ("macro", get_macro), ("curve", get_curve), ("crypto", get_crypto), ("gld", lambda: get_gld(prev)),
+                     ("vn", lambda: get_vn(prev.get("vn"))), ("fomc", get_fomc)):
         try:
             res = fn()
             if name in ("cot", "flows"):
@@ -466,6 +582,11 @@ def main():
             data["errors"][name] = f"{type(e).__name__}: {e}"
             data[name] = prev.get(name)  # nguồn lỗi thì giữ bản cũ
             print(f"  ! {name}: {data['errors'][name]}")
+    # chỉ số USD rộng lấy từ nguồn riêng (Fed H.10): nguồn lỗi thì giữ bản cũ của riêng dòng đó
+    if data.get("macro") and not any(m.get("key") == "usd" for m in data["macro"]):
+        old = next((m for m in (prev.get("macro") or []) if m.get("key") == "usd"), None)
+        if old:
+            data["macro"].append(old)
     data["scenarios"] = scenarios(data.get("cot"), data.get("macro") or [], data.get("eia"), data.get("gld"))
     write_json("market.json", data)
     cot = data.get("cot") or {}

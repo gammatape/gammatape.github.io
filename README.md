@@ -15,9 +15,14 @@ Bộ nhận diện giống bộ ảnh quảng cáo: nền #0b0f17, xanh #22c55e,
 | Tồn kho dầu Mỹ | EIA, Weekly Petroleum Status | Thứ Tư hằng tuần |
 | Quỹ vàng SPDR (GLD): số tấn đang giữ, mua / bán mỗi phiên | File lưu trữ của SPDR Gold Shares (xlsx), chỉ đăng số tấn và thay đổi | Mỗi ngày giao dịch (tải 1 lần khi quỹ đã công bố, buổi sáng giờ VN; chưa có thì thử lại cách 3 giờ) |
 | Động lực vĩ mô | U.S. Treasury (lợi suất danh nghĩa, lợi suất thực), Fed New York (EFFR) | Hằng ngày |
+| Vàng trong nước so với thế giới (SJC miếng / nhẫn, thế giới quy đổi VNĐ / lượng, chênh lệch, tỷ lệ vàng / bạc) | Bảng giá công khai SJC (`PriceService.ashx`, robots.txt Allow: /), tỷ giá Vietcombank (API JSON công khai, robots.txt Allow: /), giá vàng / bạc gold-api.com (điều khoản cho dùng trên website) | 30 phút; lịch sử chênh lệch mỗi ngày một điểm, giữ 120 ngày |
+| Chỉ số USD rộng (thay DXY) | Fed, bảng H.10 (dữ liệu công khai của Chính phủ Mỹ) | Hằng ngày |
+| Lịch họp Fed (FOMC), giờ công bố theo giờ VN | federalreserve.gov/monetarypolicy/fomccalendars.htm | 30 phút |
+| Cột phải: phiên Tokyo / London / New York, CME Globex mở / nghỉ | Tính trên trình duyệt theo múi giờ IANA (tự đổi giờ mùa hè / đông), chưa tính ngày lễ | Mỗi 30 giây |
 | Kịch bản để quan sát | Tự suy ra từ COT, vĩ mô, EIA (mang tính giáo dục) | Mỗi lần cập nhật |
 | Tin tức | RSS của Fed, EIA, CFTC và các trang tin tài chính | 30 phút |
-| Lịch vĩ mô (giờ VN) | Forex Factory | 30 phút |
+| Lịch tin USD (giờ VN) | Lịch công bố chính thức của BLS, BEA, Census, Bộ Lao động Mỹ, Fed, ISM, ĐH Michigan, EIA, chép vào scripts/us_release_calendar.json (tới 31/12/2027; Actions báo cảnh báo khi còn dưới 60 ngày). Không dùng Forex Factory: điều khoản cấm đăng lại | Mỗi năm thêm lịch mới |
+| Dự báo và số trước (mọi đồng tiền) | Widget lịch kinh tế TradingView trên /vi-mo/lich-tin/ | Trực tiếp |
 | Tính năng Wyckdelta | Ảnh chụp app thật trong site/img (Vàng, phiên Mỹ 11/11) | — |
 | Học order flow | Nội dung tĩnh | — |
 

@@ -18,6 +18,5 @@
     { "name": "Cointelegraph",     "url": "https://cointelegraph.com/rss", "lang": "en" },
     { "name": "VnExpress Kinh doanh", "url": "https://vnexpress.net/rss/kinh-doanh.rss", "lang": "vi" },
     { "name": "CafeF Chứng khoán", "url": "https://cafef.vn/thi-truong-chung-khoan.rss", "lang": "vi" }
-  ],
-  "calendar_url": "https://nfs.faireconomy.media/ff_calendar_thisweek.json"
+  ]
 }

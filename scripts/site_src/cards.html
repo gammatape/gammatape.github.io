@@ -6,6 +6,17 @@
         <p class="note">COT: báo cáo Commitments of Traders (Legacy, nhóm Non-commercial) của CFTC, chốt số thứ Ba, công bố thứ Sáu. COT Index là vị trí của vị thế ròng trong biên cao–thấp 26 hoặc 156 tuần (0 = thấp nhất, 100 = cao nhất). Kịch bản tự suy ra từ COT, vĩ mô và EIA theo quy tắc đơn giản, mang tính giáo dục, không phải khuyến nghị mua bán.</p>
       </section>
 
+      <section class="card" id="vn-gold" data-tags="gc">
+        <div class="card-head"><h3>Vàng trong nước so với thế giới</h3><span class="badge" id="vn-badge">Đang tải…</span></div>
+        <p class="q">Giá vàng miếng và nhẫn SJC, giá vàng thế giới quy ra VNĐ / lượng theo tỷ giá bán USD của Vietcombank, và khoảng chênh giữa hai giá.</p>
+        <div class="stats" id="vn-stats"></div>
+        <div class="vn-cols">
+          <div><div class="sub-h">Chênh lệch SJC bán ra − thế giới quy đổi, triệu đồng / lượng</div><div class="chart" id="vn-spread"></div></div>
+          <div class="vn-tbl" id="vn-table"></div>
+        </div>
+        <p class="note">Nguồn: bảng giá công khai của <a href="https://sjc.com.vn" target="_blank" rel="noopener">SJC</a> (Hồ Chí Minh), tỷ giá <a href="https://www.vietcombank.com.vn/vi-VN/KHCN/Cong-cu-Tien-ich/Ty-gia" target="_blank" rel="noopener">Vietcombank</a>, giá vàng và bạc thế giới <a href="https://gold-api.com" target="_blank" rel="noopener">gold-api.com</a>. Quy đổi: giá vàng (USD / ounce) × 37,5 / 31,1035 × tỷ giá bán USD; chưa gồm thuế, phí gia công, vận chuyển. Giá tham khảo, cập nhật mỗi 30 phút, không dùng để mua bán.</p>
+      </section>
+
       <section class="card" id="calendar" data-tags="macro">
         <div class="card-head"><h3>Tuần này có tin gì?</h3><span class="badge">Giờ VN</span>
           <div class="seg push" id="week-imp" role="group" aria-label="Mức ảnh hưởng trên dòng thời gian"></div></div>
@@ -16,11 +27,10 @@
           <summary>Xem cả lịch tuần <span class="badge" id="cal-badge">…</span></summary>
           <div class="filters">
             <div class="seg" id="impacts" role="group" aria-label="Mức ảnh hưởng"></div>
-            <div class="seg" id="ccy" role="group" aria-label="Tiền tệ"></div>
           </div>
           <div id="cal-list"></div>
         </details>
-        <p class="note">Nguồn: lịch kinh tế tuần này của Forex Factory. Tên sự kiện dịch sang tiếng Việt, tên gốc ghi bên dưới.</p>
+        <p class="note">Nguồn: lịch công bố chính thức của các cơ quan Mỹ (BLS, BEA, Census, Bộ Lao động, Fed, ISM, ĐH Michigan, EIA), đổi sang giờ VN. Tên gốc ghi bên dưới tên tiếng Việt.</p>
       </section>
 
       <section class="card c5" id="macro" data-tags="macro gc es nq">
