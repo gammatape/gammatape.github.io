@@ -407,25 +407,31 @@ LUONG_OZ = 37.5 / 31.1034768   # 1 lượng = 37,5 g; 1 troy ounce = 31,1034768 
 
 
 def get_vn(prev):
-    sjc = json.loads(fetch(SJC_URL))
+    # SJC / Vietcombank can block data-centre IPs (GitHub Actions answered 403): name the source in the error.
+    # site/app.js then fetches the same public prices from the visitor's browser (both send CORS headers).
+    try:
+        sjc = json.loads(fetch(SJC_URL))
+    except Exception as e:
+        raise RuntimeError(f"SJC: {type(e).__name__}: {e}") from e
     rows = {r["Id"]: r for r in sjc.get("data", [])}
     bar, ring = rows.get(1), rows.get(49)   # Id 1: vàng miếng SJC 1L-1KG, Id 49: nhẫn SJC 99,99 (Hồ Chí Minh)
     if not bar:
         raise ValueError("SJC: thiếu dòng vàng miếng")
-    usd = None
+    usd, last_err = None, None
     for back in range(0, 5):   # cuối tuần / ngày lễ / ngày lỗi: lấy ngày gần nhất có tỷ giá
         d = (datetime.now(timezone(timedelta(hours=7))) - timedelta(days=back)).date().isoformat()
         try:
             r = json.loads(fetch(VCB_URL.format(d=d)))
         except Exception as e:
             print(f"  ! vietcombank {d}: {type(e).__name__}: {e}")
+            last_err = f"{type(e).__name__}: {e}"
             continue
         usd = next((x for x in r.get("Data", []) if x.get("currencyCode") == "USD"), None)
         if usd:
             usd = {"buy": float(usd["transfer"]), "sell": float(usd["sell"]), "date": r.get("UpdatedDate") or d}
             break
     if not usd:
-        raise ValueError("Vietcombank: không có tỷ giá USD")
+        raise ValueError(f"Vietcombank: không có tỷ giá USD ({last_err or 'không có dòng USD'})")
     xau, xag = (json.loads(fetch(METAL_URL.format(sym=s))) for s in ("XAU", "XAG"))
     world = xau["price"] * LUONG_OZ * usd["sell"]          # giá vàng thế giới quy ra VNĐ / lượng, chưa thuế phí
     out = {

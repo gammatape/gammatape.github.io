@@ -523,6 +523,44 @@ function renderCal() {
 }
 
 // ---------- Vietnamese gold vs world (SJC, Vietcombank, gold-api.com) ----------
+// When the server could not read SJC / Vietcombank (they block data-centre IPs), the visitor's browser reads the same
+// public prices directly: both send CORS headers, as does gold-api.com. Cached 10 minutes per visitor.
+const LUONG_OZ = 37.5 / 31.1034768;
+let vnLive = null, vnLiveAt = 0;
+async function liveVn() {
+  if (vnLive && Date.now() - vnLiveAt < 6e5) return vnLive;
+  try { const c = JSON.parse(sessionStorage.getItem("wd-vn") || "null"); if (c && Date.now() - c.at < 6e5) { vnLiveAt = c.at; return (vnLive = c.v); } } catch {}
+  const j = u => fetch(u).then(r => { if (!r.ok) throw new Error(u + " " + r.status); return r.json(); });
+  const day = back => new Date(Date.now() + 7 * 36e5 - back * 864e5).toISOString().slice(0, 10);
+  const [sjc, xau, xag] = await Promise.all([j("https://sjc.com.vn/GoldPrice/Services/PriceService.ashx"),
+    j("https://api.gold-api.com/price/XAU"), j("https://api.gold-api.com/price/XAG")]);
+  let usd = null;
+  for (let b = 0; b < 5 && !usd; b++) {
+    try {
+      const r = await j(`https://www.vietcombank.com.vn/api/exchangerates?date=${day(b)}`), u = (r.Data || []).find(x => x.currencyCode === "USD");
+      if (u) usd = { buy: +u.transfer, sell: +u.sell, date: r.UpdatedDate || day(b) };
+    } catch {}
+  }
+  const rows = Object.fromEntries((sjc.data || []).map(r => [r.Id, r])), bar = rows[1], ring = rows[49];
+  if (!bar || !usd) throw new Error("vn: missing rows");
+  const world = Math.round(xau.price * LUONG_OZ * usd.sell / 1e3) * 1e3;
+  vnLive = { time: new Date().toISOString(), live: true, sjc: { buy: bar.BuyValue, sell: bar.SellValue, date: sjc.latestDate },
+    ring: ring ? { buy: ring.BuyValue, sell: ring.SellValue } : null, usd, xau: xau.price, xag: xag.price,
+    world, spread: Math.round((bar.SellValue - world) / 1e3) * 1e3, ratio: xau.price / xag.price, history: [] };
+  vnLiveAt = Date.now();
+  try { sessionStorage.setItem("wd-vn", JSON.stringify({ at: vnLiveAt, v: vnLive })); } catch {}
+  return vnLive;
+}
+async function ensureVn() {
+  if (!market || market.vn?.sjc || !($("vn-stats") || $("rr-vn"))) return;
+  try {
+    const v = await liveVn();
+    if (market.vn?.sjc) return;
+    market.vn = { ...v, history: [] };
+    renderVn(); renderRailVn();
+  } catch (e) { console.warn("vn live", e); }
+}
+
 const tr = v => fmtN(v / 1e6, 2);   // VND -> "133,50" (million dong)
 function renderVn() {
   if (!$("vn-stats")) return;
@@ -554,7 +592,9 @@ function renderVn() {
   const day = d => new Date(d + "T12:00:00Z");
   if (h.length > 1) levelLine($("vn-spread"), h.map(([d, s, w]) => ({ v: +((s - w) / 1e6).toFixed(2), label: vnDate(day(d)), short: vnDate(day(d), { day: "2-digit", month: "2-digit" }) })),
     { unit: I18N.t("tr", "M"), digits: 2, h: 170, color: "#f5b301" });
-  else $("vn-spread").replaceChildren(el("div", { className: "empty", textContent: I18N.t("Mỗi ngày lưu một điểm; đường chênh lệch hiện ra từ ngày thứ hai.", "One point is kept per day; the premium line appears from the second day.") }));
+  else $("vn-spread").replaceChildren(el("div", { className: "empty", textContent: v.live
+    ? I18N.t("Giá lấy trực tiếp từ SJC và Vietcombank lúc bạn mở trang; đường chênh lệch theo ngày chưa có.", "Prices read directly from SJC and Vietcombank when you opened the page; the daily premium line is not available.")
+    : I18N.t("Mỗi ngày lưu một điểm; đường chênh lệch hiện ra từ ngày thứ hai.", "One point is kept per day; the premium line appears from the second day.") }));
 }
 
 // ---------- Right rail: sessions, next releases, FOMC, gold, news ----------
@@ -700,6 +740,7 @@ async function refresh() {
   // the rail first, and one failing card must not leave the others empty
   for (const f of [renderRail, renderPulse, renderFour, renderWeek, renderCrypto, renderCurve, renderMap, renderFlows, renderEia, renderGld, renderMacro, renderNews, renderCal, renderSources, renderVn])
     try { f(); } catch (e) { console.error(f.name, e); }
+  ensureVn();
 }
 
 // ---------- Start ----------
