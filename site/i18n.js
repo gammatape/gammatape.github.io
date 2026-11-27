@@ -8,7 +8,7 @@
 (() => {
 'use strict';
 const KEY = 'wd-lang';
-const DICT_V = 'f38caa230d';  // i18n_en.js version, written by scripts/i18n_build.py
+const DICT_V = '79128e701a';  // i18n_en.js version, written by scripts/i18n_build.py
 function readLang() {
   try {
     const q = new URLSearchParams(location.search).get('lang');
