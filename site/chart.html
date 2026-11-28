@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mở Wyckdelta Chart</title>
-<meta name="description" content="Mở Wyckdelta Chart: biểu đồ order flow + GEX. Chưa có tài khoản thì cài đặt 3 bước, hết hạn thì inbox Wyckdelta.">
+<meta name="description" content="Mở Wyckdelta Chart: bản Free cho crypto mở ngay trên trình duyệt, hoặc bản đầy đủ order flow + GEX qua Tailscale.">
 <meta name="theme-color" content="#0b0f17">
 <link rel="canonical" href="https://wyckdelta.com/chart.html">
 <meta property="og:site_name" content="Wyckdelta">
@@ -70,6 +70,19 @@ h1 { font-size: 28px; line-height: 1.2; letter-spacing: -.4px; margin: 0 0 8px; 
 .auto p { margin: 0; flex: 1 1 220px; font-weight: 600; }
 .auto .acts { flex: none; }
 @media (max-width: 480px) { h1 { font-size: 24px; } .acts .btn { flex: 1 1 100%; } }
+.tiers { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0 0 22px; }
+.tier { border: 1px solid var(--line); border-radius: 12px; background: var(--panel); padding: 16px; display: flex; flex-direction: column; }
+.tier.free { border-color: color-mix(in srgb, var(--green) 50%, var(--line)); }
+.tier.full { border-color: color-mix(in srgb, var(--gold) 50%, var(--line)); }
+.tag { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; margin: 0 0 8px; align-self: flex-start; }
+.free .tag { background: color-mix(in srgb, var(--green) 18%, transparent); color: var(--green); }
+.full .tag { background: var(--gold-soft); color: var(--gold); }
+.tier h2 { font-size: 18px; margin: 0 0 6px; }
+.tier ul { margin: 0 0 14px; padding-left: 18px; color: var(--muted); font-size: 14.5px; flex: 1; }
+.tier li { margin: 2px 0; }
+.btn.green { background: var(--green); border-color: var(--green); color: #06130b; }
+h3.sub { font-size: 16px; margin: 6px 0 10px; color: var(--muted); font-weight: 600; }
+@media (max-width: 640px) { .tiers { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -82,25 +95,48 @@ h1 { font-size: 28px; line-height: 1.2; letter-spacing: -.4px; margin: 0 0 8px; 
 
 <main class="wrap">
   <h1>Mở Wyckdelta Chart</h1>
-  <p class="lead">Biểu đồ order flow + GEX của Wyckdelta. Chọn đúng trường hợp của bạn.</p>
+  <p class="lead">Wyckdelta Chart có 2 bản. Chọn bản bạn cần.</p>
 
   <div class="auto" id="auto" role="status" hidden>
-    <p>Đang mở Wyckdelta Chart sau 2 giây…</p>
+    <p><span id="auto-free" hidden>Đang mở Wyckdelta Chart Free sau 2 giây…</span><span id="auto-full" hidden>Đang mở Wyckdelta Chart bản đầy đủ sau 2 giây…</span></p>
     <div class="acts">
       <button class="btn" type="button" id="auto-cancel">Huỷ</button>
       <button class="btn" type="button" id="auto-off">Không tự mở nữa</button>
     </div>
   </div>
   <p class="auto" id="auto-stopped" role="status" hidden>Đã dừng. Lần sau trang sẽ không tự mở biểu đồ nữa.</p>
+  <div class="tiers">
+    <section class="tier free">
+      <span class="tag">BẢN FREE · mở ngay</span>
+      <h2>Wyckdelta Chart Free</h2>
+      <ul>
+        <li>Crypto: BTC, ETH, SOL... từ Binance, Bybit, OKX, Coinbase</li>
+        <li>Footprint, delta, volume profile trên dữ liệu sàn</li>
+        <li>Mở trên trình duyệt, không cần cài gì</li>
+        <li>Lưu bố cục: tự tạo tài khoản</li>
+      </ul>
+      <div class="acts"><a class="btn green" href="https://fchart.wyckdelta.com/" id="open-free">Mở bản Free</a></div>
+      <p class="addr" style="margin:10px 0 0">https://fchart.wyckdelta.com</p>
+    </section>
+    <section class="tier full">
+      <span class="tag">BẢN ĐẦY ĐỦ · qua Tailscale</span>
+      <h2>Wyckdelta Chart</h2>
+      <ul>
+        <li>Vàng, ES, NQ (CME) + crypto</li>
+        <li>Order flow CME, heatmap sổ lệnh, iceberg, GEX</li>
+        <li>App Windows, iPhone, Android, cảnh báo giá</li>
+        <li>Cần Tailscale + link mời</li>
+      </ul>
+      <div class="acts"><a class="btn gold" href="https://wyckdelta.tail65e625.ts.net/" id="open">Mở bản đầy đủ</a></div>
+      <p class="addr" style="margin:10px 0 0">https://wyckdelta.tail65e625.ts.net</p>
+    </section>
+  </div>
+  <h3 class="sub">Bản đầy đủ: chọn đúng trường hợp của bạn</h3>
 
   <div class="cases">
-    <section class="case first">
+    <section class="case">
       <h2>Đã có tài khoản</h2>
-      <p>Bật Tailscale (công tắc xanh) rồi bấm nút dưới. Máy Windows: mở app Wyckdelta Chart trên màn hình Desktop.</p>
-      <div class="acts">
-        <a class="btn gold" href="https://wyckdelta.tail65e625.ts.net/" id="open">Mở Wyckdelta Chart</a>
-      </div>
-      <p class="addr" style="margin:10px 0 0">https://wyckdelta.tail65e625.ts.net</p>
+      <p>Bật Tailscale (công tắc xanh) rồi bấm <b>Mở bản đầy đủ</b> ở trên. Máy Windows: mở app Wyckdelta Chart trên màn hình Desktop.</p>
     </section>
     <section class="case">
       <h2>Chưa có tài khoản</h2>
@@ -125,23 +161,28 @@ h1 { font-size: 28px; line-height: 1.2; letter-spacing: -.4px; margin: 0 0 8px; 
 <!-- No reachability probe: the chart server sends Cross-Origin-Resource-Policy: same-origin (any cross-site fetch or
      image is refused) and Chrome may ask for local-network permission; a plain link (top-level navigation) has neither. -->
 <script>
-// Returning visitors (like TradingView's /chart/ opening the last layout): once someone clicked "Open Wyckdelta Chart"
-// here, the next visit opens it after 2 s, with Cancel and "stop opening by itself". Per-browser memory only
-// (localStorage); without it the page simply shows the three cases. location.replace keeps this page out of the back
-// history, so Back from a chart that does not load does not bounce here again.
+// Returning visitors (like TradingView's /chart/ opening the last layout): once someone clicked one of the two
+// "Open" buttons here, the next visit opens that same version after 2 s, with Cancel and "stop opening by itself".
+// Per-browser memory only (localStorage: "full" or "free"; "1" from before the free version = full); without it the
+// page simply shows both versions. location.replace keeps this page out of the back history, so Back from a chart
+// that does not load does not bounce here again.
 (function () {
-  var KEY = "wd-chart-auto", CHART = "https://wyckdelta.tail65e625.ts.net/", timer = null;
+  var KEY = "wd-chart-auto", timer = null;
+  var URLS = { full: "https://wyckdelta.tail65e625.ts.net/", free: "https://fchart.wyckdelta.com/" };
   var $ = function (id) { return document.getElementById(id); };
-  function get() { try { return localStorage.getItem(KEY) === "1"; } catch (e) { return false; } }
-  function set(on) { try { if (on) localStorage.setItem(KEY, "1"); else localStorage.removeItem(KEY); } catch (e) {} }
+  function get() { try { var v = localStorage.getItem(KEY); return v === "1" ? "full" : (URLS.hasOwnProperty(v) ? v : ""); } catch (e) { return ""; } }
+  function set(v) { try { if (v) localStorage.setItem(KEY, v); else localStorage.removeItem(KEY); } catch (e) {} }
   function stop() { if (timer) { clearTimeout(timer); timer = null; } $("auto").hidden = true; }
-  $("open").addEventListener("click", function () { set(true); });
+  $("open").addEventListener("click", function () { set("full"); });
+  $("open-free").addEventListener("click", function () { set("free"); });
   $("auto-cancel").addEventListener("click", stop);
-  $("auto-off").addEventListener("click", function () { set(false); stop(); $("auto-stopped").hidden = false; });
+  $("auto-off").addEventListener("click", function () { set(""); stop(); $("auto-stopped").hidden = false; });
   function start() {
-    if (!get() || /[?&]stay=1\b/.test(location.search)) return;
+    var v = get();
+    if (!v || /[?&]stay=1\b/.test(location.search)) return;
+    $(v === "free" ? "auto-free" : "auto-full").hidden = false;
     $("auto").hidden = false;
-    timer = setTimeout(function () { location.replace(CHART); }, 2000);
+    timer = setTimeout(function () { location.replace(URLS[v]); }, 2000);
   }
   // back/forward cache: a page restored from history must not jump away again by itself
   window.addEventListener("pageshow", function (e) { if (e.persisted) stop(); });

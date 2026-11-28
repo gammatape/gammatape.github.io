@@ -107,7 +107,8 @@ NAV = [
     ("wyckdelta-chart", "Wyckdelta Chart", "/wyckdelta-chart/", "chart", [
         ("Tính năng", "/wyckdelta-chart/", "Order flow + GEX trên một biểu đồ"),
         ("Cài đặt app", "/huong-dan.html", "Windows, điện thoại, Mac"),
-        ("Mở Wyckdelta Chart", "/chart.html", "Đã có tài khoản"),
+        ("Mở bản Free", "https://fchart.wyckdelta.com/", "Crypto, mở ngay trên trình duyệt"),
+        ("Mở Wyckdelta Chart", "/chart.html", "Bản Free hoặc bản đầy đủ"),
     ]),
 ]
 SECTION = {k: (label, url, subs) for k, label, url, _i, subs in NAV}
@@ -511,6 +512,7 @@ def right_rail(p):
   {vn_box}
   {news_box}
   <section class="rr rr-cta"><h2>Wyckdelta Chart</h2><p>Footprint, heatmap sổ lệnh và các mức GEX trên một biểu đồ, cho Vàng, ES, NQ, crypto.</p>
+    <a class="btn green" href="https://fchart.wyckdelta.com/">Mở bản Free (crypto)</a>
     <a class="btn gold" href="{INBOX}" target="_blank" rel="noopener">Inbox để nhận link dùng thử</a>
     <a class="btn" href="/chart.html">Mở Wyckdelta Chart</a></section>
 </aside>'''
@@ -606,8 +608,9 @@ def page(p, v_css, v_js):
     if p["note"]:
         parts.append('''<div class="site-note" role="note">
   <div class="wrap">
-    <p>wyckdelta.com là trang giới thiệu và hướng dẫn. Biểu đồ nằm trong <b>Wyckdelta Chart</b>: app Windows, điện thoại và Mac.</p>
+    <p>wyckdelta.com là trang giới thiệu và hướng dẫn. Biểu đồ nằm trong <b>Wyckdelta Chart</b>: bản Free (crypto, mở ngay trên trình duyệt) và bản đầy đủ (app Windows, điện thoại, Mac qua Tailscale).</p>
     <div class="sn-cases">
+      <div class="sn-case"><span>Chưa cài gì</span><a href="https://fchart.wyckdelta.com/">Mở bản Free</a></div>
       <div class="sn-case"><span>Đã có tài khoản</span><a class="pri" href="/chart.html">Mở Wyckdelta Chart</a></div>
       <div class="sn-case"><span>Chưa có tài khoản</span><a href="/huong-dan.html">Cài đặt 3 bước</a></div>
       <div class="sn-case"><span>Tài khoản hết hạn</span><a href="https://t.me/wyckdeltachart" target="_blank" rel="noopener">Inbox Wyckdelta</a></div>
